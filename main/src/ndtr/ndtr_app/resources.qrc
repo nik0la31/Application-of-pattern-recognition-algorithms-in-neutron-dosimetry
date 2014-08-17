@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/ico">
+        <file>ico/image_original.ico</file>
+        <file>ico/image_grayscale.ico</file>
+        <file>ico/image_blackwhite.ico</file>
+        <file>ico/close_project.ico</file>
+        <file>ico/help.ico</file>
+        <file>ico/new_project.ico</file>
+        <file>ico/open_project.ico</file>
+        <file>ico/open_file.ico</file>
+        <file>ico/exit.ico</file>
+        <file>ico/user_guide.ico</file>
+        <file>ico/redo.ico</file>
+        <file>ico/undo.ico</file>
+        <file>ico/save_all.ico</file>
+        <file>ico/save.ico</file>
+        <file>ico/zoom_fit.ico</file>
+        <file>ico/zoom_out.ico</file>
+        <file>ico/zoom_100.ico</file>
+        <file>ico/zoom_in.ico</file>
+        <file>ico/white.ico</file>
+        <file>ico/black.ico</file>
+        <file>ico/ellipse.ico</file>
+        <file>ico/contour.ico</file>
+        <file>ico/center.ico</file>
+        <file>ico/fill.ico</file>
+        <file>ico/edge.ico</file>
+    </qresource>
+</RCC>
