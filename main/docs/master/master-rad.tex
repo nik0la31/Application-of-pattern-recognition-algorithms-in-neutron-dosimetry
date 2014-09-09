@@ -1,0 +1,193 @@
+\documentclass[12pt,a4paper,serbian,oneside]{book}
+\usepackage[utf8x]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{ucs}
+\usepackage{listings}
+\usepackage[serbian]{babel}
+\usepackage{pdfsync}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+
+% Komanda za horizontal ruler
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+%
+% Definicija fiksiranih reci
+%
+\addto\captionsserbian{%
+ \def\prefacename{Предговор}%
+ \def\refname{Списак литературе}%
+ \def\abstractname{Сажетак}%
+ \def\bibname{Литература}%
+ \def\chaptername{Глава}%
+ \def\appendixname{Додатак}%
+ \def\contentsname{Садржај}%
+ \def\listfigurename{Списак слика}%
+ \def\listtablename{Списак табела}%
+ \def\indexname{Регистар}%
+ \def\figurename{Слика}%
+ \def\tablename{Табела}%
+ \def\partname{Део}%
+ \def\enclname{Прилози}%
+ \def\ccname{Копије}%
+ \def\headtoname{Прима}%
+ \def\pagename{Страна}%
+ \def\seename{Види}%
+ \def\alsoname{Види такође}%
+ \def\proofname{Доказ}%
+ \def\glossaryname{Речник непознатих речи}
+ \def\contentsname{Садржај}%
+ }%
+
+%
+% Podesavanja paketa za listinge
+%
+\renewcommand\lstlistingname{Изворни код}
+\lstset {
+	basicstyle=\footnotesize\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	%stepnumber=2,
+	numbersep=5pt,
+	tabsize=2,
+	extendedchars=true,
+	breaklines=true,
+	keywordstyle=\color{blue},
+	frame=b,
+	stringstyle=\color{white}\ttfamily,
+	showspaces=false,
+	showtabs=false,
+	xleftmargin=17pt,
+	framexleftmargin=14pt,
+	framexrightmargin=3pt,
+	framexbottommargin=4pt,
+	framextopmargin=0pt,
+	%backgroundcolor=\color{lightgray},
+	showstringspaces=false,
+          commentstyle=\color{green!50!black},
+}
+
+\lstloadlanguages {
+	% Check Documentation for further languages ...
+	%[Visual]Basic
+	%Pascal
+	%C
+	%C++
+	Java,
+	XML
+	%HTML
+}
+
+%
+% Podesavanje okvira listinga
+%
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{12pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize} }
+
+%
+% Dupla kosa crta
+%
+\usepackage{stmaryrd}
+
+%
+% Pocetak dokumenta
+%
+\begin{document}
+
+\input{naslovna.tex}
+
+\tableofcontents
+\newpage
+
+\chapter{Увод}
+
+\chapter{Обрада слика употребом OpenCV библиотеке}
+
+OpenCV (Open Source Computer Vision Library) је библиотека отвореног кода која садржи имплеметације више стотина алгоритама рачунарског вида (computer vision). Библиотека је написана у C++ програмском језику, али подржава и итерфејс ка C, Python, MATLAB програмским језицима, а у разоју су и интерфејси за CUDA и OpenCL језике. Подржана је на свим видећим операстивним системима Windows, Linux, Android и Mac OS. Библиотека је објављена под BSD лиценцом, те је стога погодна  и за академску и за комерцијалну употребу.
+
+Имплементирани алгоритми се могу користити за  препознавање облика, детекцију и препознавање лицa, праћење покрета при видео снимку, спајање више слика у једну, препознавање маркера за проширену стварност и слично. Такви алгоритми су примењени у бројним програмима попут програма за видео надзор, навигацију и аутоматизацију рада робота, проверу призвода у фабрикама, асистенцију при вожњи аутомобила и тд.
+
+Рачунарски вид помаже у прикупљању релевантних информација са слика и доношењу одлука базираним на тим подацима. Циљ рачунарског вида је да омогући да рачунар посматра ствари на исти начин као и људи. Основни кораци система базираног на рачунарском виду су:
+
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+  \item прикуљање слика
+  \item манипулација сликама
+  \item извлачење релевантних информација
+  \item доношење одлука
+\end{itemize}
+
+NAPOMENA: Ukljuci sliku cv.png \\
+
+Као што се види из наведеног, за један такав систем јако су важни и алгоритми машинсог учења (machine learning) као и алгоритми обраде слика (image processing). OpenCV библиотека садржи такве алгоритме.
+Обрада слика је процес манипулације подацима слике у сврху пружања информација дањем току алгоритама рачунарског вида.
+Компонента која нас занима је управо обрада слика. 
+
+\section{Сиво скалирана слика}
+
+Први корак за већину алгоритама обрадa слика је рачунање сиво скалиране слике на основу оригиналне слике, слике која садржи црвену, зелену и плаву компоненту.. У даљем процесу користи се само сиво скалирана слика. На тај начин  постиже се значајна уштеда у меморији јер слика која се обрађује може бити копирана више пута, самим тим постижу се боље перформансе,  а добија се и на једноставности алгоритама.
+
+\begin{lstlisting}[language=Java,label=lst:grayscale,caption=Рачунање сиво скалиране слике]
+// Load BGR image.
+Mat bgrImage = imread(path, CV_LOAD_IMAGE_COLOR);
+
+// Convert image to grayscale.
+Mat gsImage;
+cvtColor(bgrImage, gsImage, CV_BGR2GRAY);
+\end{lstlisting}
+
+ Сиво скалирана слика рачуна се као:
+\begin{equation}
+Y \gets 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B
+\end{equation}
+
+где су Y - сиво скалирана слика, R - црвена компонента оригиналне слике, G - зелена компонента оригиналне слике и B - плава компонента оригиналне слике. Коефицијенти представљају измерену перцепцију интензитета код трохроматских људи. Конкретно, људски вид је најосетљивији на зелену, а најмање на плаву боју. \\
+
+NAPOMENA: Ukljuci sliku original-gray.png
+
+\section{Сегментација слике}
+
+Сегментација слике је процес раздвајања објеката од позадине слике.
+
+\section{Детекција контура}
+
+\section{Сегментација спојених трагова}
+
+\subsection{Ерозија}
+
+\subsection{Слив}
+
+\section{Одређивање угла слике}
+
+\chapter{Развој корисничког интерфејса употребом Qt фрејмворка}
+
+\chapter{Софтвер за детекцију трагова неутронске дозиметрије}
+
+\chapter{Тестирање}
+
+\chapter{Закључак}
+
+
+%
+% Spisak Literature
+%
+\begin{thebibliography}{11}
+\bibitem{larsv} {Lars Vogel, Android Service and Broadcast Receiver, www.vogella.de, 2011.}
+\bibitem{literatura1} ...
+
+\bibitem{opencv} http:\slash \slash opencv.org, OpenCV званична веб страна
+
+\end{thebibliography}
+
+	
+\end{document}
+
+
