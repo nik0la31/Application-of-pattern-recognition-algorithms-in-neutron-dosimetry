@@ -3,9 +3,11 @@
 
 #include <project.h>
 #include <QFile>
+#include <QFileInfo>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include "utils.h"
+#include <stack>
 
 class ProjectParser
 {
@@ -16,12 +18,16 @@ public:
     {
         try
         {
-            QFile f(Utils::StringW2Q(project->GetPath()));
-            f.open(QIODevice::ReadOnly | QFile::Text);
+            QFile file(Utils::StringW2Q(project->GetPath()));
+            file.open(QIODevice::ReadOnly | QFile::Text);
 
-            QXmlStreamReader stream(&f);
+            QXmlStreamReader stream(&file);
 
-            stream.readNext();
+            std::stack<std::string> tags;
+
+            Document* doc;
+
+            std::string path;
 
             while(!stream.atEnd())
             {
@@ -29,25 +35,60 @@ public:
                 {
                     if (stream.name() == "ndtr")
                     {
-                        stream.readNext();
+                        tags.push("ndtr");
+                    }
+                    else if(stream.name() == "documents")
+                    {
+                        tags.push("documents");
+                    }
+                    else if(stream.name() == "document")
+                    {
+                        tags.push("document");
+
+                        QXmlStreamAttributes attributes = stream.attributes();
+                        std::string name = attributes.value(QString("name")).toString().toStdString();
+                        std::string ext = attributes.value(QString("ext")).toString().toStdString();
+                        path = project->GetDocumentsPath().append("\\").append(name).append(ext);
+
+                        doc = new Document();
+                        doc->Init(project, name, path);
+
 
                     }
-                    //else if(stream.name() == "name")
-                    //{
-                    //    project.SetName(Utils::StringQ2W(stream.readElementText()));
-                    //}
+                    else if(stream.name() == "options")
+                    {
+                        tags.push("options");
+
+                        ProcessingOptions options;
+                        LoadImageProcessingOptions(stream, options);
+
+                        //doc->Update(options);
+// use ext,not path
+                        project->AddDocument(doc->GetName(), path, options);
+                    }
                     else
                     {
                         stream.raiseError("Unexpected tag in NDTR project file.");
                     }
                 }
-                else
+                else if (stream.isEndElement())
                 {
-                    stream.readNext();
+                    std::string name = stream.name().toString().toStdString();
+
+                    if (tags.top().compare(name) == 0)
+                    {
+                        tags.pop();
+                    }
+                    else
+                    {
+                        stream.raiseError("Unexpected closing tag in NDTR project file.");
+                    }
                 }
+
+                stream.readNext();
             }
 
-            f.close();
+            file.close();
         }
         catch (...)
         {
@@ -55,6 +96,47 @@ public:
         }
 
         return true;
+    }
+
+    static void LoadImageProcessingOptions(QXmlStreamReader& stream, ProcessingOptions& options)
+    {
+        QXmlStreamAttributes attributes = stream.attributes();
+
+        if (attributes.hasAttribute(QString("AutomaticOtsuThreshold")))
+        {
+            int autoThresh = attributes.value(QString("AutomaticOtsuThreshold")).toInt();
+            options.AutomaticOtsuThreshold = autoThresh != 0;
+        }
+
+        if (attributes.hasAttribute(QString("OtsuThreshold")))
+        {
+            int thresh = attributes.value(QString("OtsuThreshold")).toInt();
+            options.OtsuThreshold = thresh;
+        }
+
+        if (attributes.hasAttribute(QString("GaussianBlur")))
+        {
+            int blur = attributes.value(QString("GaussianBlur")).toInt();
+            options.GaussianBlur = blur != 0;
+        }
+
+        if (attributes.hasAttribute(QString("WoB")))
+        {
+            int wob = attributes.value(QString("WoB")).toInt();
+            options.WoB = wob != 0;
+        }
+
+        if (attributes.hasAttribute(QString("MinTraceDiameter")))
+        {
+            int min = attributes.value(QString("MinTraceDiameter")).toInt();
+            options.MinTraceDiameter = min;
+        }
+
+        if (attributes.hasAttribute(QString("MaxTraceDiameter")))
+        {
+            int max = attributes.value(QString("MaxTraceDiameter")).toInt();
+            options.MaxTraceDiameter = max;
+        }
     }
 
     static bool Save(Project* project)
@@ -80,9 +162,36 @@ public:
             for(auto doc : documents)
             {
                 // DOCUMENT  - START/END
-                stream.writeTextElement("document", Utils::StringW2Q(doc->GetName()));
+                stream.writeStartElement("document");
+
+                QString name("name");
+                stream.writeAttribute(name, Utils::StringW2Q(doc->GetName()));
+                QString ext("ext");
+                stream.writeAttribute(ext, Utils::StringW2Q(doc->GetExt()));
+
+                // OPTIONS  - START/END
+                stream.writeStartElement("options");
+
+                ProcessingOptions options = doc->GetOptions();
+
+                QString autoThresh("AutomaticOtsuThreshold");
+                stream.writeAttribute(autoThresh, QString::number(options.AutomaticOtsuThreshold ? 1 : 0));
+                QString thresh("OtsuThreshold");
+                stream.writeAttribute(thresh, QString::number(options.OtsuThreshold));
+                QString blur("GaussianBlur");
+                stream.writeAttribute(blur, QString::number(options.GaussianBlur ? 1 : 0));
+                QString wob("WoB");
+                stream.writeAttribute(wob, QString::number(options.WoB ? 1 : 0));
+                QString min("MinTraceDiameter");
+                stream.writeAttribute(min, QString::number(options.MinTraceDiameter));
+                QString max("MaxTraceDiameter");
+                stream.writeAttribute(max, QString::number(options.MaxTraceDiameter));
+
+                // OPTIONS  - END
+                stream.writeEndElement();
 
                 // DOCUMENT  - END
+                stream.writeEndElement();
             }
 
             // DOCUMENTS - END

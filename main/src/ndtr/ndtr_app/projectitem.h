@@ -6,9 +6,9 @@
 class ProjectItem : public QStandardItem
 {
 public:
-    ProjectItem(std::wstring& name, bool isDoc = false);
+    ProjectItem(std::string& name, bool isDoc = false);
 
-    std::wstring GetName();
+    std::string GetName();
 
     bool IsDocument();
 
@@ -19,7 +19,7 @@ public:
     void Unselect();
 
 private:
-    std::wstring m_Name;
+    std::string m_Name;
 
     bool m_IsDocument;
     bool m_IsSelected;

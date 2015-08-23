@@ -25,5 +25,11 @@
         <file>ico/center.ico</file>
         <file>ico/fill.ico</file>
         <file>ico/edge.ico</file>
+        <file>ico/Blur.ico</file>
+        <file>ico/ok.ico</file>
+        <file>ico/revert.ico</file>
+        <file>ico/clipboard.ico</file>
+        <file>ico/save_image.ico</file>
+        <file>ico/csv.ico</file>
     </qresource>
 </RCC>

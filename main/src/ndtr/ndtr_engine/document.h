@@ -8,26 +8,15 @@
 #include <string>
 #include <vector>
 
+#include "viewoptions.h"
+#include "processingoptions.h"
+#include "stats.h"
+#include "trace.h"
+
 typedef std::vector<cv::Point> Contuor;
 
 // Forward declatation.
 class Project;
-
-
-enum ImageType
-{
-    NDTR_ORIGINAL = 0,
-    NDTR_GRAYSCALE,
-    NDTR_BLACK_WHITE,
-    NDTR_BLACK_BACKGROUND,
-    NDTR_WHITE_BACKGROUND
-};
-
-enum ShapeType
-{
-    NDTR_CONTOUR,
-    NDTR_ELLIPSE
-};
 
 class Document
 {
@@ -38,28 +27,42 @@ public:
 
     }
 
-    void Init(Project*, std::wstring& name, std::wstring& path);
+    void Init(Project*, std::string& name, std::string& path);
+
+    void Process(ProcessingOptions& options);
 
     Project* GetProject();
 
-    std::wstring GetName();
+    std::string GetName();
 
-    cv::Mat GetImage(
-            ImageType imgType,
-            ShapeType shapeType,
-            bool fill,
-            bool edge,
-            bool center);
+    std::string GetExt();
+
+    const Stats GetStats();
+
+    ProcessingOptions GetOptions();
+
+    std::vector<Trace>& GetTraces();
+
+    cv::Mat GatTransform();
+
+    void SetTransform(cv::Mat& transform);
+
+    cv::Mat GetImage(ViewOptions& view);
+
+    static cv::Mat CalcTransform(Document* prev, Document* curr);
 
 private:
     // Project - document parent.
     Project *m_Project;
 
     // Image name.
-    std::wstring m_Name;
+    std::string m_Name;
+
+    // Processing options.
+    ProcessingOptions m_Options;
 
     // Image path;
-    std::wstring m_Path;
+    std::string m_Path;
 
     // Image dimensions.
     unsigned int m_Width;
@@ -68,11 +71,16 @@ private:
     // Images
     std::vector<cv::Mat> m_Images;
 
-    // Contuors.
+    // Traces.
     std::vector<Contuor> m_Contuors;
-
-    // Ellipses.
     std::vector<cv::RotatedRect> m_Ellipses;
+    std::vector<bool> m_TraceFilter;
+    std::vector<Trace> m_Traces;
+
+    // Transform matrix
+    cv::Mat m_Transform;
+
+    void ProcessImage();
 };
 
 #endif // DOCUMENT_H

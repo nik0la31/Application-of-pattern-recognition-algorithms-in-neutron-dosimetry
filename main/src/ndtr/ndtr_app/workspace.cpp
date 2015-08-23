@@ -1,8 +1,14 @@
 #include "workspace.h"
 
+
+#include <QObject>
+
 #include <exception>
 #include "projectparser.h"
 #include "utils.h"
+
+#include <iostream>
+#include <fstream>
 
 using namespace cv;
 using namespace std;
@@ -20,7 +26,7 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
 
     // Extract project name from path.
     QString projectNameQ = projectFileInfo.fileName().remove(".ndtr");
-    std::wstring projectName = Utils::StringQ2W(projectNameQ);
+    std::string projectName = Utils::StringQ2W(projectNameQ);
 
     // If not exists, create dir to store images.
     QDir projectDir = projectFileInfo.absoluteDir();
@@ -39,6 +45,7 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
 
     // Initialize project.
     m_Projects[projectName] = unique_ptr<Project>(new Project());
+    m_ProjectsPersistentState[projectName] = true; // loaded or saved
     Project* project = m_Projects[projectName].get();
     project->Init(projectName,
                   Utils::StringQ2W(projectFullPath),
@@ -70,16 +77,28 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
     projectItems << projectItem;
     rootItem->appendRow(projectItems);
 
+    for (Document* doc : project->GetDocuments())
+    {
+        auto projRowItem = m_ProjectsModel.findItems(Utils::StringW2Q(projectName));
+        ProjectItem* projectItem = (ProjectItem*) projRowItem.first();
+
+        ProjectItem* docItem = new ProjectItem(doc->GetName(), true);
+        QList<QStandardItem*> docRowItem;
+        docRowItem << docItem;
+        projectItem->appendRow(docItem);
+    }
+
     // Set new project as current project.
     SetCurrent(projectName);
 }
 
-void Workspace::AddDocument(wstring& projectName, QString& imageFullPath)
+void Workspace::AddDocument(string& projectName, QString& imageFullPath, ProcessingOptions& options)
 {
     QFileInfo imageFileInfo(imageFullPath);
 
     // Get project.
     Project* project = m_Projects[projectName].get();
+    m_ProjectsPersistentState[projectName] = false;
     QString projectDirPath = Utils::StringW2Q(project->GetDocumentsPath());
     QDir projectDir(projectDirPath);
 
@@ -89,12 +108,13 @@ void Workspace::AddDocument(wstring& projectName, QString& imageFullPath)
 
     // Get image name.
     QString docNameQ = imageFileInfo.baseName();
-    std::wstring docName = Utils::StringQ2W(docNameQ);
+    std::string docName = Utils::StringQ2W(docNameQ);
 
     // Add image to project.
     Document* document = project->AddDocument(
                                 docName,
-                                Utils::StringQ2W(dstImageFullPath));
+                                Utils::StringQ2W(dstImageFullPath),
+                                options);
 
     // Add image to view model.
     auto projRowItem = m_ProjectsModel.findItems(Utils::StringW2Q(projectName));
@@ -106,8 +126,6 @@ void Workspace::AddDocument(wstring& projectName, QString& imageFullPath)
     projectItem->appendRow(docItem);
 
     SetCurrent(project, projectItem, document, docItem);
-
-    // TODO: Save project when new image is added.
 }
 
 void Workspace::SetCurrent(
@@ -142,7 +160,7 @@ void Workspace::SetCurrent(
     }
 }
 
-void Workspace::SetCurrent(std::wstring& projectName, std::wstring documentName)
+void Workspace::SetCurrent(std::string& projectName, std::string documentName)
 {
     Project*     proj     = nullptr;
     ProjectItem* projItem = nullptr;
@@ -191,13 +209,134 @@ void Workspace::SetCurrent(std::wstring& projectName, std::wstring documentName)
     SetCurrent(proj, projItem, doc, docItem);
 }
 
-Mat Workspace::GetImage(ImageType imgType, ShapeType shapeType, bool fill, bool edge, bool center)
+Mat Workspace::GetImage(ViewOptions view)
 {
     // Check is there current image.
-    return m_CurrentDocument->GetImage(imgType, shapeType, fill, edge, center);
+    return m_CurrentDocument->GetImage(view);
+}
+
+Stats Workspace::GetStats()
+{
+    // Check is there current image.
+    return m_CurrentDocument->GetStats();
 }
 
 bool Workspace::IsImageAvalilable()
 {
     return m_CurrentDocument != nullptr;
+}
+
+Document* Workspace::GetCurrentDocument()
+{
+    return m_CurrentDocument;
+}
+
+Project* Workspace::GetCurrentProject()
+{
+    return m_CurrentProject;
+}
+
+void Workspace::SaveCurrentProject()
+{
+    if (Workspace::Instance.GetCurrentProject() != nullptr)
+    {
+        ProjectParser::Save(Workspace::Instance.GetCurrentProject());
+        m_ProjectsPersistentState[m_CurrentProject->GetName()] = true;
+    }
+}
+
+void Workspace::SaveAllProjects()
+{
+    for (auto& proj : m_Projects)
+    {
+        ProjectParser::Save(proj.second.get());
+        m_ProjectsPersistentState[proj.second.get()->GetName()] = true;
+    }
+}
+
+void Workspace::Update(ProcessingOptions& options)
+{
+    m_CurrentDocument->Process(options);
+    m_ProjectsPersistentState[m_CurrentProject->GetName()] = true;
+}
+
+bool Workspace::IsCurrentProjectPersistent()
+{
+    return m_ProjectsPersistentState[m_CurrentProject->GetName()];
+}
+
+bool Workspace::AreAllProjectsPersistent()
+{
+    for (auto& persistent : m_ProjectsPersistentState)
+    {
+        if (!persistent.second)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void Workspace::CloseCurrentProject()
+{
+    std::string name = m_CurrentProject->GetName();
+    m_ProjectsModel.removeRow(m_CurrentProjectItem->row());
+    m_Projects.erase(name);
+    m_ProjectsPersistentState.erase(name);
+
+    m_CurrentProject = nullptr;
+    m_CurrentProjectItem = nullptr;
+    m_CurrentDocument = nullptr;
+    m_CurrentDocumentItem = nullptr;
+}
+
+void Workspace::CloseAllProjects()
+{
+    m_ProjectsModel.clear();
+    m_Projects.clear();
+    m_ProjectsPersistentState.clear();
+
+    m_CurrentProject = nullptr;
+    m_CurrentProjectItem = nullptr;
+    m_CurrentDocument = nullptr;
+    m_CurrentDocumentItem = nullptr;
+}
+
+void Workspace::RemoveCurrentDocument()
+{
+    m_CurrentProjectItem->removeRow(m_CurrentDocumentItem->row());
+    m_CurrentProject->RemoveDocument(m_CurrentDocument->GetName());
+
+    m_CurrentDocument = nullptr;
+    m_CurrentDocumentItem = nullptr;
+}
+
+void Workspace::ExportTraces(std::string& filePath)
+{
+    ofstream out;
+    out.open(filePath);
+
+    Stats stats = m_CurrentDocument->GetStats();
+
+    out << "Broj tragova,\n";
+    out << stats.TracesCount << ",\n";
+
+    out << "Statistika,\n";
+    out << "Diajmetar,\n";
+    out << "Min,Max,Avg\n";
+    out << stats.MinDiameter << "," << stats.MaxDiameter << "," << stats.AverageDiameter << ",\n";
+    out << "Intenzitet,\n";
+    out << "Min,Max,Avg\n";
+    out << stats.MinIntensity << "," << stats.MaxIntensity << "," << stats.AverageIntensity << ",\n";
+
+    out << "Tragovi,\n";
+    out << "x,y,ugao,dijametar1,dijametar2,intenzitet,\n";
+    vector<Trace>& traces = m_CurrentDocument->GetTraces();
+    for (Trace& trace : traces)
+    {
+        out << trace.x << "," << trace.y << "," << trace.angle << "," << trace.diameter1 << "," << trace.diameter2 << "," << trace.intensity << ",\n";
+    }
+
+    out.close();
 }

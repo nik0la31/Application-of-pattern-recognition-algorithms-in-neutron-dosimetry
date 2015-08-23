@@ -1,46 +1,49 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include <iostream>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
 #include "document.h"
+#include "processingoptions.h"
+
+#include <list>
+#include <string>
 
 class Project
 {
 public:
     Project() {}
 
-    void Init(std::wstring& name, std::wstring& path, std::wstring& docsPath);
+    ~Project();
 
-    std::wstring GetName();
+    void Init(std::string& name, std::string& path, std::string& docsPath);
 
-    void SetName(std::wstring& newName);
+    std::string GetName();
 
-    std::wstring GetPath();
+    void SetName(std::string& name);
 
-    Document* AddDocument(std::wstring& name, std::wstring& path);
+    std::string GetPath();
 
-    Document* GetDocument(std::wstring& name);
+    std::string GetDocumentsPath();
 
-    std::vector<Document*> GetDocuments();
+    Document* AddDocument(std::string& name, std::string& path, ProcessingOptions& options);
 
-    std::wstring GetDocumentsPath();
+    Document* GetDocument(std::string& name);
+
+    void RemoveDocument(std::string& name);
+
+    std::list<Document*> GetDocuments();
 
 private:
     // Project name.
-    std::wstring m_Name;
+    std::string m_Name;
 
     // Project path.
-    std::wstring m_Path;
+    std::string m_Path;
 
     // Documents dir path.
-    std::wstring m_DocsPath;
+    std::string m_DocsPath;
 
     // Project documents (images with processing data).
-    std::map<std::wstring, std::unique_ptr<Document> > m_Documents;
+    std::list<Document*> m_Documents;
 };
 
 #endif // PROJECT_H

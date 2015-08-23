@@ -46,32 +46,10 @@ INCLUDEPATH += C:/opencv/build/include \
 DEPENDPATH += C:/opencv/build/x86/vc12/
 
 win32:CONFIG(release, debug|release): LIBS += -LC:/opencv/build/x86/vc12/lib/ \
-    -lopencv_core249 \
-    -lopencv_imgproc249 \
-    -lopencv_highgui249 \
-    -lopencv_ml249 \
-    -lopencv_video249 \
-    -lopencv_features2d249 \
-    -lopencv_calib3d249 \
-    -lopencv_objdetect249 \
-    -lopencv_contrib249 \
-    -lopencv_legacy249 \
-    -lopencv_flann249 \
+    -lopencv_world300 \
 
 else:win32:CONFIG(debug, debug|release): LIBS += -LC:/opencv/build/x86/vc12/lib/ \
-    -lopencv_core249d \
-    -lopencv_imgproc249d \
-    -lopencv_highgui249d \
-    -lopencv_ml249d \
-    -lopencv_video249d \
-    -lopencv_features2d249d \
-    -lopencv_calib3d249d \
-    -lopencv_objdetect249d \
-    -lopencv_contrib249d \
-    -lopencv_legacy249d \
-    -lopencv_flann249d \
-
-
+    -lopencv_world300d \
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ndtr_engine/release/ -lndtr_engine
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ndtr_engine/debug/ -lndtr_engine
@@ -85,3 +63,13 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../ndtr
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../ndtr_engine/release/ndtr_engine.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../ndtr_engine/debug/ndtr_engine.lib
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../ndtr_engine/libndtr_engine.a
+
+DISTFILES += \
+    ../../../docs/master/master-rad.pdf
+
+docroot.files  = $$DISTFILES
+docroot.path   = $${OUT_PWD}
+INSTALLS       += docroot
+
+win32: DEFINES += WINDOWS
+unix:

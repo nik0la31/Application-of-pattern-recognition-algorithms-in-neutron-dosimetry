@@ -34,13 +34,11 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Program</string>
     </property>
     <addaction name="actionNew_Project"/>
     <addaction name="actionOpen_Project"/>
     <addaction name="actionOpen_File"/>
-    <addaction name="actionRecent_Projects"/>
-    <addaction name="actionRecent_Files"/>
     <addaction name="separator"/>
     <addaction name="actionClose_Project"/>
     <addaction name="actionClose_All"/>
@@ -52,14 +50,14 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>Pomoć</string>
     </property>
     <addaction name="actionUser_Guide"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>Pregled</string>
     </property>
     <addaction name="actionOriginal"/>
     <addaction name="actionGrayscale"/>
@@ -81,17 +79,18 @@
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>Akcije</string>
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionCopy_Image"/>
     <addaction name="actionSave_Image"/>
+    <addaction name="actionExport"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
-     <string>Window</string>
+     <string>Prozori</string>
     </property>
     <addaction name="actionProjects"/>
     <addaction name="actionOptions"/>
@@ -129,7 +128,7 @@
    <addaction name="actionZoom_Out"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QDockWidget" name="dockProjects">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -177,7 +176,7 @@ border: 0px;</string>
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_2">
+  <widget class="QDockWidget" name="dockStatistics">
    <property name="minimumSize">
     <size>
      <width>150</width>
@@ -195,9 +194,32 @@ border: 0px;</string>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2"/>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <widget class="QLabel" name="labelStats">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>181</width>
+       <height>361</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_3">
+  <widget class="QDockWidget" name="dockSettings">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
      <width>150</width>
@@ -252,22 +274,22 @@ border: 0px;</string>
         <attribute name="title">
          <string>Image Preprocessor</string>
         </attribute>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupThreshold">
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>341</width>
+           <width>340</width>
            <height>80</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 127);</string>
+          <string notr="true"/>
          </property>
          <property name="title">
           <string>Threshold</string>
          </property>
-         <widget class="QSlider" name="horizontalSlider">
+         <widget class="QSlider" name="sliderThreshold">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -276,11 +298,29 @@ border: 0px;</string>
             <height>19</height>
            </rect>
           </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="toolTipDuration">
+           <number>-1</number>
+          </property>
+          <property name="statusTip">
+           <string/>
+          </property>
+          <property name="maximum">
+           <number>250</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBelow</enum>
+          </property>
          </widget>
-         <widget class="QCheckBox" name="checkBox">
+         <widget class="QCheckBox" name="checkBoxAutoThreshold">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -294,16 +334,334 @@ border: 0px;</string>
           </property>
          </widget>
         </widget>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Trace Resolver</string>
-        </attribute>
+        <widget class="QToolButton" name="buttonBlur">
+         <property name="geometry">
+          <rect>
+           <x>355</x>
+           <y>10</y>
+           <width>50</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}
+
+QToolButton:checked
+{
+    background-color: #A0A0A0;
+}</string>
+         </property>
+         <property name="text">
+          <string>Blur</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/Blur.ico</normaloff>:/ico/ico/Blur.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="buttonWoB">
+         <property name="geometry">
+          <rect>
+           <x>410</x>
+           <y>10</y>
+           <width>50</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}
+
+QToolButton:checked
+{
+    background-color: #A0A0A0;
+}</string>
+         </property>
+         <property name="text">
+          <string>WoB</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/image_blackwhite.ico</normaloff>:/ico/ico/image_blackwhite.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="spinMax">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>60</y>
+           <width>62</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="spinMin">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>30</y>
+           <width>62</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="statusTip">
+          <string/>
+         </property>
+         <property name="prefix">
+          <string/>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
+        <widget class="QLabel" name="labelDiameter">
+         <property name="geometry">
+          <rect>
+           <x>465</x>
+           <y>10</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Diameter</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="labelMin">
+         <property name="geometry">
+          <rect>
+           <x>465</x>
+           <y>36</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Min</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="labelMax">
+         <property name="geometry">
+          <rect>
+           <x>465</x>
+           <y>62</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Max</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
          <string>Colors</string>
         </attribute>
+        <widget class="QToolButton" name="actionFillColor">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>50</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="mouseTracking">
+          <bool>false</bool>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Fill</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/fill.ico</normaloff>:/ico/ico/fill.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>false</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="actionCenterColor">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>10</y>
+           <width>50</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Center</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/center.ico</normaloff>:/ico/ico/center.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="actionEdgeColor">
+         <property name="geometry">
+          <rect>
+           <x>75</x>
+           <y>10</y>
+           <width>50</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Edge</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/edge.ico</normaloff>:/ico/ico/edge.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
        </widget>
       </widget>
      </item>
@@ -317,7 +675,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>New Project</string>
+    <string>Novi projekat</string>
    </property>
   </action>
   <action name="actionOpen_Project">
@@ -327,7 +685,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Open Project</string>
+    <string>Otvori projekat</string>
    </property>
   </action>
   <action name="actionOpen_File">
@@ -337,17 +695,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Open File</string>
-   </property>
-  </action>
-  <action name="actionRecent_Files">
-   <property name="text">
-    <string>Recent Files</string>
-   </property>
-  </action>
-  <action name="actionRecent_Projects">
-   <property name="text">
-    <string>Recent Projects</string>
+    <string>Učitaj sliku</string>
    </property>
   </action>
   <action name="actionClose_Project">
@@ -357,7 +705,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Close Project</string>
+    <string>Zatvori projekat</string>
    </property>
   </action>
   <action name="actionExit">
@@ -367,7 +715,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Izlaz</string>
    </property>
   </action>
   <action name="actionOriginal">
@@ -434,7 +782,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>User Guide</string>
+    <string>Uputstvo</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -444,15 +792,18 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>O programu</string>
    </property>
   </action>
   <action name="actionProjects">
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Projects</string>
+    <string>Projekti</string>
    </property>
    <property name="toolTip">
     <string>Projects</string>
@@ -462,16 +813,22 @@ border: 0px;</string>
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Statistics</string>
+    <string>Statistika</string>
    </property>
   </action>
   <action name="actionOptions">
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Settings</string>
+    <string>Podešavanja</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -481,7 +838,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Undo</string>
+    <string>Nazad</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -491,17 +848,25 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Redo</string>
+    <string>Napred</string>
    </property>
   </action>
   <action name="actionCopy_Image">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/ico/ico/clipboard.ico</normaloff>:/ico/ico/clipboard.ico</iconset>
+   </property>
    <property name="text">
-    <string>Copy Image</string>
+    <string>Kopiraj sliku</string>
    </property>
   </action>
   <action name="actionSave_Image">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/ico/ico/save_image.ico</normaloff>:/ico/ico/save_image.ico</iconset>
+   </property>
    <property name="text">
-    <string>Save Image</string>
+    <string>Sačuvaj sliku</string>
    </property>
   </action>
   <action name="actionClose_All">
@@ -511,7 +876,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Close All</string>
+    <string>Zatvori sve</string>
    </property>
   </action>
   <action name="actionSave_Project">
@@ -521,7 +886,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Save Project</string>
+    <string>Sačuvaj projekat</string>
    </property>
   </action>
   <action name="actionSave_All">
@@ -531,7 +896,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Save All</string>
+    <string>Sačuvaj sve</string>
    </property>
   </action>
   <action name="actionBorder">
@@ -589,10 +954,10 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Zoom In</string>
+    <string>Zumiraj</string>
    </property>
    <property name="toolTip">
-    <string>Zoom In</string>
+    <string>Zumiraj</string>
    </property>
   </action>
   <action name="actionZoom_Out">
@@ -602,10 +967,10 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Zoom Out</string>
+    <string>Odzumiraj</string>
    </property>
    <property name="toolTip">
-    <string>Zoom Out</string>
+    <string>Odzumiraj</string>
    </property>
   </action>
   <action name="actionFit_to_Window">
@@ -615,7 +980,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Fit to Window</string>
+    <string>Prikaži celu</string>
    </property>
   </action>
   <action name="actionNormal_Size">
@@ -625,7 +990,7 @@ border: 0px;</string>
     </iconset>
    </property>
    <property name="text">
-    <string>Normal Size</string>
+    <string>1:1</string>
    </property>
   </action>
   <action name="actionBlack_Background">
@@ -680,8 +1045,19 @@ border: 0px;</string>
     <string>Fill</string>
    </property>
   </action>
+  <action name="actionExport">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/ico/ico/csv.ico</normaloff>:/ico/ico/csv.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Izvoz</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

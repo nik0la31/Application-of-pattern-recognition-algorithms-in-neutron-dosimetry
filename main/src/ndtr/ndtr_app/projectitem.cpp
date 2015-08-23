@@ -9,13 +9,13 @@ QBrush ProjectItem::c_ProjectBrush = QBrush(QColor::fromRgb(204, 204, 255));
 QBrush ProjectItem::c_DocumentBrush = QBrush(QColor::fromRgb(235, 235, 255));
 QBrush ProjectItem::c_DefaultBrush = QBrush(QColor::fromRgb(255, 255, 255));
 
-ProjectItem::ProjectItem(std::wstring& name, bool isDoc)
+ProjectItem::ProjectItem(std::string& name, bool isDoc)
     : QStandardItem(Utils::StringW2Q(name)), m_Name(name), m_IsDocument(isDoc)
 {
 
 }
 
-wstring ProjectItem::GetName()
+string ProjectItem::GetName()
 {
     return m_Name;
 }

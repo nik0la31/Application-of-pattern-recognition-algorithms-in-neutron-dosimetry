@@ -8,14 +8,14 @@ class Utils
 {
 public:
 
-    static std::wstring StringQ2W(QString& str)
+    static std::string StringQ2W(QString& str)
     {
-        return str.toStdWString();
+        return str.toStdString();
     }
 
-    static QString StringW2Q(std::wstring& str)
+    static QString StringW2Q(std::string& str)
     {
-        return QString::fromWCharArray(str.c_str());
+        return QString(str.c_str());
     }
 };
 

@@ -1,6 +1,8 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
+#include "stats.h"
+
 #include <map>
 #include <memory>
 #include <project.h>
@@ -13,6 +15,8 @@
 #include <QString>
 #include "projectparser.h"
 #include "projectitem.h"
+#include "viewoptions.h"
+#include "processingoptions.h"
 
 class Workspace
 {
@@ -22,6 +26,7 @@ public:
 
     Workspace()
     {
+
 
     }
 
@@ -34,17 +39,42 @@ public:
 
     void AddProject(QString& projectFullPath, bool load = false);
 
-    void AddDocument(std::wstring& proj, QString& imagePath);
+    void AddDocument(std::string& proj, QString& imagePath, ProcessingOptions& options);
 
-    void SetCurrent(std::wstring& projectName, std::wstring documentName = L"");
+    void SetCurrent(std::string& projectName, std::string documentName = "");
 
-    cv::Mat GetImage(ImageType imgType, ShapeType shapeType, bool fill, bool edge, bool center);
+    cv::Mat GetImage(ViewOptions view);
+
+    Stats GetStats();
 
     bool IsImageAvalilable();
 
+    Document* GetCurrentDocument();
+
+    Project* GetCurrentProject();
+
+    void SaveCurrentProject();
+
+    void SaveAllProjects();
+
+    void RemoveCurrentDocument();
+
+    void Update(ProcessingOptions& options);
+
+    bool IsCurrentProjectPersistent();
+
+    bool AreAllProjectsPersistent();
+
+    void CloseCurrentProject();
+
+    void CloseAllProjects();
+
+    void ExportTraces(std::string& filePath);
+
 private:
     // Projects.
-    std::map<std::wstring, std::unique_ptr<Project> > m_Projects;
+    std::map<std::string, std::unique_ptr<Project> > m_Projects;
+    std::map<std::string, bool> m_ProjectsPersistentState;
 
     // Projects tree model view.
     QStandardItemModel m_ProjectsModel;

@@ -1,53 +1,84 @@
 #include "project.h"
 
 using namespace std;
+using namespace cv;
 
-void Project::Init(wstring& name, wstring& path, wstring& docsPath)
+Project::~Project()
+{
+    for (Document* doc : m_Documents)
+    {
+        delete(doc);
+    }
+}
+
+void Project::Init(string& name, string& path, string& docsPath)
 {
     m_Name = name;
     m_Path = path;
     m_DocsPath = docsPath;
 }
 
-wstring Project::GetPath()
-{
-    return m_Path;
-}
-
-wstring Project::GetName()
+string Project::GetName()
 {
     return m_Name;
 }
 
-void Project::SetName(wstring& newName)
+void Project::SetName(string& name)
 {
-    m_Name = newName;
+    m_Name = name;
 }
 
-vector<Document*> Project::GetDocuments()
+string Project::GetPath()
 {
-    vector<Document*> documents;
-    for (auto doc = m_Documents.begin(); doc != m_Documents.end(); ++doc)
-    {
-        documents.push_back(doc->second.get());
-    }
-    return documents;
+    return m_Path;
 }
 
-Document* Project::GetDocument(std::wstring& name)
-{
-    return m_Documents[name].get();
-}
-
-wstring Project::GetDocumentsPath()
+string Project::GetDocumentsPath()
 {
     return m_DocsPath;
 }
 
-Document* Project::AddDocument(wstring& name, wstring& path)
+Document* Project::AddDocument(string& name, string& path, ProcessingOptions& options)
 {
-    m_Documents[name] = unique_ptr<Document>(new Document());
-    m_Documents[name]->Init(this, name, path);
+    Document* doc  = new Document();
+    doc->Init(this, name, path);
+    doc->Process(options);
 
-    return m_Documents[name].get();
+    if (m_Documents.size() > 0)
+    {
+        Mat transform = Document::CalcTransform(m_Documents.back(), doc);
+        doc->SetTransform(transform);
+    }
+
+    m_Documents.push_back(doc);
+
+    return doc;
+}
+
+Document* Project::GetDocument(string& name)
+{
+    for (Document* doc : m_Documents)
+    {
+        if (doc->GetName() == name)
+        {
+            return doc;
+        }
+    }
+
+    return nullptr;
+}
+
+void Project::RemoveDocument(string& name)
+{
+    Document* doc = GetDocument(name);
+    if (doc != nullptr)
+    {
+        m_Documents.remove(doc);
+        delete(doc);
+    }
+}
+
+list<Document*> Project::GetDocuments()
+{
+    return m_Documents;
 }
