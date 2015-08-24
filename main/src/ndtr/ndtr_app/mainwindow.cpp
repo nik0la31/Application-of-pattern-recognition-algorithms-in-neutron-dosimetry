@@ -380,21 +380,31 @@ void MainWindow::RefreshImage()
 
         char val[100];
 
+
+
+
         string statsStr;
         statsStr.append("Broj tragova:\n");
-        statsStr.append(itoa(stats.TracesCount, val, 10));
+        sprintf(val, "%d", stats.TracesCount);
+        statsStr.append(val);
         statsStr.append("\n\nMinimalni dijametar:\n");
-        statsStr.append(itoa(stats.MinDiameter, val, 10));
+        sprintf(val, "%d", stats.MinDiameter);
+        statsStr.append(val);
         statsStr.append("\n\nMaksimalni dijametar:\n");
-        statsStr.append(itoa(stats.MaxDiameter, val, 10));
+        sprintf(val, "%d", stats.MaxDiameter);
+        statsStr.append(val);
         statsStr.append("\n\nSrednji dijametar:\n");
-        statsStr.append(itoa(stats.AverageDiameter, val, 10));
+        sprintf(val, "%d", stats.AverageDiameter);
+        statsStr.append(val);
         statsStr.append("\n\nMinimalni intenzitet:\n");
-        statsStr.append(itoa(stats.MinIntensity, val, 10));
+        sprintf(val, "%d", stats.MinIntensity);
+        statsStr.append(val);
         statsStr.append("\n\nMaksimalni intenzitet:\n");
-        statsStr.append(itoa(stats.MaxIntensity, val, 10));
+        sprintf(val, "%d", stats.MaxIntensity);
+        statsStr.append(val);
         statsStr.append("\n\nSrednji intenzitet:\n");
-        statsStr.append(itoa(stats.AverageIntensity, val, 10));
+        sprintf(val, "%d", stats.AverageIntensity);
+        statsStr.append(val);
 
         ui->labelStats->setText(QString(statsStr.c_str()));
     }

@@ -40,7 +40,8 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
     // There can't be more projects with same name.
     if (m_Projects.count(projectName))
     {
-        throw std::exception("Project with the same name is already loaded.");
+        // "Project with the same name is already loaded."
+        throw std::exception();
     }
 
     // Initialize project.
@@ -48,8 +49,8 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
     m_ProjectsPersistentState[projectName] = true; // loaded or saved
     Project* project = m_Projects[projectName].get();
     project->Init(projectName,
-                  Utils::StringQ2W(projectFullPath),
-                  Utils::StringQ2W(projectDir.absolutePath()));
+                  projectFullPath.toStdString(),
+                  projectDir.absolutePath().toStdString());
 
     // Load/Save project.
     if (load)
@@ -57,7 +58,8 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
         // If exists load project from file.
         if(!ProjectParser::Load(project))
         {
-            throw std::exception("Failed to load project file.");
+            // "Failed to load project file."
+            throw std::exception();
         }
     }
     else
@@ -65,7 +67,8 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
         // Save project file. Serialize as XML.
         if (!ProjectParser::Save(project))
         {
-            throw std::exception("Failed to save project file.");
+            // "Failed to save project file."
+            throw std::exception();
         }
     }
 
@@ -92,14 +95,14 @@ void Workspace::AddProject(QString& projectFullPath, bool load)
     SetCurrent(projectName);
 }
 
-void Workspace::AddDocument(string& projectName, QString& imageFullPath, ProcessingOptions& options)
+void Workspace::AddDocument(string projectName, QString& imageFullPath, ProcessingOptions& options)
 {
     QFileInfo imageFileInfo(imageFullPath);
 
     // Get project.
     Project* project = m_Projects[projectName].get();
     m_ProjectsPersistentState[projectName] = false;
-    QString projectDirPath = Utils::StringW2Q(project->GetDocumentsPath());
+    QString projectDirPath = QString(project->GetDocumentsPath().c_str());
     QDir projectDir(projectDirPath);
 
     // Copy image to project dir.
@@ -160,7 +163,7 @@ void Workspace::SetCurrent(
     }
 }
 
-void Workspace::SetCurrent(std::string& projectName, std::string documentName)
+void Workspace::SetCurrent(std::string projectName, std::string documentName)
 {
     Project*     proj     = nullptr;
     ProjectItem* projItem = nullptr;
@@ -312,7 +315,7 @@ void Workspace::RemoveCurrentDocument()
     m_CurrentDocumentItem = nullptr;
 }
 
-void Workspace::ExportTraces(std::string& filePath)
+void Workspace::ExportTraces(std::string filePath)
 {
     ofstream out;
     out.open(filePath);

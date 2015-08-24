@@ -18,7 +18,7 @@ public:
     {
         try
         {
-            QFile file(Utils::StringW2Q(project->GetPath()));
+            QFile file(QString(project->GetPath().c_str()));
             file.open(QIODevice::ReadOnly | QFile::Text);
 
             QXmlStreamReader stream(&file);
@@ -143,7 +143,7 @@ public:
     {
         try
         {
-            QFile f(Utils::StringW2Q(project->GetPath()));
+            QFile f(QString(project->GetPath().c_str()));
             f.open(QIODevice::WriteOnly);
 
             QXmlStreamWriter stream(&f);
@@ -165,9 +165,9 @@ public:
                 stream.writeStartElement("document");
 
                 QString name("name");
-                stream.writeAttribute(name, Utils::StringW2Q(doc->GetName()));
+                stream.writeAttribute(name, QString(doc->GetName().c_str()));
                 QString ext("ext");
-                stream.writeAttribute(ext, Utils::StringW2Q(doc->GetExt()));
+                stream.writeAttribute(ext, QString(doc->GetExt().c_str()));
 
                 // OPTIONS  - START/END
                 stream.writeStartElement("options");

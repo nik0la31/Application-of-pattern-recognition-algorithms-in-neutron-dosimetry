@@ -11,7 +11,7 @@ Project::~Project()
     }
 }
 
-void Project::Init(string& name, string& path, string& docsPath)
+void Project::Init(string name, string path, string docsPath)
 {
     m_Name = name;
     m_Path = path;
@@ -23,7 +23,7 @@ string Project::GetName()
     return m_Name;
 }
 
-void Project::SetName(string& name)
+void Project::SetName(string name)
 {
     m_Name = name;
 }
@@ -38,7 +38,7 @@ string Project::GetDocumentsPath()
     return m_DocsPath;
 }
 
-Document* Project::AddDocument(string& name, string& path, ProcessingOptions& options)
+Document* Project::AddDocument(string name, string path, ProcessingOptions& options)
 {
     Document* doc  = new Document();
     doc->Init(this, name, path);
@@ -55,7 +55,7 @@ Document* Project::AddDocument(string& name, string& path, ProcessingOptions& op
     return doc;
 }
 
-Document* Project::GetDocument(string& name)
+Document* Project::GetDocument(string name)
 {
     for (Document* doc : m_Documents)
     {
@@ -68,7 +68,7 @@ Document* Project::GetDocument(string& name)
     return nullptr;
 }
 
-void Project::RemoveDocument(string& name)
+void Project::RemoveDocument(string name)
 {
     Document* doc = GetDocument(name);
     if (doc != nullptr)

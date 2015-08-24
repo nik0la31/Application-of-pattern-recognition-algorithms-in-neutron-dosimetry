@@ -14,21 +14,21 @@ public:
 
     ~Project();
 
-    void Init(std::string& name, std::string& path, std::string& docsPath);
+    void Init(std::string name, std::string path, std::string docsPath);
 
     std::string GetName();
 
-    void SetName(std::string& name);
+    void SetName(std::string name);
 
     std::string GetPath();
 
     std::string GetDocumentsPath();
 
-    Document* AddDocument(std::string& name, std::string& path, ProcessingOptions& options);
+    Document* AddDocument(std::string name, std::string path, ProcessingOptions& options);
 
-    Document* GetDocument(std::string& name);
+    Document* GetDocument(std::string name);
 
-    void RemoveDocument(std::string& name);
+    void RemoveDocument(std::string name);
 
     std::list<Document*> GetDocuments();
 

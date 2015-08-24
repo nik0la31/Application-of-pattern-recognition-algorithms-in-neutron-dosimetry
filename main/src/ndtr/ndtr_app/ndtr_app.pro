@@ -7,6 +7,8 @@
 QT       += core gui
 QT       += printsupport
 
+QMAKE_CXXFLAGS += -std=c++11
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ndtr_app
@@ -17,7 +19,7 @@ SOURCES += \
     mainwindow.cpp \
     utils.cpp \
     projectparser.cpp \
-    projectitem.cpp
+    projectitem.cpp \
     workspace.cpp \
 
 HEADERS += \
@@ -63,7 +65,29 @@ win32 {
 }
 
 unix {
+    target.path = /usr/lib
+    INSTALLS += target
+
+    INCLUDEPATH += \
+        /usr/local/include/opencv \
+        /usr/local/include/opencv2 \
+
     LIBS += -L$$OUT_PWD/../ndtr_engine/ -lndtr_engine
+
+    LIBS += -L/usr/local/lib
+    LIBS += -lopencv_core
+    LIBS += -lopencv_imgproc
+    LIBS += -lopencv_highgui
+    LIBS += -lopencv_ml
+    LIBS += -lopencv_video
+    LIBS += -lopencv_features2d
+    LIBS += -lopencv_calib3d
+    LIBS += -lopencv_objdetect
+    LIBS += -lopencv_imgcodecs
+    #LIBS += -lopencv_contrib
+    #LIBS += -lopencv_legacy
+    LIBS += -lopencv_flann
+    #LIBS += -lopencv_nonfree
 
     PRE_TARGETDEPS += $$OUT_PWD/../ndtr_engine/libndtr_engine.a
 }

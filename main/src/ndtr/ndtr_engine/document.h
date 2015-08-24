@@ -27,7 +27,7 @@ public:
 
     }
 
-    void Init(Project*, std::string& name, std::string& path);
+    void Init(Project*, std::string name, std::string path);
 
     void Process(ProcessingOptions& options);
 

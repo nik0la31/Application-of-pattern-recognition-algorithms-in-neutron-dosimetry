@@ -6,10 +6,11 @@
 
 QT       -= gui
 
+QMAKE_CXXFLAGS += -std=c++11
+
 TARGET = ndtr_engine
 TEMPLATE = lib
 CONFIG += staticlib
-
 CONFIG   += console
 
 DEFINES += NDTR_ENGINE_LIBRARY \
@@ -48,4 +49,23 @@ win32 {
 unix {
     target.path = /usr/lib
     INSTALLS += target
+
+    INCLUDEPATH += \
+        /usr/local/include/opencv \
+        /usr/local/include/opencv2 \
+
+    LIBS += -L/usr/local/lib
+    LIBS += -lopencv_core
+    LIBS += -lopencv_imgproc
+    LIBS += -lopencv_highgui
+    LIBS += -lopencv_ml
+    LIBS += -lopencv_video
+    LIBS += -lopencv_features2d
+    LIBS += -lopencv_calib3d
+    LIBS += -lopencv_objdetect
+    LIBS += -lopencv_imgcodecs
+    #LIBS += -lopencv_contrib
+    #LIBS += -lopencv_legacy
+    LIBS += -lopencv_flann
+    #LIBS += -lopencv_nonfree
 }

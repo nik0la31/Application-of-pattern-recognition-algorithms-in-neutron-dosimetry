@@ -14,7 +14,7 @@
 using namespace cv;
 using namespace std;
 
-void Document::Init(Project* project, string& name, string& path)
+void Document::Init(Project* project, string name, string path)
 {
     m_Project = project;
     m_Name = name;
@@ -22,7 +22,12 @@ void Document::Init(Project* project, string& name, string& path)
 
     // Load image.
     std::string p(path.begin(), path.end());
-    m_Images[NDTR_ORIGINAL] = imread(p, CV_LOAD_IMAGE_COLOR);
+
+    cv::String ppp(p.c_str());
+
+    //imread()
+
+    m_Images[NDTR_ORIGINAL] = imread(ppp, CV_LOAD_IMAGE_COLOR);
 
     // Get image dimensions.
     m_Width = m_Images[NDTR_ORIGINAL].cols;
@@ -337,9 +342,9 @@ Mat GetDist(vector<Trace> traces)
     return nearest5;
 }
 
-bool MatchComparer (DMatch& i, DMatch& j)
+bool MatchComparer (DMatch* i, DMatch* j)
 {
-    return (i.distance < j.distance);
+    return (i->distance < j->distance);
 }
 
 Mat Document::CalcTransform(Document* prev, Document* curr)
@@ -354,8 +359,15 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
     std::vector< DMatch > matches;
     matcher.match( prevN5, currN5, matches );
 
+    std::vector< DMatch* > refMatches;
+
+    for (DMatch& m : matches)
+    {
+        refMatches.push_back(&m);
+    }
+
     // using function as comp
-    std::sort (matches.begin(), matches.end(), MatchComparer);
+    std::sort (refMatches.begin(), refMatches.end(), MatchComparer);
 
     std::vector<Point2f> pPrev;
     std::vector<Point2f> pCurr;
@@ -365,13 +377,13 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
         Point2f pkp;
         Point2f ckp;
 
-        DMatch m = matches[i];
+        DMatch* m = refMatches[i];
 
-        pkp.x = static_cast<float>(prevTraces[m.trainIdx].x);
-        pkp.y = static_cast<float>(prevTraces[m.trainIdx].y);
+        pkp.x = static_cast<float>(prevTraces[m->trainIdx].x);
+        pkp.y = static_cast<float>(prevTraces[m->trainIdx].y);
 
-        ckp.x = static_cast<float>(currTraces[m.queryIdx].x);
-        ckp.y = static_cast<float>(currTraces[m.queryIdx].y);
+        ckp.x = static_cast<float>(currTraces[m->queryIdx].x);
+        ckp.y = static_cast<float>(currTraces[m->queryIdx].y);
 
         pPrev.push_back(pkp);
         pCurr.push_back(ckp);

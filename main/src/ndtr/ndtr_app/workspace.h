@@ -39,9 +39,9 @@ public:
 
     void AddProject(QString& projectFullPath, bool load = false);
 
-    void AddDocument(std::string& proj, QString& imagePath, ProcessingOptions& options);
+    void AddDocument(std::string proj, QString& imagePath, ProcessingOptions& options);
 
-    void SetCurrent(std::string& projectName, std::string documentName = "");
+    void SetCurrent(std::string projectName, std::string documentName = "");
 
     cv::Mat GetImage(ViewOptions view);
 
@@ -69,7 +69,7 @@ public:
 
     void CloseAllProjects();
 
-    void ExportTraces(std::string& filePath);
+    void ExportTraces(std::string filePath);
 
 private:
     // Projects.

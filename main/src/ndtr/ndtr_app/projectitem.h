@@ -6,7 +6,7 @@
 class ProjectItem : public QStandardItem
 {
 public:
-    ProjectItem(std::string& name, bool isDoc = false);
+    ProjectItem(std::string name, bool isDoc = false);
 
     std::string GetName();
 
