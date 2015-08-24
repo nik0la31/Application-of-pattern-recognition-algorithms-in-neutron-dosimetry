@@ -21,13 +21,7 @@ void Document::Init(Project* project, string name, string path)
     m_Path = path;
 
     // Load image.
-    std::string p(path.begin(), path.end());
-
-    cv::String ppp(p.c_str());
-
-    //imread()
-
-    m_Images[NDTR_ORIGINAL] = imread(ppp, CV_LOAD_IMAGE_COLOR);
+    m_Images[NDTR_ORIGINAL] = imread(path, CV_LOAD_IMAGE_COLOR);
 
     // Get image dimensions.
     m_Width = m_Images[NDTR_ORIGINAL].cols;
