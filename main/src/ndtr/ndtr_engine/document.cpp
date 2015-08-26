@@ -354,6 +354,8 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
     printf("prevN5\n");
     for (int t=0; t<prevN5.rows; t++)
     {
+        printf("%d. ", t);
+
         for (int p=0; p<prevN5.cols; p++)
         {
             printf("%f ", prevN5.at<float>(t, p));
@@ -364,6 +366,8 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
     printf("prevN5\n");
     for (int t=0; t<currN5.rows; t++)
     {
+        printf("%d. ", t);
+
         for (int p=0; p<currN5.cols; p++)
         {
             printf("%f ", currN5.at<float>(t, p));
@@ -385,22 +389,28 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
     }
 
 #ifdef PROFILE
-    printf("\nMatches\n");
+
+    printf("Matches\n");
     for (DMatch* m : refMatches)
     {
         printf("[%d %d %f] ", m->trainIdx, m->queryIdx, m->distance);
     }
+    printf("\n");
+
 #endif
 
     // using function as comp
     std::sort (refMatches.begin(), refMatches.end(), MatchComparer);
 
 #ifdef PROFILE
-    printf("\nSorted matches\n");
+
+    printf("Sorted matches\n");
     for (DMatch* m : refMatches)
     {
         printf("[%d %d %f] ",m->trainIdx, m->queryIdx, m->distance);
     }
+    printf("\n");
+
 #endif
 
     std::vector<Point2f> pPrev;
