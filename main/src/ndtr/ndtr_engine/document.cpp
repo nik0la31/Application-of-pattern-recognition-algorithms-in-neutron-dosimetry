@@ -318,12 +318,12 @@ Mat GetDist(vector<Trace> traces)
     for (size_t t=0; t<traces.size(); t++)
     {
         Trace& tt = traces[t];
-        Mat &tn = nearest5.adjustROI(t, traces.size() - (traces.size() - t), 0, k-1);
+        Mat tn = nearest5(Rect(0, t, k, 1));
 
         for (size_t c=t+1; c<traces.size(); c++)
         {
             Trace& ct = traces[c];
-            Mat &cn = nearest5.adjustROI(c, traces.size() - (traces.size() - c), 0, k-1);
+            Mat cn = nearest5(Rect(0, c, k, 1));
 
             // NOTE: We'll skip calculating sqrt, it would be just overhead.
             float dist = static_cast<float>(pow(tt.x-ct.x, 2) + pow(tt.y-ct.y, 2));
