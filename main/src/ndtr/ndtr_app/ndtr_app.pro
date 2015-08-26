@@ -52,13 +52,12 @@ win32 {
         C:/opencv/build/x86/vc12/
 
     CONFIG(release, debug|release) {
-        LIBS += -LC:/opencv/build/x86/vc12/lib/ -lopencv_world300
+        LIBS += -LC:/opencv/build/x64/vc12/lib/ -lopencv_world300
         LIBS += -L$$OUT_PWD/../ndtr_engine/release/ -lndtr_engine
-
     }
 
     CONFIG(debug, debug|release) {
-        LIBS += -LC:/opencv/build/x86/vc12/lib/ -lopencv_world300d
+        LIBS += -LC:/opencv/build/x64/vc12/lib/ -lopencv_world300d
         LIBS += -L$$OUT_PWD/../ndtr_engine/debug/ -lndtr_engine
     }
 

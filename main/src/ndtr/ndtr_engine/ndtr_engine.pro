@@ -16,6 +16,9 @@ CONFIG   += console
 DEFINES += NDTR_ENGINE_LIBRARY \
             _CRT_SECURE_NO_WARNINGS
 
+
+DEFINES += PROFILE
+
 SOURCES += \
     project.cpp \
     document.cpp \
@@ -39,10 +42,10 @@ win32 {
 
     DEPENDPATH += C:/opencv/build/x86/vc12/
 
-    CONFIG(release, debug|release): LIBS += -LC:/opencv/build/x86/vc12/lib/ \
+    CONFIG(release, debug|release): LIBS += -LC:/opencv/build/x64/vc12/lib/ \
         -lopencv_world300 \
 
-    CONFIG(debug, debug|release): LIBS += -LC:/opencv/build/x86/vc12/lib/ \
+    CONFIG(debug, debug|release): LIBS += -LC:/opencv/build/x64/vc12/lib/ \
         -lopencv_world300d \
 }
 

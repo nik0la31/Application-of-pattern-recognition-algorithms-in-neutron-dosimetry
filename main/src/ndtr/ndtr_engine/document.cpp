@@ -349,6 +349,30 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
     Mat prevN5 = GetDist(prevTraces);
     Mat currN5 = GetDist(currTraces);
 
+#ifdef PROFILE
+
+    printf("prevN5\n");
+    for (int t=0; t<prevN5.rows; t++)
+    {
+        for (int p=0; p<prevN5.cols; p++)
+        {
+            printf("%f ", prevN5.at<float>(t, p));
+        }
+        printf("\n");
+    }
+
+    printf("prevN5\n");
+    for (int t=0; t<currN5.rows; t++)
+    {
+        for (int p=0; p<currN5.cols; p++)
+        {
+            printf("%f ", currN5.at<float>(t, p));
+        }
+        printf("\n");
+    }
+
+#endif
+
     FlannBasedMatcher matcher;
     std::vector< DMatch > matches;
     matcher.match( prevN5, currN5, matches );
@@ -360,8 +384,24 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
         refMatches.push_back(&m);
     }
 
+#ifdef PROFILE
+    printf("\nMatches\n");
+    for (DMatch* m : refMatches)
+    {
+        printf("[%d %d %f] ", m->trainIdx, m->queryIdx, m->distance);
+    }
+#endif
+
     // using function as comp
     std::sort (refMatches.begin(), refMatches.end(), MatchComparer);
+
+#ifdef PROFILE
+    printf("\nSorted matches\n");
+    for (DMatch* m : refMatches)
+    {
+        printf("[%d %d %f] ",m->trainIdx, m->queryIdx, m->distance);
+    }
+#endif
 
     std::vector<Point2f> pPrev;
     std::vector<Point2f> pCurr;
