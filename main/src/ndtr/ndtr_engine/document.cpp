@@ -269,26 +269,28 @@ void Document::ProcessImage()
             continue;
         }
 
-        RotatedRect rr = fitEllipse(Mat(m_Contuors[i]));
+        RotatedRect ellipse = fitEllipse(Mat(m_Contuors[i]));
 
-        m_Ellipses.emplace_back(rr);
+        if (ellipse.size.width < m_Options.MinTraceDiameter &&
+            ellipse.size.width > m_Options.MaxTraceDiameter &&
+            ellipse.size.height < m_Options.MinTraceDiameter &&
+            ellipse.size.height > m_Options.MaxTraceDiameter)
+        {
+            continue;
+        }
 
-        // TODO: make this work.
-//        m_TraceFilter[i] = m_Ellipses[i].size.width >= m_Options.MinTraceDiameter &&
-//                           m_Ellipses[i].size.width <= m_Options.MaxTraceDiameter &&
-//                           m_Ellipses[i].size.height >= m_Options.MinTraceDiameter &&
-//                           m_Ellipses[i].size.height <= m_Options.MaxTraceDiameter;
+        m_Ellipses.emplace_back(ellipse);
 
         drawContours(labels, m_Contuors, i, cv::Scalar(i), CV_FILLED);
         cv::Rect roi = cv::boundingRect(m_Contuors[i]);
         cv::Scalar mean = cv::mean(m_Images[NDTR_GRAYSCALE](roi), labels(roi) == i);
 
         m_Traces.emplace_back(
-            static_cast<int>(rr.center.x),
-            static_cast<int>(rr.center.y),
-            rr.angle,
-            static_cast<int>(rr.size.width),
-            static_cast<int>(rr.size.height),
+            static_cast<int>(ellipse.center.x),
+            static_cast<int>(ellipse.center.y),
+            ellipse.angle,
+            static_cast<int>(ellipse.size.width),
+            static_cast<int>(ellipse.size.height),
             static_cast<int>(mean[0]));
     }
 }

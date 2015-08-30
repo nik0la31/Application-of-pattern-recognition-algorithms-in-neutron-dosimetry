@@ -128,6 +128,11 @@ void MainWindow::on_actionNew_Project_triggered()
     {
         try
         {
+            if (!fullFilePath.endsWith(QString(".ndtr")), Qt::CaseInsensitive)
+            {
+                fullFilePath.append(QString(".ndtr"));
+            }
+
             Workspace::Instance.AddProject(fullFilePath);
 
             RefreshImage();
