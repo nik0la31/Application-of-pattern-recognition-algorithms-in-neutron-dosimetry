@@ -2,6 +2,7 @@
 #define PROJECTPARSER_H
 
 #include <project.h>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QXmlStreamReader>
@@ -48,12 +49,11 @@ public:
                         QXmlStreamAttributes attributes = stream.attributes();
                         std::string name = attributes.value(QString("name")).toString().toStdString();
                         std::string ext = attributes.value(QString("ext")).toString().toStdString();
-                        path = project->GetDocumentsPath().append("\\").append(name).append(ext);
+                        std::string separator = QString(QDir::separator()).toStdString();
+                        path = project->GetDocumentsPath().append(separator).append(name).append(ext);
 
                         doc = new Document();
                         doc->Init(project, name, path);
-
-
                     }
                     else if(stream.name() == "options")
                     {

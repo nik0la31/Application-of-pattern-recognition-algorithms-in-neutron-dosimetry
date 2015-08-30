@@ -128,7 +128,7 @@ void MainWindow::on_actionNew_Project_triggered()
     {
         try
         {
-            if (!fullFilePath.endsWith(QString(".ndtr")), Qt::CaseInsensitive)
+            if (!fullFilePath.endsWith(".ndtr"))
             {
                 fullFilePath.append(QString(".ndtr"));
             }
