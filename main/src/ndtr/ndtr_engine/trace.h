@@ -6,6 +6,8 @@ class Trace
 public:
     Trace();
 
+    Trace(int argX, int argY, double argAngle, int argD1, int argD2, int argIntensity);
+
     int x;
     int y;
     double angle;

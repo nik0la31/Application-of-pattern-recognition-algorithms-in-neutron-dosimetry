@@ -42,7 +42,6 @@ Document* Project::AddDocument(string name, string path, ProcessingOptions& opti
 {
     Document* doc  = new Document();
     doc->Init(this, name, path);
-    doc->Process(options);
 
     if (m_Documents.size() > 0)
     {

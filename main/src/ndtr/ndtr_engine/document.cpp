@@ -246,15 +246,19 @@ void Document::ProcessImage()
             thresholdType);
 
     // Get contuors.
+    m_Contuors.clear();
     findContours(m_Images[NDTR_BLACK_WHITE],
                  m_Contuors,
                  CV_RETR_LIST,
                  CV_CHAIN_APPROX_SIMPLE);
 
     // Calculate ellipses.
-    m_Ellipses.resize(m_Contuors.size());
-    m_TraceFilter.resize(m_Contuors.size());
-    m_Traces.resize(m_Contuors.size());
+    m_Ellipses.clear();
+    m_Ellipses.reserve(m_Contuors.size());
+    m_TraceFilter.clear();
+    m_TraceFilter.reserve(m_Contuors.size());
+    m_Traces.clear();
+    m_Traces.reserve(m_Contuors.size());
 
     cv::Mat labels = cv::Mat::zeros(m_Images[NDTR_GRAYSCALE].size(), CV_8UC1);
 
@@ -264,25 +268,28 @@ void Document::ProcessImage()
         {
             continue;
         }
-        m_Ellipses[i] = fitEllipse(Mat(m_Contuors[i]));
+
+        RotatedRect rr = fitEllipse(Mat(m_Contuors[i]));
+
+        m_Ellipses.emplace_back(rr);
 
         // TODO: make this work.
-        m_TraceFilter[i] = m_Ellipses[i].size.width >= m_Options.MinTraceDiameter &&
-                           m_Ellipses[i].size.width <= m_Options.MaxTraceDiameter &&
-                           m_Ellipses[i].size.height >= m_Options.MinTraceDiameter &&
-                           m_Ellipses[i].size.height <= m_Options.MaxTraceDiameter;
-
-        m_Traces[i].x = static_cast<int>(m_Ellipses[i].center.x);
-        m_Traces[i].y = static_cast<int>(m_Ellipses[i].center.y);
-        m_Traces[i].angle = m_Ellipses[i].angle;
-        m_Traces[i].diameter1 = static_cast<int>(m_Ellipses[i].size.width);
-        m_Traces[i].diameter2 = static_cast<int>(m_Ellipses[i].size.height);
+//        m_TraceFilter[i] = m_Ellipses[i].size.width >= m_Options.MinTraceDiameter &&
+//                           m_Ellipses[i].size.width <= m_Options.MaxTraceDiameter &&
+//                           m_Ellipses[i].size.height >= m_Options.MinTraceDiameter &&
+//                           m_Ellipses[i].size.height <= m_Options.MaxTraceDiameter;
 
         drawContours(labels, m_Contuors, i, cv::Scalar(i), CV_FILLED);
         cv::Rect roi = cv::boundingRect(m_Contuors[i]);
         cv::Scalar mean = cv::mean(m_Images[NDTR_GRAYSCALE](roi), labels(roi) == i);
 
-        m_Traces[i].intensity = static_cast<int>(mean[0]);
+        m_Traces.emplace_back(
+            static_cast<int>(rr.center.x),
+            static_cast<int>(rr.center.y),
+            rr.angle,
+            static_cast<int>(rr.size.width),
+            static_cast<int>(rr.size.height),
+            static_cast<int>(mean[0]));
     }
 }
 
@@ -327,6 +334,8 @@ Mat GetDist(vector<Trace> traces)
 
             // NOTE: We'll skip calculating sqrt, it would be just overhead.
             float dist = static_cast<float>(pow(tt.x-ct.x, 2) + pow(tt.y-ct.y, 2));
+
+            printf("%d %d %f\n", t, c, dist);
 
             UpdateDist(tn, k, dist);
             UpdateDist(cn, k, dist);
@@ -423,11 +432,11 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
 
         DMatch* m = refMatches[i];
 
-        pkp.x = static_cast<float>(prevTraces[m->trainIdx].x);
-        pkp.y = static_cast<float>(prevTraces[m->trainIdx].y);
+        pkp.x = static_cast<float>(prevTraces[m->queryIdx].x);
+        pkp.y = static_cast<float>(prevTraces[m->queryIdx].y);
 
-        ckp.x = static_cast<float>(currTraces[m->queryIdx].x);
-        ckp.y = static_cast<float>(currTraces[m->queryIdx].y);
+        ckp.x = static_cast<float>(currTraces[m->trainIdx].x);
+        ckp.y = static_cast<float>(currTraces[m->trainIdx].y);
 
         pPrev.push_back(pkp);
         pCurr.push_back(ckp);
