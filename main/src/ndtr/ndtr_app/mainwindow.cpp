@@ -112,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Display default image processing options.
     DisplayImageProcesingOptions();
 
-    ui->treeView->setEditTriggers(QAbstractItemView::DoubleClicked);
+    ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 MainWindow::~MainWindow()
@@ -384,9 +384,6 @@ void MainWindow::RefreshImage()
         Stats stats = Workspace::Instance.GetStats();
 
         char val[100];
-
-
-
 
         string statsStr;
         statsStr.append("Broj tragova:\n");

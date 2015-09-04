@@ -1,6 +1,8 @@
 #ifndef TRACE_H
 #define TRACE_H
 
+#include <opencv2/core/core.hpp>
+
 class Trace
 {
 public:
@@ -14,6 +16,8 @@ public:
     int diameter1;
     int diameter2;
     int intensity;
+
+    cv::Scalar DebugColor;
 };
 
 #endif // TRACE_H

@@ -16,9 +16,6 @@ CONFIG   += console
 DEFINES += NDTR_ENGINE_LIBRARY \
             _CRT_SECURE_NO_WARNINGS
 
-
-DEFINES += PROFILE
-
 SOURCES += \
     project.cpp \
     document.cpp \

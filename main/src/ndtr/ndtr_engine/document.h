@@ -13,7 +13,8 @@
 #include "stats.h"
 #include "trace.h"
 
-typedef std::vector<cv::Point> Contuor;
+typedef std::vector<cv::Point> Contour;
+typedef cv::RotatedRect Ellipse;
 
 // Forward declatation.
 class Project;
@@ -72,9 +73,8 @@ private:
     std::vector<cv::Mat> m_Images;
 
     // Traces.
-    std::vector<Contuor> m_Contuors;
-    std::vector<cv::RotatedRect> m_Ellipses;
-    std::vector<bool> m_TraceFilter;
+    std::vector<Contour> m_Contuors;
+    std::vector<Ellipse> m_Ellipses;
     std::vector<Trace> m_Traces;
 
     // Transform matrix
