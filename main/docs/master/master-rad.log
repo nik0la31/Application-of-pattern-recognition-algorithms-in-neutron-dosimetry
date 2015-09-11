@@ -1,0 +1,1270 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  11 SEP 2015 11:35
+entering extended mode
+**D:/Repo/NDTR/Application-of-pattern-recognition-algorithms-in-neutron-dosimet
+ry/main/docs/master/master-rad.tex
+
+(D:/Repo/NDTR/Application-of-pattern-recognition-algorithms-in-neutron-dosimetr
+y/main/docs/master/master-rad.tex
+LaTeX2e <2015/01/01> patch level 2
+Babel <3.9m> and hyphenation patterns for 69 languages loaded.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\book.cls"
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\bk12.clo"
+File: bk12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ucs\utf8x.def"
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ucs\ucs.sty"
+Package: ucs 2013/05/11 v2.2 UCS: Unicode input support
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ucs\uni-global.def"
+File: uni-global.def 2013/05/13 UCS: Unicode global data
+)
+\uc@secondtry=\count88
+\uc@combtoks=\toks16
+\uc@combtoksb=\toks17
+\uc@temptokena=\toks18
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\cyrillic\t2aenc.def"
+File: t2aenc.def 2005/09/27 v1.0i Cyrillic encoding definition file
+)
+LaTeX Font Info:    Try loading font information for T2A+cmr on input line 105.
+
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\cyrillic\t2acmr.fd"
+File: t2acmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
+Package: amstext 2000/06/29 v2.01
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks19
+\ex@=\dimen103
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count89
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count90
+\leftroot@=\count91
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count92
+\DOTSCASE@=\count93
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count94
+\c@MaxMatrixCols=\count95
+\dotsspace@=\muskip10
+\c@parentequation=\count96
+\dspbrk@lvl=\count97
+\tag@help=\toks20
+\row@=\count98
+\column@=\count99
+\maxfields@=\count100
+\andhelp@=\toks21
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks22
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks23
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\textcomp.sty"
+Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1enc.def"
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)
+LaTeX Info: Redefining \oldstylenums on input line 334.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
+Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
+Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
+Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
+Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
+Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
+Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
+Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
+Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
+Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
+Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
+Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
+Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
+Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
+Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
+Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks24
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 94.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count101
+))
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.sty"
+\lst@mode=\count102
+\lst@gtempboxa=\box28
+\lst@token=\toks25
+\lst@length=\count103
+\lst@currlwidth=\dimen114
+\lst@column=\count104
+\lst@pos=\count105
+\lst@lostspace=\dimen115
+\lst@width=\dimen116
+\lst@newlines=\count106
+\lst@lineno=\count107
+\lst@maxwidth=\dimen117
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count108
+\lst@skipnumbers=\count109
+\lst@framebox=\box29
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.cfg"
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.sty"
+Package: babel 2015/08/03 3.9m The Babel package
+
+*************************************
+* Local config file bblopts.cfg used
+*
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\bblopts.cfg"
+File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\babel-serbian\serbian.ldf"
+Language: serbian 2005/03/31 v1.0d Serbocroatian support from the babel system
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.def"
+File: babel.def 2015/08/03 3.9m Babel common definitions
+\babel@savecnt=\count110
+\U@D=\dimen118
+)
+Package babel Info: Making " an active character on input line 73.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\serbianc\serbianc.ldf"
+Language: serbianc 2011/06/06 v2.2 Serbian cyrillic
+
+
+Package babel Warning: No hyphenation patterns were preloaded for
+(babel)                the language `serbianc' into the format.
+(babel)                Please, configure your TeX system to add them and
+(babel)                rebuild the format. Now I will use the patterns
+(babel)                preloaded for english instead on input line 24.
+
+\l@serbianc = a dialect from \language0
+)) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\cyrillic\t2aenc.def"
+File: t2aenc.def 2005/09/27 v1.0i Cyrillic encoding definition file
+LaTeX Font Info:    Redeclaring font encoding T2A on input line 42.
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\pdfsync\pdfsync.sty"
+Package: pdfsync 2008/01/26 v1.1
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty"
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count111
+\Gm@cntv=\count112
+\c@Gm@tempcnt=\count113
+\Gm@bindingoffset=\dimen119
+\Gm@wd@mp=\dimen120
+\Gm@odd@mp=\dimen121
+\Gm@even@mp=\dimen122
+\Gm@layoutwidth=\dimen123
+\Gm@layoutheight=\dimen124
+\Gm@layouthoffset=\dimen125
+\Gm@layoutvoffset=\dimen126
+\Gm@dimlist=\toks26
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.cfg"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count114
+\float@exts=\toks27
+\float@box=\box30
+\@float@everytoks=\toks28
+\@floatcapt=\box31
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\color.sty"
+Package: color 2014/10/28 v1.1a Standard LaTeX Color (DPC)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 142.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+LaTeX Info: Redefining \color on input line 702.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen127
+\captionmargin@=\dimen128
+\captionwidth=\dimen129
+\caption@tempdima=\dimen130
+\caption@indent=\dimen131
+\caption@parindent=\dimen132
+\caption@hangindent=\dimen133
+)
+\c@ContinuedFloat=\count115
+Package caption Info: float package is loaded.
+Package caption Info: listings package is loaded.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\stmaryrd\stmaryrd.sty"
+Package: stmaryrd 1994/03/03 St Mary's Road symbol package
+\symstmry=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
+(Font)                  U/stmry/m/n --> U/stmry/b/n on input line 89.
+)
+(master-rad.aux
+
+LaTeX Warning: Label `fig:atom' multiply defined.
+
+
+LaTeX Warning: Label `fig:cv' multiply defined.
+
+
+LaTeX Warning: Label `fig:cv' multiply defined.
+
+
+LaTeX Warning: Label `lst:grayscale' multiply defined.
+
+
+LaTeX Warning: Label `fig:cv' multiply defined.
+
+
+LaTeX Warning: Label `lst:grayscaleOtsu' multiply defined.
+
+
+LaTeX Warning: Label `fig:otsu' multiply defined.
+
+
+LaTeX Warning: Label `lst:signal_and_slot' multiply defined.
+
+
+LaTeX Warning: Label `lst:signal_and_slot' multiply defined.
+
+
+LaTeX Warning: Label `lst:signal_and_slot' multiply defined.
+
+
+LaTeX Warning: Label `opencv' multiply defined.
+
+)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 104.
+LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 104.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 104.
+
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 104.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ucs\ucsencs.def"
+File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count116
+\scratchdimen=\dimen134
+\scratchbox=\box32
+\nofMPsegments=\count117
+\nofMParguments=\count118
+\everyMPshowfont=\toks29
+\MPscratchCnt=\count119
+\MPscratchDim=\dimen135
+\MPnumerator=\count120
+\makeMPintoPDFobject=\count121
+\everyMPtoPDFconversion=\toks30
+)
+\c@lstlisting=\count122
+Configuring pdfsync
+\PDFSYNC@ut=\write3
+\PDFSYNCf@li@=\count123
+\PDFSYNC@rder=\count124
+**** pdfsync.sty: Synchronizing at \everypar
+\PDFSYNCeveryp@r=\toks31
+**** pdfsync.sty: Synchronizing at \everymath
+\PDFSYNCeverym@th=\toks32
+**** pdfsync.sty: Synchronizing at \everyhbox
+\PDFSYNCeveryhb@x=\toks33
+**** pdfsync.sty: Synchronizing at \everyvbox
+\PDFSYNCeveryvb@x=\toks34
+**** pdfsync.sty: started
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(71.13188pt, 455.24411pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=455.24411pt
+* \textheight=702.78308pt
+* \oddsidemargin=-1.1381pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-33.0119pt
+* \headheight=12.0pt
+* \headsep=19.8738pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=38.0pt
+* \marginparsep=7.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+(naslovna.tex <logo-pmf.pdf, id=1, 288.07625pt x 288.07625pt>
+File: logo-pmf.pdf Graphic file (type pdf)
+
+<use logo-pmf.pdf>
+Package pdftex.def Info: logo-pmf.pdf used on input line 10.
+(pdftex.def)             Requested size: 113.81102pt x 113.81303pt.
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ucs\uni-4.def"
+File: uni-4.def 2013/05/13 UCS: Unicode data U+0400..U+04FF
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 30.
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 30.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+stmry on input line 30.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\stmaryrd\ustmry.fd") [1
+
+
+{C:/Users/Nikola/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./logo-pmf
+.pdf>])
+(master-rad.toc)
+\tf@toc=\write4
+ [1
+
+]
+Overfull \hbox (8.701pt too wide) in paragraph at lines 133--134
+[][][]\T2A/cmr/m/n/12 У првом поглав§у дат jе увод у неутронску дозиметриjу, »е
+ну примену и дефинисан
+ []
+
+
+Overfull \hbox (9.00754pt too wide) in paragraph at lines 133--134
+\T2A/cmr/m/n/12 jе проблем коjи Је решавати оваj рад. Друго поглав§е представ§а
+ \T2A/cmr/m/it/12 OpenCV \T2A/cmr/m/n/12 библиотеку
+ []
+
+
+Overfull \hbox (0.82747pt too wide) in paragraph at lines 133--134
+\T2A/cmr/m/n/12 и описуjе коришЈене алгоритме за обраду слика. ТреЈе поглав»е у
+кратко представ§а
+ []
+
+
+Overfull \hbox (5.21089pt too wide) in paragraph at lines 133--134
+\T2A/cmr/m/n/12 поглав»у дата jе анализа софтвера, процена тачности детекциjе т
+рагова, као и анализа
+ []
+
+
+Overfull \hbox (24.15309pt too wide) in paragraph at lines 133--134
+\T2A/cmr/m/n/12 наjчешЈих грешака детекциjе. У послед»ем поглав§у даt jе предло
+г могуЈих унапреўе»а. 
+ []
+
+[2
+
+]
+\CYRG \cyrl \cyra \cyrv \cyra  1.
+
+Overfull \hbox (16.81241pt too wide) in paragraph at lines 147--148
+[][][]\T2A/cmr/m/n/12 Атом jе основна jединица материjе. Атоми су изграўени од 
+позитивно наелектрисаног
+ []
+
+
+Overfull \hbox (1.80435pt too wide) in paragraph at lines 147--148
+\T2A/cmr/m/n/12 атомског jезгра и одреўеног броjа електрона. Електрони носе нег
+атвно наелектриса»е
+ []
+
+<images/atom.png, id=23, 701.62125pt x 691.08188pt>
+File: images/atom.png Graphic file (type png)
+ <use images/atom.png>
+Package pdftex.def Info: images/atom.png used on input line 152.
+(pdftex.def)             Requested size: 142.26378pt x 140.12257pt.
+
+Overfull \hbox (1.91518pt too wide) in paragraph at lines 160--161
+\T2A/cmr/m/n/12 односом броjа протона и броjа неутрона су нестабилна и путем ра
+диоактивног распада
+ []
+
+[3
+
+ <./images/atom.png (PNG copy)>]
+Overfull \hbox (16.05965pt too wide) in paragraph at lines 168--169
+[][][]\T2A/cmr/m/n/12 JонизираjуЈе зраче»е ук§учуjе космичке зраке, \T2A/cmr/m/
+it/12 X \T2A/cmr/m/n/12 зраке и зраче»е од радиоактивних
+ []
+
+
+Overfull \hbox (6.6791pt too wide) in paragraph at lines 170--171
+[][][]\T2A/cmr/m/n/12 НеjонизираjуЈе зраче»е ук§учуjе ултра§убичасто светло, то
+плотно зраче»е, радио
+ []
+
+<images/radiation.png, id=28, 867.99281pt x 554.07pt>
+File: images/radiation.png Graphic file (type png)
+
+<use images/radiation.png>
+Package pdftex.def Info: images/radiation.png used on input line 175.
+(pdftex.def)             Requested size: 341.43306pt x 217.9464pt.
+
+Overfull \hbox (27.63524pt too wide) in paragraph at lines 187--188
+\T2A/cmr/m/n/12 атомима када пролази кроз материjал, првенствено због интеракци
+jе са електронима.
+ []
+
+[4 <./images/radiation.png>]
+Overfull \hbox (0.35115pt too wide) in paragraph at lines 189--190
+\T2A/cmr/m/n/12 Када су у реакциjи са материjалом изазиваjу емисиjу $[][]\OML/c
+mm/m/it/12 $ \T2A/cmr/m/n/12 и $[][]\OML/cmm/m/it/12 $ \T2A/cmr/m/n/12 зраче»
+е. Неутронско
+ []
+
+
+Overfull \hbox (1.07307pt too wide) in paragraph at lines 195--196
+[][][]\T2A/cmr/m/n/12 Изворе зраче»а делимо на \T2A/cmr/bx/n/12 природне \T2A/c
+mr/m/n/12 и \T2A/cmr/bx/n/12 вештачке\T2A/cmr/m/n/12 . Природном зраче»у изложе
+ни
+ []
+
+
+Overfull \hbox (9.60219pt too wide) in paragraph at lines 203--204
+[][][]\T2A/cmr/bx/n/12 Нуклеарне електране \T2A/cmr/m/n/12 имаjу за ци§ да прои
+зведу електричну енергиjу. НаjвеЈу
+ []
+
+
+Overfull \hbox (6.55975pt too wide) in paragraph at lines 205--206
+[][][]\T2A/cmr/bx/n/12 Медицински извори \T2A/cmr/m/n/12 зраче»а настаjу при ле
+че»у неких болести услед употребе
+ []
+
+
+Overfull \hbox (9.91655pt too wide) in paragraph at lines 207--208
+\T2A/cmr/m/n/12 бази радионуклеида те представ§аjу опасност за животну средину 
+(радиоактивни
+ []
+
+
+Overfull \hbox (2.66568pt too wide) in paragraph at lines 219--220
+\T2A/cmr/m/n/12 директно да jонизуjу материjу, веЈ то чине иск§учиво преко секу
+ндарно произведених
+ []
+
+[5]
+Overfull \hbox (14.85664pt too wide) in paragraph at lines 221--222
+[][][]\T2A/cmr/m/n/12 Електромагнетска интеракциjа неутрона са електронима jе з
+анемар§ива. ПролазеЈи
+ []
+
+
+Overfull \hbox (12.24413pt too wide) in paragraph at lines 223--224
+\T2A/cmr/m/n/12 процеса у нуклеарним реакторима. Како енергиjа неутрона опада р
+асеjа»е се настав§а,
+ []
+
+
+Overfull \hbox (4.65112pt too wide) in paragraph at lines 235--236
+[][][]\T2A/cmr/bx/n/12 Контрола индустриjских процеса\T2A/cmr/m/n/12 : контрола
+ цементног процеса, испитива»е
+ []
+
+
+Overfull \hbox (0.5515pt too wide) in paragraph at lines 239--240
+\T2A/cmr/m/n/12 фикациjа хемиjског оружиjа, детекциjа и идентификациjа специjал
+них нуклеар-
+ []
+
+[6]
+Overfull \hbox (5.65265pt too wide) in paragraph at lines 253--254
+\T2A/cmr/m/n/12 и »егове конструкциjе. На пример, гасни детектори директно прик
+уп§аjу jонизационе
+ []
+
+
+Overfull \hbox (30.8467pt too wide) in paragraph at lines 255--256
+[][][]\T2A/cmr/m/n/12 Савремени детектори су претежно електричне природе. У нек
+ом тренутку информациjа
+ []
+
+
+Overfull \hbox (39.04918pt too wide) in paragraph at lines 257--258
+\T2A/cmr/m/n/12 личним неутронским дозиметрима, траг детектори се сматраjу jедн
+ом од наjперспективниjих
+ []
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ucs\uni-32.def"
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+)
+Overfull \hbox (1.39441pt too wide) in paragraph at lines 263--266
+\T2A/cmr/m/n/12 наелектрисане честице ($[][]\OML/cmm/m/it/12 $ \T2A/cmr/m/n/12
+ честице, протони, деутерони...). Секундарне наелектрисане
+ []
+
+
+Overfull \hbox (8.26315pt too wide) in paragraph at lines 263--266
+\T2A/cmr/m/n/12 материjал, коjа се називаjу латентни трагови. Попречне дименз
+иjе латентних трагова
+ []
+
+<images/dosimetry.png, id=45, 625.58719pt x 274.77657pt>
+File: images/dosimetry.png Graphic file (type png)
+
+<use images/dosimetry.png>
+Package pdftex.def Info: images/dosimetry.png used on input line 269.
+(pdftex.def)             Requested size: 426.79134pt x 187.46611pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[7] [8 <./images/dosimetry.png>]
+\CYRG \cyrl \cyra \cyrv \cyra  2.
+
+Overfull \hbox (1.36038pt too wide) in paragraph at lines 296--297
+[][][]\T2A/cmr/m/n/12 Имплементирани алгоритми се могу користити за препознава»
+е облика, детекциjу
+ []
+
+<images/cv.png, id=53, 1309.89375pt x 1276.77pt>
+File: images/cv.png Graphic file (type png)
+ <use images/cv.png>
+Package pdftex.def Info: images/cv.png used on input line 309.
+(pdftex.def)             Requested size: 213.39566pt x 207.98894pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (28.6766pt too wide) in paragraph at lines 317--318
+[][][]\T2A/cmr/m/n/12 Обрада слика jе процес манипулациjе подацима слике у сврх
+у прикуп§а»а релевантних
+ []
+
+[9
+
+]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 323--323
+[][][][][][][][][] 
+ []
+
+LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 323
+.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\cyrillic\t2acmtt.fd"
+File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+)
+<images/original+grayscale.png, id=58, 781.41937pt x 297.36093pt>
+File: images/original+grayscale.png Graphic file (type png)
+
+<use images/original+grayscale.png>
+Package pdftex.def Info: images/original+grayscale.png used on input line 342.
+(pdftex.def)             Requested size: 426.79134pt x 162.41013pt.
+ [10 <./images/cv.png>]
+Overfull \hbox (12.196pt too wide) in paragraph at lines 352--353
+[][][]\T2A/cmr/m/n/12 Jедан од основних ци§ева обраде слика jе идентификациjа о
+бjеката коjи се поjав§уjу
+ []
+
+
+Overfull \hbox (0.87369pt too wide) in paragraph at lines 358--359
+\T2A/cmr/m/n/12 Уколико се врши сегментациjа са jедним прагом, метода се назива
+ бинаризациjа.
+ []
+
+
+Overfull \hbox (10.46048pt too wide) in paragraph at lines 358--359
+\T2A/cmr/m/n/12 наjjедноставниjи и наjбржи метод сегметациjе. Сегментациjа праг
+ом се приме§уjе
+ []
+
+
+Overfull \hbox (17.62299pt too wide) in paragraph at lines 360--361
+[][][]\T2A/cmr/m/n/12 Сегметациjа кластеризациjом (\T2A/cmr/m/it/12 Clus-ter-in
+g\T2A/cmr/m/n/12 ) подразумева груписа»е пиксела сличних
+ []
+
+
+Overfull \hbox (10.50398pt too wide) in paragraph at lines 360--361
+\T2A/cmr/m/n/12 вектора одлика за сваки пиксел, проналаже»а карактеристичних ве
+ктора пиксела
+ []
+
+
+Overfull \hbox (13.50604pt too wide) in paragraph at lines 360--361
+\T2A/cmr/m/n/12 - центара кластера коjи свакако припадаjу различитим обjектима 
+и придружива»е
+ []
+
+
+Overfull \hbox (2.62903pt too wide) in paragraph at lines 360--361
+\T2A/cmr/m/n/12 сваког пиксела jедном од кластера. Ова метода се приме»уjе са в
+еликим успехом
+ []
+
+[11 <./images/original+grayscale.png>]
+Overfull \hbox (6.64532pt too wide) in paragraph at lines 368--369
+[][][]\T2A/cmr/m/n/12 У сличаjу детекциjе трагова неутронске дозиметриjе трагов
+и су jасно представ§ени
+ []
+
+
+Overfull \hbox (7.46242pt too wide) in paragraph at lines 368--369
+\T2A/cmr/m/n/12 раздваjа»е трагова коjи се преклапаjу без jасне границе измеўу 
+преклоп§ених трагова.
+ []
+
+
+Overfull \hbox (7.35149pt too wide) in paragraph at lines 380--381
+\T2A/cmr/m/n/12 односно бинаризациjа. Бинаризациjа подразумева раздваjа»е светл
+их и тамних делова
+ []
+
+<images/binary.png, id=71, 778.40813pt x 294.34969pt>
+File: images/binary.png Graphic file (type png)
+ <use images/binary.png>
+Package pdftex.def Info: images/binary.png used on input line 385.
+(pdftex.def)             Requested size: 426.79134pt x 161.39427pt.
+
+Overfull \hbox (4.5778pt too wide) in paragraph at lines 391--392
+[][][]\T2A/cmr/m/n/12 Улазни параметар за бинаризациjу jе сиво скалирана слика.
+ Резултат бинаризациjе
+ []
+
+
+Overfull \hbox (2.61798pt too wide) in paragraph at lines 391--392
+\T2A/cmr/m/n/12 jе црно-бела слика истих димензиjа као и сиво скалирана слика. 
+Црна боjа представ§а
+ []
+
+[12 <./images/binary.png>]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+)
+Overfull \hbox (6.0pt too wide) in paragraph at lines 403--403
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (10.72552pt too wide) in paragraph at lines 413--414
+[][][]\T2A/cmr/m/n/12 Праг према коме се врши класификациjа може бити и аутомат
+ски одреўена вредност
+ []
+
+<images/histogram.png, id=78, 330.48468pt x 175.40532pt>
+File: images/histogram.png Graphic file (type png)
+
+<use images/histogram.png>
+Package pdftex.def Info: images/histogram.png used on input line 417.
+(pdftex.def)             Requested size: 284.52756pt x 151.01959pt.
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 424--424
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 438--438
+[][][][][][][][][] 
+ []
+
+[13 <./images/histogram.png>]
+<images/seg_bin_con.png, id=83, 901.11656pt x 367.3725pt>
+File: images/seg_bin_con.png Graphic file (type png)
+
+<use images/seg_bin_con.png>
+Package pdftex.def Info: images/seg_bin_con.png used on input line 451.
+(pdftex.def)             Requested size: 426.79134pt x 173.99922pt.
+
+Overfull \hbox (14.85457pt too wide) in paragraph at lines 457--458
+\T2A/cmr/m/n/12 контуре како бисмо их раздвоjили на контуре поjединачних трагов
+е. Да§е процесира»е,
+ []
+
+<images/distance_matrix.png, id=84, 1403.99532pt x 414.04688pt>
+File: images/distance_matrix.png Graphic file (type png)
+
+<use images/distance_matrix.png>
+Package pdftex.def Info: images/distance_matrix.png used on input line 461.
+(pdftex.def)             Requested size: 341.43306pt x 100.68738pt.
+
+Overfull \hbox (14.86978pt too wide) in paragraph at lines 467--468
+\T2A/cmr/m/it/12 form\T2A/cmr/m/n/12 ). Резултат jе сиво скалирана слика коjа л
+ичи на улазну слику, с тим да интензитети
+ []
+
+[14 <./images/seg_bin_con.png> <./images/distance_matrix.png>]
+<images/local_maxima.png, id=89, 78.2925pt x 39.14626pt>
+File: images/local_maxima.png Graphic file (type png)
+
+<use images/local_maxima.png>
+Package pdftex.def Info: images/local_maxima.png used on input line 471.
+(pdftex.def)             Requested size: 426.79134pt x 213.42523pt.
+
+Overfull \hbox (8.03201pt too wide) in paragraph at lines 477--478
+\T2A/cmr/m/it/12 OpenCV\T2A/cmr/m/n/12 -jа да означимо засебне компоненте. Jедн
+а компонента представ§а све пикселе
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 479--479
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (7.07083pt too wide) in paragraph at lines 492--493
+[][][]\T2A/cmr/m/n/12 Уколико jе детектован само jедан локални максимум, траг с
+е ипак сматра засебним.
+ []
+
+[15 <./images/local_maxima.png>]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 498--498
+[][][][][][][][][] 
+ []
+
+<images/watershed.png, id=93, 38.39343pt x 39.14626pt>
+File: images/watershed.png Graphic file (type png)
+
+<use images/watershed.png>
+Package pdftex.def Info: images/watershed.png used on input line 523.
+(pdftex.def)             Requested size: 213.39566pt x 217.59514pt.
+
+Overfull \hbox (12.67291pt too wide) in paragraph at lines 529--529
+[][][]\T2A/cmr/bx/n/17.28 Исправ§а»е ротациjе слике у односу на претходну
+ []
+
+[16 <./images/watershed.png>]
+<images/prev+new.png, id=98, 244.66406pt x 99.37125pt>
+File: images/prev+new.png Graphic file (type png)
+
+<use images/prev+new.png>
+Package pdftex.def Info: images/prev+new.png used on input line 535.
+(pdftex.def)             Requested size: 426.79134pt x 173.34732pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 541--542
+
+ []
+
+
+Overfull \hbox (19.37276pt too wide) in paragraph at lines 552--553
+[][][]\T2A/cmr/m/n/12 Интересне тачке су препознат§иве тачке обjекта коjе се мо
+гу пронаЈи при различитим
+ []
+
+
+Overfull \hbox (34.75938pt too wide) in paragraph at lines 552--553
+\T2A/cmr/m/n/12 различитих слика. Пореўе»ем описних вектора може се донети зак§
+учак о трансформациjи
+ []
+
+<images/desc.png, id=99, 447.92343pt x 362.10281pt>
+File: images/desc.png Graphic file (type png)
+ <use images/desc.png>
+Package pdftex.def Info: images/desc.png used on input line 560.
+(pdftex.def)             Requested size: 284.52756pt x 230.02112pt.
+
+[17 <./images/prev+new.png>]
+Overfull \hbox (6.58266pt too wide) in paragraph at lines 566--566
+[][][]\T2A/cmr/bx/n/14.4 Пореўе»е описних вектора и одреўива»е трансформациjе 
+ []
+
+
+Overfull \hbox (22.96213pt too wide) in paragraph at lines 568--569
+\T2A/cmr/m/n/12 растоjа»е измеўу описног вектора интересне тачке са описним век
+торима свих интересних
+ []
+
+<images/rotation.png, id=103, 240.9pt x 97.11281pt>
+File: images/rotation.png Graphic file (type png)
+ <use images/rotation.png>
+Package pdftex.def Info: images/rotation.png used on input line 578.
+(pdftex.def)             Requested size: 426.79134pt x 172.06746pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 584--584
+[][][][][][][][][] 
+ []
+
+[18 <./images/desc.png>] [19 <./images/rotation.png>] [20]
+\CYRG \cyrl \cyra \cyrv \cyra  3.
+<images/qt_platforms.png, id=115, 978.65625pt x 730.22812pt>
+File: images/qt_platforms.png Graphic file (type png)
+
+<use images/qt_platforms.png>
+Package pdftex.def Info: images/qt_platforms.png used on input line 651.
+(pdftex.def)             Requested size: 426.79134pt x 318.46005pt.
+
+Overfull \hbox (32.16217pt too wide) in paragraph at lines 657--658
+[][][]\T2A/cmr/m/it/12 Qt \T2A/cmr/m/n/12 веЈ користе стотине хи§ада програмера
+. Значаjани делови \T2A/cmr/m/it/12 Linux KDE \T2A/cmr/m/n/12 дистрибуциjе,
+ []
+
+
+Overfull \hbox (2.33942pt too wide) in paragraph at lines 657--658
+\T2A/cmr/m/n/12 али подржава и конвенционални модел за реагова»е на клик миша, 
+притисак дугмета,
+ []
+
+[21
+
+ <./images/qt_platforms.png (PNG copy)>]
+Overfull \hbox (10.23198pt too wide) in paragraph at lines 667--668
+\T2A/cmr/m/n/12 класе фреjмворка. Такоўе, пружа могуЈност jедноставне претраге 
+документациjе.
+ []
+
+
+Overfull \hbox (0.17752pt too wide) in paragraph at lines 669--670
+\T2A/cmr/m/n/12 начин. МогуЈе jе тестира»е понаша»а интересjа при различитим ре
+золуциjама,
+ []
+
+
+Overfull \hbox (41.24226pt too wide) in paragraph at lines 669--670
+\T2A/cmr/m/n/12 кодом употребом модела сигнала и слотова што олакшава раздваjа»
+е функционалности
+ []
+
+
+Overfull \hbox (7.64514pt too wide) in paragraph at lines 669--670
+\T2A/cmr/m/n/12 у фаjловима са екстензиjом \T2A/cmr/m/it/12 .ui\T2A/cmr/m/n/12 
+. То су \T2A/cmr/m/it/12 XML \T2A/cmr/m/n/12 фаjлови на основу коjих се аутомат
+ски
+ []
+
+
+Overfull \hbox (12.2334pt too wide) in paragraph at lines 673--674
+\T2A/cmr/m/n/12 задатке као што су креира»е проjеката, додава»е нових фаjлова, 
+нуди семантичко
+ []
+
+
+Overfull \hbox (51.90173pt too wide) in paragraph at lines 679--680
+[][][]\T2A/cmr/m/it/12 Qt \T2A/cmr/m/n/12 фреjмворк jе поде§ен у неколико засеб
+них модула. Да би се користиле функционалности
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 681--681
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (40.44992pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 3.  РАЗВОJ КОРИСНИЧКОГ ИНТЕРФЕJСА УПОТРЕБОМ \T2A/cmr
+/m/it/12 QT \T2A/cmr/m/sl/12 ФРЕJМВОРКА \T2A/cmr/m/n/12 22
+ []
+
+[22]
+Overfull \hbox (10.89839pt too wide) in paragraph at lines 689--690
+\T2A/cmr/m/n/12 модули. Оваj модул омогуЈава рад са обjектима (\T2A/cmr/m/it/12
+ QOb-ject)\T2A/cmr/m/n/12 , стринговима (\T2A/cmr/m/it/12 QString)\T2A/cmr/m/n/
+12 ,
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 703--703
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 720--720
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (40.44992pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 3.  РАЗВОJ КОРИСНИЧКОГ ИНТЕРФЕJСА УПОТРЕБОМ \T2A/cmr
+/m/it/12 QT \T2A/cmr/m/sl/12 ФРЕJМВОРКА \T2A/cmr/m/n/12 23
+ []
+
+[23]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 736--736
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 746--746
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (40.44992pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 3.  РАЗВОJ КОРИСНИЧКОГ ИНТЕРФЕJСА УПОТРЕБОМ \T2A/cmr
+/m/it/12 QT \T2A/cmr/m/sl/12 ФРЕJМВОРКА \T2A/cmr/m/n/12 24
+ []
+
+[24]
+\CYRG \cyrl \cyra \cyrv \cyra  4.
+[25
+
+]
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 26
+ []
+
+[26]
+\CYRG \cyrl \cyra \cyrv \cyra  5.
+<images/test.png, id=135, 975.645pt x 731.73375pt>
+File: images/test.png Graphic file (type png)
+ <use images/test.png>
+Package pdftex.def Info: images/test.png used on input line 852.
+(pdftex.def)             Requested size: 426.79134pt x 320.09923pt.
+
+[27
+
+ <./images/test.png>]
+<images/recall_prec.png, id=139, 523.9575pt x 706.13812pt>
+File: images/recall_prec.png Graphic file (type png)
+
+<use images/recall_prec.png>
+Package pdftex.def Info: images/recall_prec.png used on input line 864.
+(pdftex.def)             Requested size: 341.43306pt x 460.1588pt.
+
+Overfull \hbox (9.09389pt too wide) in paragraph at lines 870--871
+[][][]\T2A/cmr/m/n/12 Написан jе и програм коjи за сваку слику учитава податке 
+о генерисаним траговима,
+ []
+
+
+Overfull \hbox (20.44316pt too wide) in paragraph at lines 872--873
+[][][]\T2A/cmr/m/n/12 При мере»у тачности и прецизности одабран jе \T2A/cmr/m/i
+t/12 Otsu \T2A/cmr/m/n/12 аутоматски праг за бинаризациjу,
+ []
+
+
+Overfull \hbox (20.31439pt too wide) in paragraph at lines 877--889
+ [][][][] 
+ []
+
+[28 <./images/recall_prec.png>]
+<images/analysis.png, id=144, 140.77594pt x 100.12407pt>
+File: images/analysis.png Graphic file (type png)
+
+<use images/analysis.png>
+Package pdftex.def Info: images/analysis.png used on input line 893.
+(pdftex.def)             Requested size: 284.52756pt x 202.40024pt.
+ <images/error01.png, id=145, 909.3975pt x 1397.22pt>
+File: images/error01.png Graphic file (type png)
+
+<use images/error01.png>
+Package pdftex.def Info: images/error01.png used on input line 907.
+(pdftex.def)             Requested size: 426.79134pt x 655.73412pt.
+ [29 <./images/analysis.png>]
+Overfull \vbox (19.45102pt too high) has occurred while \output is active []
+
+
+[30 <./images/error01.png>]
+<images/binthresh.png, id=154, 206.27063pt x 48.93282pt>
+File: images/binthresh.png Graphic file (type png)
+
+<use images/binthresh.png>
+Package pdftex.def Info: images/binthresh.png used on input line 915.
+(pdftex.def)             Requested size: 426.79134pt x 101.2559pt.
+ <images/multi.png, id=155, 97.86563pt x 24.84282pt>
+File: images/multi.png Graphic file (type png)
+
+<use images/multi.png>
+Package pdftex.def Info: images/multi.png used on input line 923.
+(pdftex.def)             Requested size: 426.79134pt x 108.36288pt.
+ <images/small.png, id=156, 90.3375pt x 44.41594pt>
+File: images/small.png Graphic file (type png)
+
+<use images/small.png>
+Package pdftex.def Info: images/small.png used on input line 931.
+(pdftex.def)             Requested size: 426.79134pt x 209.89618pt.
+ <images/shadow.png, id=157, 96.36pt x 44.41594pt>
+File: images/shadow.png Graphic file (type png)
+
+<use images/shadow.png>
+Package pdftex.def Info: images/shadow.png used on input line 939.
+(pdftex.def)             Requested size: 426.79134pt x 196.75632pt.
+ [31 <./images/binthresh.png> <./images/multi.png> <./images/small.png>] [32 <.
+/images/shadow.png>]
+\CYRG \cyrl \cyra \cyrv \cyra  6.
+
+Overfull \hbox (13.17282pt too wide) in paragraph at lines 965--966
+[][][]\T2A/cmr/m/n/12 Као резултат рада направ§ен jе програм коjи обраўуjе слик
+е неутранске дозиметриjе
+ []
+
+
+Overfull \hbox (6.25523pt too wide) in paragraph at lines 967--968
+\T2A/cmr/m/n/12 сликама веЈе резолуциjе, систем би се могао унапредити да даjе 
+бо§е процене величине
+ []
+
+[33
+
+] [34
+
+] (master-rad.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 9161 strings out of 493673
+ 125717 string characters out of 3141528
+ 311859 words of memory out of 3000000
+ 12318 multiletter control sequences out of 15000+200000
+ 29198 words of font info for 69 fonts, out of 3000000 for 9000
+ 1025 hyphenation exceptions out of 8191
+ 36i,19n,63p,3872b,1977s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\l
+abi1000.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a
+\dpi600\latt1000.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\
+lh\lh-t2a\dpi600\larm0600.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\p
+k\ljfour\lh\lh-t2a\dpi600\labx1000.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.
+9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labi2488.pk> <C:\Users\Nikola\AppData\Local\
+MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk> <C:\Users\Nikola\App
+Data\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx1440.pk> <C:\Users\N
+ikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lasl1200.pk> <C
+:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx17
+28.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi6
+00\lati1200.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh
+-t2a\dpi600\labi1200.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
+our\lh\lh-t2a\dpi600\larm1200.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fon
+ts\pk\ljfour\lh\lh-t2a\dpi600\labx1200.pk> <C:\Users\Nikola\AppData\Local\MiKTe
+X\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\larm1440.pk> <C:\Users\Nikola\AppData\Lo
+cal\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lati1440.pk> <C:\Users\Nikola\A
+ppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx2488.pk> <C:\Users
+\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lacc1728.pk> 
+<C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lacc
+2074.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex1
+0.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.
+pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb
+><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:
+/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on master-rad.pdf (35 pages, 5515336 bytes).
+PDF statistics:
+ 862 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+
