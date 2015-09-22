@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  11 SEP 2015 11:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  22 SEP 2015 00:15
 entering extended mode
 **D:/Repo/NDTR/Application-of-pattern-recognition-algorithms-in-neutron-dosimet
 ry/main/docs/master/master-rad.tex
@@ -425,9 +425,6 @@ LaTeX Warning: Label `lst:signal_and_slot' multiply defined.
 
 
 LaTeX Warning: Label `lst:signal_and_slot' multiply defined.
-
-
-LaTeX Warning: Label `opencv' multiply defined.
 
 )
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 104.
@@ -1012,6 +1009,12 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 584--584
 
 [18 <./images/desc.png>] [19 <./images/rotation.png>] [20]
 \CYRG \cyrl \cyra \cyrv \cyra  3.
+
+Overfull \hbox (6.05937pt too wide) in paragraph at lines 647--648
+[][][]\T2A/cmr/m/it/12 Qt \T2A/cmr/m/n/12 [[]] jе фреjмворк за развоj корисничк
+ог интерфеjса. ОмогуЈуjе развоj апликациjа
+ []
+
 <images/qt_platforms.png, id=115, 978.65625pt x 730.22812pt>
 File: images/qt_platforms.png Graphic file (type png)
 
@@ -1121,108 +1124,351 @@ Overfull \hbox (40.44992pt too wide) has occurred while \output is active
 
 [24]
 \CYRG \cyrl \cyra \cyrv \cyra  4.
+
+Overfull \hbox (18.01485pt too wide) in paragraph at lines 766--767
+\T2A/cmr/m/n/12 у брзини, софтвер jе написан у програмском jезику \T2A/cmr/m/it
+/12 C++\T2A/cmr/m/n/12 . Поред стандардних библиотека
+ []
+
+<images/softver.png, id=129, 730.98094pt x 496.85625pt>
+File: images/softver.png Graphic file (type png)
+
+<use images/softver.png>
+Package pdftex.def Info: images/softver.png used on input line 770.
+(pdftex.def)             Requested size: 384.1122pt x 261.08846pt.
+
+Overfull \hbox (6.21802pt too wide) in paragraph at lines 778--779
+[][][]\T2A/cmr/m/n/12 Изворни код софтвера налази се на адреси https://github.c
+om/nik0la31/Application-
+ []
+
+
+Overfull \hbox (12.94441pt too wide) in paragraph at lines 778--779
+\T2A/cmr/m/n/12 неутронске дозиметриjе обрадом слике и графички кориснички инте
+рфеjс, респективно. 
+ []
+
 [25
 
-]
+ <./images/softver.png>]
+<images/struktura.png, id=134, 205.5178pt x 45.92157pt>
+File: images/struktura.png Graphic file (type png)
+
+<use images/struktura.png>
+Package pdftex.def Info: images/struktura.png used on input line 782.
+(pdftex.def)             Requested size: 284.52756pt x 63.58063pt.
+
+Overfull \hbox (21.87889pt too wide) in paragraph at lines 791--792
+[][][]\T2A/cmr/m/it/12 MainWindow \T2A/cmr/m/n/12 класа садржи дизаjн корисничк
+ог интерфеjса и управ§а интеракциjом
+ []
+
+
+Overfull \hbox (21.00365pt too wide) in paragraph at lines 792--793
+[][][]\T2A/cmr/m/it/12 Workspace \T2A/cmr/m/n/12 класа представ§а модел у \T2A/
+cmr/m/it/12 Mod-el/View \T2A/cmr/m/n/12 архитектури. Чува све релевантне
+ []
+
+
+Overfull \hbox (50.57474pt too wide) in paragraph at lines 792--793
+\T2A/cmr/m/n/12 податке о учитаним проjектима и сликама, тренутном приказу, ода
+браним подешава»има
+ []
+
+
+Overfull \hbox (3.6702pt too wide) in paragraph at lines 802--803
+[][][]\T2A/cmr/m/it/12 ShapeType \T2A/cmr/m/n/12 енумерациjа дефинише коjи се о
+блици трага могу приказати (контура,
+ []
+
+
+Overfull \hbox (4.53943pt too wide) in paragraph at lines 803--804
+[][][]\T2A/cmr/m/it/12 ImageType \T2A/cmr/m/n/12 енумерациjа дефинише коjи се т
+ипови слике могу приказати (изворна,
+ []
+
+
+Overfull \hbox (6.97357pt too wide) in paragraph at lines 804--805
+[][][]\T2A/cmr/m/it/12 ViewOptions \T2A/cmr/m/n/12 структура се користи да се з
+адаjу опциjе приказа да би се генерисала
+ []
+
+
+Overfull \hbox (15.84306pt too wide) in paragraph at lines 805--806
+[][][]\T2A/cmr/m/it/12 ProcessingOptions \T2A/cmr/m/n/12 структура служи за зад
+ава»е подешава§а обраде слике. МогуЈа
+ []
+
+
+Overfull \hbox (29.68459pt too wide) in paragraph at lines 805--806
+\T2A/cmr/m/n/12 подешава»а су: употреба аутоматског \T2A/cmr/m/it/12 Otsu \T2A/
+cmr/m/n/12 прага бинаризациjе, задава»е конкретног
+ []
+
+
 Overfull \hbox (19.95633pt too wide) has occurred while \output is active
 [][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
 ИJЕ \T2A/cmr/m/n/12 26
  []
 
-[26]
+[26 <./images/struktura.png>]
+<images/engine.png, id=139, 549.55313pt x 478.03593pt>
+File: images/engine.png Graphic file (type png)
+ <use images/engine.png>
+Package pdftex.def Info: images/engine.png used on input line 814.
+(pdftex.def)             Requested size: 426.79134pt x 371.2618pt.
+
+Overfull \hbox (32.68616pt too wide) in paragraph at lines 822--824
+[][][]\T2A/cmr/m/n/12 Кориснички интерфеjс jе jедноставан за коришЈе»е и прегле
+дан, тако да jе корисницима
+ []
+
+
+Overfull \hbox (18.93341pt too wide) in paragraph at lines 822--824
+\T2A/cmr/m/n/12 омогуЈено брзо прилагоўава»е на рад овим алатом. На слици 4.4[]
+ jе приказан кориснички
+ []
+
+
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 27
+ []
+
+[27 <./images/engine.png>]
+<images/softver2.png, id=144, 846.16125pt x 560.0925pt>
+File: images/softver2.png Graphic file (type png)
+
+<use images/softver2.png>
+Package pdftex.def Info: images/softver2.png used on input line 835.
+(pdftex.def)             Requested size: 426.79134pt x 282.49835pt.
+
+Underfull \hbox (badness 2460) in paragraph at lines 837--837
+[][][]\T2A/cmr/m/n/12 Слика 4.4: |Основне компоненте софтвера за детекциjу траг
+ова неутронске
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 858--858
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 28
+ []
+
+[28 <./images/softver2.png>]
+<images/projects.png, id=149, 679.03688pt x 217.5628pt>
+File: images/projects.png Graphic file (type png)
+
+<use images/projects.png>
+Package pdftex.def Info: images/projects.png used on input line 874.
+(pdftex.def)             Requested size: 426.79134pt x 136.74327pt.
+
+<images/viewoptions.png, id=150, 353.06906pt x 27.10126pt>
+File: images/viewoptions.png Graphic file (type png)
+
+<use images/viewoptions.png>
+Package pdftex.def Info: images/viewoptions.png used on input line 887.
+(pdftex.def)             Requested size: 426.79134pt x 32.76035pt.
+
+<images/imagetype.png, id=151, 947.03813pt x 294.34969pt>
+File: images/imagetype.png Graphic file (type png)
+
+<use images/imagetype.png>
+Package pdftex.def Info: images/imagetype.png used on input line 899.
+(pdftex.def)             Requested size: 426.79134pt x 132.64925pt.
+
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 29
+ []
+
+[29 <./images/projects.png> <./images/viewoptions.png>]
+<images/shapetype.png, id=155, 287.57437pt x 182.18062pt>
+File: images/shapetype.png Graphic file (type png)
+
+<use images/shapetype.png>
+Package pdftex.def Info: images/shapetype.png used on input line 909.
+(pdftex.def)             Requested size: 227.62204pt x 144.20464pt.
+
+<images/trace.png, id=156, 178.41656pt x 176.91093pt>
+File: images/trace.png Graphic file (type png)
+ <use images/trace.png>
+Package pdftex.def Info: images/trace.png used on input line 920.
+(pdftex.def)             Requested size: 113.81102pt x 112.85008pt.
+
+<images/colors.png, id=157, 415.5525pt x 465.99094pt>
+File: images/colors.png Graphic file (type png)
+ <use images/colors.png>
+Package pdftex.def Info: images/colors.png used on input line 928.
+(pdftex.def)             Requested size: 369.88582pt x 414.79462pt.
+
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 30
+ []
+
+[30 <./images/imagetype.png> <./images/shapetype.png> <./images/trace.png>]
+Overfull \hbox (8.86554pt too wide) in paragraph at lines 934--935
+\T2A/cmr/m/n/12 ума»ити, приказати у изворноj величини или jе приказати целу на
+ доступноj површини
+ []
+
+
+Overfull \hbox (0.28773pt too wide) in paragraph at lines 936--937
+[][][]\T2A/cmr/m/n/12 Тренутни приказ се може копирати или сачувати одабиром од
+говараjуЈих наредби
+ []
+
+
+Overfull \hbox (7.78876pt too wide) in paragraph at lines 940--941
+[][][]\T2A/cmr/m/n/12 Контрола за преглед резултата обраде слике пружа основне 
+податке о детектованим
+ []
+
+<images/stats.png, id=162, 187.45032pt x 232.61906pt>
+File: images/stats.png Graphic file (type png)
+ <use images/stats.png>
+Package pdftex.def Info: images/stats.png used on input line 944.
+(pdftex.def)             Requested size: 170.71652pt x 211.86469pt.
+
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 31
+ []
+
+[31 <./images/colors.png>]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 952--952
+[][][][][][][][][] 
+ []
+
+
+Overfull \hbox (3.4815pt too wide) in paragraph at lines 971--973
+\T2A/cmr/m/n/12 jе филтрирати према величини, односно могуЈеjе задати наjма»и и
+ наjвеЈи дозво§ени
+ []
+
+<images/processing.png, id=166, 611.28375pt x 117.43875pt>
+File: images/processing.png Graphic file (type png)
+
+<use images/processing.png>
+Package pdftex.def Info: images/processing.png used on input line 976.
+(pdftex.def)             Requested size: 426.79134pt x 81.9933pt.
+
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 32
+ []
+
+[32 <./images/stats.png>]
+Overfull \hbox (19.95633pt too wide) has occurred while \output is active
+[][]\T2A/cmr/m/sl/12 ГЛАВА 4.  СОФТВЕР ЗА ДЕТЕКЦИJУ ТРАГОВА НЕУТРОНСКЕ ДОЗИМЕТР
+ИJЕ \T2A/cmr/m/n/12 33
+ []
+
+[33 <./images/processing.png>]
 \CYRG \cyrl \cyra \cyrv \cyra  5.
-<images/test.png, id=135, 975.645pt x 731.73375pt>
+<images/test.png, id=173, 975.645pt x 731.73375pt>
 File: images/test.png Graphic file (type png)
  <use images/test.png>
-Package pdftex.def Info: images/test.png used on input line 852.
+Package pdftex.def Info: images/test.png used on input line 998.
 (pdftex.def)             Requested size: 426.79134pt x 320.09923pt.
 
-[27
+[34
 
  <./images/test.png>]
-<images/recall_prec.png, id=139, 523.9575pt x 706.13812pt>
+<images/recall_prec.png, id=177, 523.9575pt x 706.13812pt>
 File: images/recall_prec.png Graphic file (type png)
 
 <use images/recall_prec.png>
-Package pdftex.def Info: images/recall_prec.png used on input line 864.
+Package pdftex.def Info: images/recall_prec.png used on input line 1010.
 (pdftex.def)             Requested size: 341.43306pt x 460.1588pt.
 
-Overfull \hbox (9.09389pt too wide) in paragraph at lines 870--871
+Overfull \hbox (9.09389pt too wide) in paragraph at lines 1016--1017
 [][][]\T2A/cmr/m/n/12 Написан jе и програм коjи за сваку слику учитава податке 
 о генерисаним траговима,
  []
 
 
-Overfull \hbox (20.44316pt too wide) in paragraph at lines 872--873
+Overfull \hbox (20.44316pt too wide) in paragraph at lines 1018--1019
 [][][]\T2A/cmr/m/n/12 При мере»у тачности и прецизности одабран jе \T2A/cmr/m/i
 t/12 Otsu \T2A/cmr/m/n/12 аутоматски праг за бинаризациjу,
  []
 
 
-Overfull \hbox (20.31439pt too wide) in paragraph at lines 877--889
+Overfull \hbox (20.31439pt too wide) in paragraph at lines 1023--1035
  [][][][] 
  []
 
-[28 <./images/recall_prec.png>]
-<images/analysis.png, id=144, 140.77594pt x 100.12407pt>
+[35 <./images/recall_prec.png>]
+<images/analysis.png, id=182, 140.77594pt x 100.12407pt>
 File: images/analysis.png Graphic file (type png)
 
 <use images/analysis.png>
-Package pdftex.def Info: images/analysis.png used on input line 893.
+Package pdftex.def Info: images/analysis.png used on input line 1039.
 (pdftex.def)             Requested size: 284.52756pt x 202.40024pt.
- <images/error01.png, id=145, 909.3975pt x 1397.22pt>
+ <images/error01.png, id=183, 909.3975pt x 1397.22pt>
 File: images/error01.png Graphic file (type png)
 
 <use images/error01.png>
-Package pdftex.def Info: images/error01.png used on input line 907.
+Package pdftex.def Info: images/error01.png used on input line 1053.
 (pdftex.def)             Requested size: 426.79134pt x 655.73412pt.
- [29 <./images/analysis.png>]
+ [36 <./images/analysis.png>]
 Overfull \vbox (19.45102pt too high) has occurred while \output is active []
 
 
-[30 <./images/error01.png>]
-<images/binthresh.png, id=154, 206.27063pt x 48.93282pt>
+[37 <./images/error01.png>]
+<images/binthresh.png, id=192, 206.27063pt x 48.93282pt>
 File: images/binthresh.png Graphic file (type png)
 
 <use images/binthresh.png>
-Package pdftex.def Info: images/binthresh.png used on input line 915.
+Package pdftex.def Info: images/binthresh.png used on input line 1061.
 (pdftex.def)             Requested size: 426.79134pt x 101.2559pt.
- <images/multi.png, id=155, 97.86563pt x 24.84282pt>
+ <images/multi.png, id=193, 97.86563pt x 24.84282pt>
 File: images/multi.png Graphic file (type png)
 
 <use images/multi.png>
-Package pdftex.def Info: images/multi.png used on input line 923.
+Package pdftex.def Info: images/multi.png used on input line 1069.
 (pdftex.def)             Requested size: 426.79134pt x 108.36288pt.
- <images/small.png, id=156, 90.3375pt x 44.41594pt>
+ <images/small.png, id=194, 90.3375pt x 44.41594pt>
 File: images/small.png Graphic file (type png)
 
 <use images/small.png>
-Package pdftex.def Info: images/small.png used on input line 931.
+Package pdftex.def Info: images/small.png used on input line 1077.
 (pdftex.def)             Requested size: 426.79134pt x 209.89618pt.
- <images/shadow.png, id=157, 96.36pt x 44.41594pt>
+ <images/shadow.png, id=195, 96.36pt x 44.41594pt>
 File: images/shadow.png Graphic file (type png)
 
 <use images/shadow.png>
-Package pdftex.def Info: images/shadow.png used on input line 939.
+Package pdftex.def Info: images/shadow.png used on input line 1085.
 (pdftex.def)             Requested size: 426.79134pt x 196.75632pt.
- [31 <./images/binthresh.png> <./images/multi.png> <./images/small.png>] [32 <.
+ [38 <./images/binthresh.png> <./images/multi.png> <./images/small.png>] [39 <.
 /images/shadow.png>]
 \CYRG \cyrl \cyra \cyrv \cyra  6.
 
-Overfull \hbox (13.17282pt too wide) in paragraph at lines 965--966
+Overfull \hbox (13.17282pt too wide) in paragraph at lines 1111--1112
 [][][]\T2A/cmr/m/n/12 Као резултат рада направ§ен jе програм коjи обраўуjе слик
 е неутранске дозиметриjе
  []
 
 
-Overfull \hbox (6.25523pt too wide) in paragraph at lines 967--968
+Overfull \hbox (6.25523pt too wide) in paragraph at lines 1113--1114
 \T2A/cmr/m/n/12 сликама веЈе резолуциjе, систем би се могао унапредити да даjе 
 бо§е процене величине
  []
 
-[33
+[40
 
-] [34
+]
+Underfull \hbox (badness 10000) in paragraph at lines 1127--1128
+\T2A/cmr/m/it/12 неутрона, Докторкска дисертациjа\T2A/cmr/m/n/12 , Природно-мат
+ематички факултет,
+ []
+
+[41
 
 ] (master-rad.aux)
 
@@ -1230,13 +1476,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 9161 strings out of 493673
- 125717 string characters out of 3141528
- 311859 words of memory out of 3000000
- 12318 multiletter control sequences out of 15000+200000
+ 9303 strings out of 493673
+ 127996 string characters out of 3141528
+ 312004 words of memory out of 3000000
+ 12448 multiletter control sequences out of 15000+200000
  29198 words of font info for 69 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 36i,19n,63p,3872b,1977s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,19n,63p,3872b,1991s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\l
 abi1000.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a
 \dpi600\latt1000.pk> <C:\Users\Nikola\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\
@@ -1262,9 +1508,9 @@ ppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx2488.pk> <C:\Users
 pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb
 ><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:
 /Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on master-rad.pdf (35 pages, 5515336 bytes).
+Output written on master-rad.pdf (42 pages, 6565985 bytes).
 PDF statistics:
- 862 PDF objects out of 1000 (max. 8388607)
+ 936 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 181 words of extra memory for PDF output out of 10000 (max. 10000000)
 
