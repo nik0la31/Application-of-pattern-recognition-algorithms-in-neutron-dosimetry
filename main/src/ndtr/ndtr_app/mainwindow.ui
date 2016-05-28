@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Neutron Dosimetry Trace Recognizer</string>
+   <string>Detekcija tragova neutronske dozimetrije</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -159,7 +159,7 @@ border: 0px;</string>
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="windowTitle">
-    <string>Projects</string>
+    <string>Projekti</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -189,7 +189,7 @@ margin: 0px;
 border: 0px;</string>
    </property>
    <property name="windowTitle">
-    <string>Statistics</string>
+    <string>Statistika</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -232,7 +232,7 @@ margin: 0px;
 border: 0px;</string>
    </property>
    <property name="windowTitle">
-    <string>Settings</string>
+    <string>Podešavanja</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -272,7 +272,7 @@ border: 0px;</string>
          <string notr="true"/>
         </property>
         <attribute name="title">
-         <string>Image Preprocessor</string>
+         <string>Obrada slike</string>
         </attribute>
         <widget class="QGroupBox" name="groupThreshold">
          <property name="geometry">
@@ -287,7 +287,7 @@ border: 0px;</string>
           <string notr="true"/>
          </property>
          <property name="title">
-          <string>Threshold</string>
+          <string>Prag binarizacije</string>
          </property>
          <widget class="QSlider" name="sliderThreshold">
           <property name="geometry">
@@ -330,7 +330,7 @@ border: 0px;</string>
            </rect>
           </property>
           <property name="text">
-           <string>Automatic OTSU Threshold</string>
+           <string>Automatski OTSU prag</string>
           </property>
          </widget>
         </widget>
@@ -366,7 +366,7 @@ QToolButton:checked
 }</string>
          </property>
          <property name="text">
-          <string>Blur</string>
+          <string>Izoštriti</string>
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
@@ -484,7 +484,7 @@ QToolButton:checked
           </rect>
          </property>
          <property name="text">
-          <string>Diameter</string>
+          <string>Dijametar</string>
          </property>
         </widget>
         <widget class="QLabel" name="labelMin">
@@ -513,10 +513,109 @@ QToolButton:checked
           <string>Max</string>
          </property>
         </widget>
+        <widget class="QToolButton" name="btnProcessImage">
+         <property name="geometry">
+          <rect>
+           <x>710</x>
+           <y>10</y>
+           <width>100</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}
+
+QToolButton:checked
+{
+    background-color: #A0A0A0;
+}</string>
+         </property>
+         <property name="text">
+          <string>Obrada</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/play.ico</normaloff>:/ico/ico/play.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>48</width>
+           <height>48</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButton">
+         <property name="geometry">
+          <rect>
+           <x>600</x>
+           <y>10</y>
+           <width>100</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 0px;
+}
+
+QToolButton:hover
+{
+    padding: 2px;
+    background-color: #F0F0F0;
+}
+
+QToolButton:pressed
+{
+    padding: 4px;
+}
+
+QToolButton:checked
+{
+    background-color: #A0A0A0;
+}</string>
+         </property>
+         <property name="text">
+          <string>Auto Obrada</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/ico/ico/autoplay.ico</normaloff>:/ico/ico/autoplay.ico</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>48</width>
+           <height>48</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
        </widget>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
-         <string>Colors</string>
+         <string>Boje prikaza</string>
         </attribute>
         <widget class="QToolButton" name="actionFillColor">
          <property name="geometry">
@@ -551,7 +650,7 @@ QToolButton:pressed
 }</string>
          </property>
          <property name="text">
-          <string>Fill</string>
+          <string>Površina</string>
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
@@ -603,7 +702,7 @@ QToolButton:pressed
 }</string>
          </property>
          <property name="text">
-          <string>Center</string>
+          <string>Centar</string>
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
@@ -646,7 +745,7 @@ QToolButton:pressed
 }</string>
          </property>
          <property name="text">
-          <string>Edge</string>
+          <string>Ivica</string>
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
@@ -690,9 +789,8 @@ QToolButton:pressed
   </action>
   <action name="actionOpen_File">
    <property name="icon">
-    <iconset>
-     <normalon>:/ico/ico/open_file.ico</normalon>
-    </iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/ico/ico/contour.ico</normaloff>:/ico/ico/contour.ico</iconset>
    </property>
    <property name="text">
     <string>Učitaj sliku</string>
@@ -728,7 +826,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Original</string>
+    <string>Izvorna</string>
    </property>
    <property name="toolTip">
     <string>Original Image</string>
@@ -747,7 +845,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Grayscale</string>
+    <string>Sivo skalirana</string>
    </property>
    <property name="toolTip">
     <string>Grayscale Image</string>
@@ -766,7 +864,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Black-White</string>
+    <string>Binarna</string>
    </property>
    <property name="toolTip">
     <string>Black-White Image</string>
@@ -909,7 +1007,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Border</string>
+    <string>Ivica</string>
    </property>
    <property name="toolTip">
     <string>Trace border</string>
@@ -925,7 +1023,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Contour</string>
+    <string>Kontura</string>
    </property>
    <property name="toolTip">
     <string>Trace Contour</string>
@@ -941,7 +1039,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Center</string>
+    <string>Centar</string>
    </property>
    <property name="toolTip">
     <string>Trace Center</string>
@@ -1003,7 +1101,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Black Background</string>
+    <string>Crna pozadina</string>
    </property>
   </action>
   <action name="actionWhite_Background">
@@ -1016,7 +1114,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>White Background</string>
+    <string>Bela pozadina</string>
    </property>
   </action>
   <action name="actionEllipse">
@@ -1029,7 +1127,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Ellipse</string>
+    <string>Elipsa</string>
    </property>
   </action>
   <action name="actionFill">
@@ -1042,7 +1140,7 @@ QToolButton:pressed
     </iconset>
    </property>
    <property name="text">
-    <string>Fill</string>
+    <string>Površina</string>
    </property>
   </action>
   <action name="actionExport">

@@ -11,7 +11,7 @@ QMAKE_CXXFLAGS += -std=c++11
 TARGET = ndtr_engine
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG   += console
+#CONFIG   += console
 
 DEFINES += NDTR_ENGINE_LIBRARY \
             _CRT_SECURE_NO_WARNINGS

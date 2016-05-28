@@ -52,32 +52,32 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->setSelectionMode(QAbstractItemView::NoSelection);
 
     // Add image action.
-    addImageAct = new QAction(tr("Add Image"), this);
+    addImageAct = new QAction(tr("Dodaj sliku"), this);
     connect(addImageAct, SIGNAL(triggered()), this, SLOT(on_actionAdd_Image_triggered()));
 
-    saveProjctAct = new QAction(tr("Save Project"), this);
+    saveProjctAct = new QAction(tr("Sačuvaj projekat"), this);
     connect(saveProjctAct, SIGNAL(triggered()), this, SLOT(on_actionSave_Project_triggered()));
 
-    closeProjectAct = new QAction(tr("Close Project"), this);
+    closeProjectAct = new QAction(tr("Zatvori projekat"), this);
     connect(closeProjectAct, SIGNAL(triggered()), this, SLOT(on_actionClose_Project_triggered()));
 
-    removeImageAct = new QAction(tr("Remove Image"), this);
+    removeImageAct = new QAction(tr("Ukloni sliku"), this);
     connect(removeImageAct, SIGNAL(triggered()), this, SLOT(on_actionRemove_Image_triggered()));
 
-    newProjectAct = new QAction(tr("New Project"), this);
+    newProjectAct = new QAction(tr("Novi projekat"), this);
     connect(newProjectAct, SIGNAL(triggered()), this, SLOT(on_actionNew_Project_triggered()));
 
-    openProjectAct = new QAction(tr("Open Project"), this);
+    openProjectAct = new QAction(tr("Otvori projekat"), this);
     connect(openProjectAct, SIGNAL(triggered()), this, SLOT(on_actionOpen_Project_triggered()));
 
-    saveAllAct = new QAction(tr("Save All"), this);
+    saveAllAct = new QAction(tr("Sačuvaj sve"), this);
     connect(saveAllAct, SIGNAL(triggered()), this, SLOT(on_actionSave_All_triggered()));
 
-    closeAllAct = new QAction(tr("Close All"), this);
+    closeAllAct = new QAction(tr("Zatvori sve"), this);
     connect(closeAllAct, SIGNAL(triggered()), this, SLOT(on_actionClose_All_triggered()));
 
-    switchToAct = new QAction(tr("Switch to ..."), this);
-    connect(switchToAct, SIGNAL(triggered()), this, SLOT(on_actionSwitch_To_triggered()));
+    //switchToAct = new QAction(tr("Switch to ..."), this);
+    //connect(switchToAct, SIGNAL(triggered()), this, SLOT(on_actionSwitch_To_triggered()));
 
     // Image viewer
     imageLabel = new QLabel();
@@ -212,8 +212,8 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pt)
 
         ProjectItem* item = (ProjectItem*) Workspace::Instance.GetProjectsModel()->itemFromIndex(index);
 
-        switchToAct->setEnabled(!item->IsSelected());
-        menu.addAction(switchToAct);
+        //switchToAct->setEnabled(!item->IsSelected());
+        //menu.addAction(switchToAct);
 
         if(!item->IsDocument())
         {
@@ -389,24 +389,28 @@ void MainWindow::RefreshImage()
         statsStr.append("Broj tragova:\n");
         sprintf(val, "%d", stats.TracesCount);
         statsStr.append(val);
-        statsStr.append("\n\nMinimalni dijametar:\n");
-        sprintf(val, "%d", stats.MinDiameter);
-        statsStr.append(val);
-        statsStr.append("\n\nMaksimalni dijametar:\n");
-        sprintf(val, "%d", stats.MaxDiameter);
-        statsStr.append(val);
-        statsStr.append("\n\nSrednji dijametar:\n");
-        sprintf(val, "%d", stats.AverageDiameter);
-        statsStr.append(val);
-        statsStr.append("\n\nMinimalni intenzitet:\n");
-        sprintf(val, "%d", stats.MinIntensity);
-        statsStr.append(val);
-        statsStr.append("\n\nMaksimalni intenzitet:\n");
-        sprintf(val, "%d", stats.MaxIntensity);
-        statsStr.append(val);
-        statsStr.append("\n\nSrednji intenzitet:\n");
-        sprintf(val, "%d", stats.AverageIntensity);
-        statsStr.append(val);
+
+        if (stats.TracesCount > 0)
+        {
+            statsStr.append("\n\nMinimalni dijametar:\n");
+            sprintf(val, "%d", stats.MinDiameter);
+            statsStr.append(val);
+            statsStr.append("\n\nMaksimalni dijametar:\n");
+            sprintf(val, "%d", stats.MaxDiameter);
+            statsStr.append(val);
+            statsStr.append("\n\nSrednji dijametar:\n");
+            sprintf(val, "%d", stats.AverageDiameter);
+            statsStr.append(val);
+            statsStr.append("\n\nMinimalni intenzitet:\n");
+            sprintf(val, "%d", stats.MinIntensity);
+            statsStr.append(val);
+            statsStr.append("\n\nMaksimalni intenzitet:\n");
+            sprintf(val, "%d", stats.MaxIntensity);
+            statsStr.append(val);
+            statsStr.append("\n\nSrednji intenzitet:\n");
+            sprintf(val, "%d", stats.AverageIntensity);
+            statsStr.append(val);
+        }
 
         ui->labelStats->setText(QString(statsStr.c_str()));
     }
@@ -557,11 +561,11 @@ void MainWindow::DisplayImageProcesingOptions()
 
     if (m_Options.AutomaticOtsuThreshold)
     {
-        ui->groupThreshold->setTitle("Threshold: AUTO");
+        ui->groupThreshold->setTitle("Prag binarizacije: AUTO");
     }
     else
     {
-        ui->groupThreshold->setTitle("Threshold: " + QString::number(ui->sliderThreshold->value()));
+        ui->groupThreshold->setTitle("Prag binarizacije: " + QString::number(ui->sliderThreshold->value()));
     }
 
 }

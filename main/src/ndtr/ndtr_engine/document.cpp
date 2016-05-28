@@ -80,6 +80,11 @@ const Stats Document::GetStats()
 
     stats.TracesCount = m_Traces.size();
 
+    if (stats.TracesCount == 0)
+    {
+        return stats;
+    }
+
     vector<int> diameters;
     diameters.reserve(2*m_Traces.size());
     vector<int> intensities;
@@ -280,6 +285,91 @@ int MarkLocalMaximums(Mat& dist_8u, Mat& localMaxumums)
     return numberOfLocalMaximums;
 }
 
+bool IsTouchingEdge(Mat& bw, Contour& contour)
+{
+
+    imwrite("be_test.png", bw);
+
+    Mat m = bw.clone();
+    m.setTo(0);
+    vector<Contour> vec;
+    vec.push_back(contour);
+    drawContours(m, vec, 0, Scalar(255));
+    imwrite("jbg.png", m);
+
+    Rect bb = boundingRect(contour);
+    if (bb.x == 1)
+    {
+        for (int i=bb.y; i<bb.y+bb.height; i++)
+        {
+            if (bw.at<char>(i, 0) != 0)
+            {
+                Point2i pt(0, i);
+                int dist = pointPolygonTest(contour, pt, true);
+
+                if (dist >= -1)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    if (bb.x + bb.width == bw.cols - 1)
+    {
+        for (int i=bb.y; i<bb.y+bb.height; i++)
+        {
+            if (bw.at<char>(i, bw.cols - 1) != 0)
+            {
+                Point2i pt(bw.cols - 1, i);
+                int dist = pointPolygonTest(contour, pt, true);
+
+                if (dist >= -1)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    if (bb.y == 1)
+    {
+        for (int i=bb.x; i<bb.x+bb.width; i++)
+        {
+            if (bw.at<char>(0, i) != 0)
+            {
+                Point2i pt(i, 0);
+                int dist = pointPolygonTest(contour, pt, true);
+
+                if (dist >= -1)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    if (bb.y + bb.height == bw.rows - 1)
+    {
+        for (int i=bb.x; i<bb.x+bb.width; i++)
+        {
+            char asd = bw.at<char>(bw.rows - 1, i);
+            if (bw.at<char>(bw.rows - 1, i) != 0)
+            {
+                Point2i pt(i, bw.rows - 1);
+                int dist = pointPolygonTest(contour, pt, true);
+
+                if (dist >= -1)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 void Document::ProcessImage()
 {
     // Convert image to grayscale.
@@ -317,11 +407,15 @@ void Document::ProcessImage()
             thresholdType);
 
     // Get contuors.
+    Mat origBW = m_Images[NDTR_BLACK_WHITE].clone();
     std::vector<Contour> initialContours;
     findContours(m_Images[NDTR_BLACK_WHITE],
                  initialContours,
                  CV_RETR_EXTERNAL,
-                 CV_CHAIN_APPROX_SIMPLE);
+                 CV_CHAIN_APPROX_NONE);
+
+    cv::Mat asd = Mat::zeros(m_Height, m_Width, CV_8UC1);
+    drawContours(asd, initialContours, -1, Scalar(255));
 
     // Reseve memory.
     size_t reserveCount = static_cast<size_t>(initialContours.size() * 1.2);
@@ -341,6 +435,12 @@ void Document::ProcessImage()
         // Check if there are enough point to analyze contour.
         const size_t minPointCount = 5;
         if (contour.size() < minPointCount)
+        {
+            continue;
+        }
+
+        // Skip contour if it is touching image edge.
+        if (IsTouchingEdge(origBW, contour))
         {
             continue;
         }
@@ -435,7 +535,7 @@ void Document::ProcessImage()
         {
             // Add new contours.
 
-            // Markers are previously obtained.
+            // Markers are previously obtained local maximas.
             // Mark background.
             for (int r = 0; r < mask.rows; r++)
             {
@@ -445,18 +545,17 @@ void Document::ProcessImage()
                     if (index == 0)
                     {
                         markers.at<int>(r,c) = 255;
-                   }
+                    }
                 }
             }
 
             Mat result;
             cvtColor(mask, result, CV_GRAY2BGR);
-            result = result * 255;
             cv::watershed(result, markers);
 
 //            // Generate random colors
 //            std::vector<cv::Vec3b> colors;
-//            for (int i = 0; i < newContoursHint.size(); i++)
+//            for (int i = 0; i < numberOfMarkers; i++)
 //            {
 //                int b = cv::theRNG().uniform(0, 255);
 //                int g = cv::theRNG().uniform(0, 255);
@@ -474,7 +573,7 @@ void Document::ProcessImage()
 //                for (int j = 0; j < markers.cols; j++)
 //                {
 //                    int index = markers.at<int>(i,j);
-//                    if (index > 0 && index <= newContoursHint.size())
+//                    if (index > 0 && index <= numberOfMarkers)
 //                        dst.at<cv::Vec3b>(i,j) = colors[index-1];
 //                    else
 //                        dst.at<cv::Vec3b>(i,j) = cv::Vec3b(0,0,0);
@@ -603,13 +702,20 @@ bool MatchComparer (DMatch* i, DMatch* j)
 
 Mat Document::CalcTransform(Document* prev, Document* curr)
 {
+    Mat transform;
+
     vector<Trace>& prevTraces = prev->GetTraces();
     vector<Trace>& currTraces = curr->GetTraces();
+
+    if (prevTraces.size() < 3 || currTraces.size() < 3)
+    {
+        return transform;
+    }
 
     Mat prevN5 = GetDist(prevTraces);
     Mat currN5 = GetDist(currTraces);
 
-    FlannBasedMatcher matcher;
+    BFMatcher matcher;
     std::vector< DMatch > matches;
     matcher.match( prevN5, currN5, matches );
 
@@ -643,19 +749,16 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
         pCurr.push_back(ckp);
     }
 
-    Mat transform;
     if (pCurr.size() >= 3 && pPrev.size() >= 3)
     {
         Mat temp = findHomography(pCurr, pPrev, CV_RANSAC);
 
-        // Should I check is it affine homography?
-
+        // Check is it affine homography.
         // h_{31}=h_{32}=0, \; h_{33}=1.
         double h31 = temp.at<double>(2,0);
         double h32 = temp.at<double>(2,1);
         double h33 = temp.at<double>(2,2);
-
-        if (abs(h31) < 0.0001 && abs(h32) < 0.0001 && abs(h33 - 1) < 0.0001)
+        if (abs(h31) < 0.001 && abs(h32) < 0.001 && abs(h33 - 1) < 0.001)
         {
             transform = temp;
         }

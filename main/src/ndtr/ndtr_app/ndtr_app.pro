@@ -7,7 +7,7 @@
 QT       += core gui
 QT       += printsupport
 
-CONFIG   += console
+#CONFIG   += console
 
 QMAKE_CXXFLAGS += -std=c++11
 

@@ -31,5 +31,7 @@
         <file>ico/clipboard.ico</file>
         <file>ico/save_image.ico</file>
         <file>ico/csv.ico</file>
+        <file>ico/autoplay.ico</file>
+        <file>ico/play.ico</file>
     </qresource>
 </RCC>
