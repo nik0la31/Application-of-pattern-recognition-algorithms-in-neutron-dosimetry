@@ -54,7 +54,7 @@ public:
 
     void Init(Project*, std::string name, std::string path);
 
-    void Process(ProcessingOptions& options);
+    void Process(ProcessingOptions& options, bool keepManualEdits);
 
     Project* GetProject();
 
@@ -99,9 +99,9 @@ public:
         m_RatioOptions.YCenterOffset = yCenterOffset;
     }
 
-    void SetBaseUnitRatio(int baseUnitRatio)
+    void SetUnit(std::string unit)
     {
-        m_RatioOptions.BaseRatio = baseUnitRatio;
+        m_RatioOptions.Unit = unit;
     }
 
     int GetWidth() { return m_Width; }
@@ -116,6 +116,16 @@ public:
     EditInfo GetEditInfo(int contourIndex);
 
     void ApplyEdit(EditInfo& ei, bool addNew = true);
+
+    std::vector<EditInfo>& GetManualEdits()
+    {
+        return m_ManualEdits;
+    }
+
+    void SetManualEdits(std::vector<EditInfo>& manualEdits)
+    {
+        m_ManualEdits = manualEdits;
+    }
 
 private:
     // Project - document parent.

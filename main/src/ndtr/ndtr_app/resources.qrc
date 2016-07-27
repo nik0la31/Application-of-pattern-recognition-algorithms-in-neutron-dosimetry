@@ -35,5 +35,6 @@
         <file>ico/play.ico</file>
         <file>ico/color_line.ico</file>
         <file>ico/ruler.ico</file>
+        <file>ico/hammer.ico</file>
     </qresource>
 </RCC>

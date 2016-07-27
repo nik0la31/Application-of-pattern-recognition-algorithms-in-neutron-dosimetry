@@ -204,6 +204,8 @@ private slots:
 
     void on_actionInfo_triggered();
 
+    void on_btnKeepManuals_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
@@ -252,9 +254,11 @@ private:
     // Othervize, clear results.
     bool m_autoProcess;
 
+    bool m_keepManualEdits;
+
     bool m_scaleRatioMode;
 
-    int m_BaseRatio;
+    std::string m_Unit;
 
     QColor m_RatioColor;
 

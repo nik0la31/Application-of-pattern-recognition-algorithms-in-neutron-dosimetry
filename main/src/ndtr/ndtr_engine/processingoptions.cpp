@@ -7,8 +7,7 @@ ProcessingOptions::ProcessingOptions()
       WoB(true),
       MinTraceDiameter(3),
       MaxTraceDiameter(100),
-      AutoDetectWob(true),
-      KeepManualEdits(true)
+      AutoDetectWob(true)
 {
 
 }
@@ -21,8 +20,7 @@ bool ProcessingOptions::Equal(ProcessingOptions& options)
             GaussianBlur == options.GaussianBlur &&
             WoB == options.GaussianBlur &&
             AutomaticOtsuThreshold == options.AutomaticOtsuThreshold &&
-            AutoDetectWob == options.AutoDetectWob &&
-            KeepManualEdits == options.KeepManualEdits;
+            AutoDetectWob == options.AutoDetectWob;
 
     if (equal && !AutomaticOtsuThreshold)
     {

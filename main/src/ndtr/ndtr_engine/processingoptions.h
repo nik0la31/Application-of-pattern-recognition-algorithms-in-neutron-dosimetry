@@ -17,8 +17,6 @@ public:
     int MinTraceDiameter;
     int MaxTraceDiameter;
 
-    bool KeepManualEdits;
-
     bool Equal(ProcessingOptions& options);
 };
 

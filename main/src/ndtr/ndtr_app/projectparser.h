@@ -15,6 +15,34 @@ class ProjectParser
 public:
     ProjectParser();
 
+    static void LoadContour(QXmlStreamReader& stream, Contour& contour)
+    {
+        QXmlStreamAttributes attributes = stream.attributes();
+
+        QString contourPointsStr = attributes.value(QString("Contour")).toString();
+        std::string contourPointsStdStr = Utils::StringQ2W(contourPointsStr);
+        std::string delimiter = " ";
+
+        std::vector<int> coords;
+        size_t pos = 0;
+        std::string token;
+        while ((pos = contourPointsStdStr.find(delimiter)) != std::string::npos) {
+            token = contourPointsStdStr.substr(0, pos);
+
+            std::string::size_type sz;   // alias of size_t
+            int i_dec = std::stoi (token,&sz);
+            coords.push_back(i_dec);
+
+            contourPointsStdStr.erase(0, pos + delimiter.length());
+        }
+
+        for (int i=0; i<coords.size(); i+=2)
+        {
+            cv::Point2i pt(coords[i], coords[i+1]);
+            contour.push_back(pt);
+        }
+    }
+
     static bool Load(Project* project)
     {
         try
@@ -27,6 +55,7 @@ public:
             std::stack<std::string> tags;
 
             Document* doc;
+            std::vector<EditInfo> manualEdits;
 
             std::string path;
 
@@ -68,7 +97,38 @@ public:
 // use ext,not path
                         Document* doc2 = project->AddDocument(doc->GetName(), path, options);
                         doc2->SetRatioOptions(ratioOptions.PixelsPerUnit, ratioOptions.XCenterOffset, ratioOptions.YCenterOffset); // todo
-                        doc2->SetBaseUnitRatio(ratioOptions.BaseRatio); // todo
+                        doc2->SetUnit(ratioOptions.Unit); // todo
+                        doc2->SetManualEdits(manualEdits);
+                    }
+                    else  if (stream.name() == "edits")
+                    {
+                        tags.push("edits");
+
+                        manualEdits.clear();
+                    }
+                    else  if (stream.name() == "manual")
+                    {
+                        tags.push("manual");
+
+                        EditInfo ei;
+                        LoadContour(stream, ei.EditContour);
+                        manualEdits.push_back(ei);
+                    }
+                    else if (stream.name() == "trace")
+                    {
+                        tags.push("trace");
+
+                        Contour c;
+                        LoadContour(stream, c);
+                        manualEdits[manualEdits.size() - 1].TraceContours.push_back(c);
+                    }
+                    else if (stream.name() == "noise")
+                    {
+                        tags.push("noise");
+
+                        Contour c;
+                        LoadContour(stream, c);
+                        manualEdits[manualEdits.size() - 1].NoiseContours.push_back(c);
                     }
                     else
                     {
@@ -157,11 +217,13 @@ public:
             ratioOptions.YCenterOffset = attributes.value(QString("YCenterOffset")).toFloat();
         }
 
-        if (attributes.hasAttribute(QString("BaseRatio")))
+        if (attributes.hasAttribute(QString("Unit")))
         {
-            ratioOptions.BaseRatio = attributes.value(QString("BaseRatio")).toInt();
+            ratioOptions.Unit = Utils::StringQ2W(attributes.value(QString("Unit")).toString());
         }
     }
+
+
 
     static bool Save(Project* project)
     {
@@ -193,7 +255,80 @@ public:
                 QString ext("ext");
                 stream.writeAttribute(ext, QString(doc->GetExt().c_str()));
 
-                // OPTIONS  - START/END
+                // EDITS  - START
+                stream.writeStartElement("edits");
+
+                std::vector<EditInfo>& edits = doc->GetManualEdits();
+
+                for (EditInfo ei : edits)
+                {
+                    // MANUAL  - START
+                    stream.writeStartElement("manual");
+
+                    {
+                        QString contour("Contour");
+                        QString points;
+                        for (cv::Point2i pt : ei.EditContour)
+                        {
+                            points.append(QString::number(pt.x));
+                            points.append(" ");
+                            points.append(QString::number(pt.y));
+                            points.append(" ");
+                        }
+
+                        stream.writeAttribute(contour, points);
+                    }
+
+                    for (Contour traceContour : ei.TraceContours)
+                    {
+                        // TRACE  - START
+                        stream.writeStartElement("trace");
+
+                        QString contour("Contour");
+                        QString points;
+                        for (cv::Point2i pt : traceContour)
+                        {
+                            points.append(QString::number(pt.x));
+                            points.append(" ");
+                            points.append(QString::number(pt.y));
+                            points.append(" ");
+                        }
+
+                        stream.writeAttribute(contour, points);
+
+                        // TRACE  - END
+                        stream.writeEndElement();
+                    }
+
+                    for (Contour noiseContour : ei.NoiseContours)
+                    {
+                        // NOISE  - START
+                        stream.writeStartElement("noise");
+
+                        QString contour("Contour");
+                        QString points;
+                        for (cv::Point2i pt : noiseContour)
+                        {
+                            points.append(QString::number(pt.x));
+                            points.append(" ");
+                            points.append(QString::number(pt.y));
+                            points.append(" ");
+                        }
+
+                        stream.writeAttribute(contour, points);
+
+                        // NOISE  - END
+                        stream.writeEndElement();
+                    }
+
+                    // MANUAL  - END
+                    stream.writeEndElement();
+                }
+
+                // EDITS  - END
+                stream.writeEndElement();
+
+                // OPTIONS  - START
                 stream.writeStartElement("options");
 
                 ProcessingOptions options = doc->GetOptions();
@@ -219,8 +354,8 @@ public:
                 stream.writeAttribute(xco, QString::number(ratioOptions.XCenterOffset));
                 QString yco("YCenterOffset");
                 stream.writeAttribute(yco, QString::number(ratioOptions.YCenterOffset));
-                QString br("BaseRatio");
-                stream.writeAttribute(br, QString::number(ratioOptions.BaseRatio));
+                QString br("Unit");
+                stream.writeAttribute(br, QString(ratioOptions.Unit.c_str()));
 
                 // OPTIONS  - END
                 stream.writeEndElement();

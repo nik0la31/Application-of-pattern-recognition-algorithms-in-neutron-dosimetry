@@ -33,9 +33,14 @@ void Document::Init(Project* project, string name, string path)
     }
 }
 
-void Document::Process(ProcessingOptions& options)
+void Document::Process(ProcessingOptions& options, bool keepManuelEdits)
 {
     m_Options = options;
+
+    if (!keepManuelEdits)
+    {
+        m_ManualEdits.clear();
+    }
 
     ProcessImage();
 }
@@ -454,18 +459,13 @@ void Document::ProcessImage()
     m_Traces.clear();
     m_Traces.reserve(reserveCount);
 
-    if (!m_Options.KeepManualEdits)
-    {
-        m_ManualEdits.clear();
-    }
-
     // Detect traces.
     cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
     for (size_t i = 0; i < m_InitialContuors.size(); i++)
     {
         Contour& contour = m_InitialContuors[i];
 
-        if (m_Options.KeepManualEdits)
+        if (m_ManualEdits.size() > 0)
         {
             Rect bb = boundingRect(contour);
 
@@ -932,35 +932,84 @@ void Document::MarkTrace(int noiseContourIndex, bool addNew)
 
         if (addNew)
         {
-            EditInfo ei;
-            ei.Index = index;
-            ei.EditContour = c;
+            Rect roi2 = boundingRect(m_InitialContuors[index]);
 
             // Get ROI - Region Of Interest.
-            Rect roi = boundingRect(c);
             Contour oc = c;
             for (Point2i& pt : oc)
             {
-                pt.x -= roi.x;
-                pt.y -= roi.y;
+                pt.x -= roi2.x;
+                pt.y -= roi2.y;
             }
 
-            ei.TraceContours.push_back(oc);
+            Point2f pt(ellipse.center.x - roi2.x, ellipse.center.y - roi2.y);
 
+            bool foundEdit = false;
             int editsCount = m_ManualEdits.size();
             for (int i=0; i<editsCount;i++)
             {
-                EditInfo cmp = m_ManualEdits[i];
-                if (cmp.Index == ei.Index)
+                EditInfo& cmp = m_ManualEdits[i];
+                if (cmp.Index == index)
                 {
-                    m_ManualEdits.erase(m_ManualEdits.begin() + i);
+                    for (size_t n=0; n<cmp.NoiseContours.size(); n++)
+                    {
+                        Contour& contour = cmp.NoiseContours[n];
 
-                    i--;
-                    editsCount--;
+                        if (pointPolygonTest(contour, pt, false) >= 0)
+                        {
+                            Contour fc = cmp.NoiseContours[n];
+                            cmp.NoiseContours.erase(cmp.NoiseContours.begin() + n);
+                            cmp.TraceContours.push_back(fc);
+                            break;
+                        }
+                    }
+
+                    foundEdit = true;
+                    break;
                 }
             }
 
-            m_ManualEdits.push_back(ei);
+            if (!foundEdit)
+            {
+                EditInfo ei;
+                ei.Index = index;
+                ei.EditContour = m_InitialContuors[index];
+                ei.TraceContours.push_back(oc);
+
+                for (int qwe=0; qwe<m_InitialContourIndex.size()-1; qwe++)
+                {
+                    if (m_InitialContourIndex[qwe] == index)
+                    {
+                        Contour zxc = m_Contuors[qwe];
+
+                        for (Point2i& pt : zxc)
+                        {
+                            pt.x -= roi2.x;
+                            pt.y -= roi2.y;
+                        }
+
+                        ei.TraceContours.push_back(zxc);
+                    }
+                }
+
+                for (int qwe=0; qwe<m_InitialNoiseContourIndex.size(); qwe++)
+                {
+                    if (m_InitialNoiseContourIndex[qwe] == index)
+                    {
+                        Contour zxc = m_Contuors[qwe];
+
+                        for (Point2i& pt : zxc)
+                        {
+                            pt.x -= roi2.x;
+                            pt.y -= roi2.y;
+                        }
+
+                        ei.NoiseContours.push_back(zxc);
+                    }
+                }
+
+                m_ManualEdits.push_back(ei);
+            }
         }
     }
 }
@@ -982,35 +1031,87 @@ void Document::MarkNoise(int traceContourIndex, bool addNew)
 
         if (addNew)
         {
-            EditInfo ei;
-            ei.Index = index;
-            ei.EditContour = c;
+            // Calculate ellipse.
+            Ellipse ellipse = fitEllipse(Mat(c));
+
+            Rect roi2 = boundingRect(m_InitialContuors[index]);
 
             // Get ROI - Region Of Interest.
-            Rect roi = boundingRect(c);
             Contour oc = c;
             for (Point2i& pt : oc)
             {
-                pt.x -= roi.x;
-                pt.y -= roi.y;
+                pt.x -= roi2.x;
+                pt.y -= roi2.y;
             }
 
-            ei.NoiseContours.push_back(oc);
+            Point2f pt(ellipse.center.x - roi2.x, ellipse.center.y - roi2.y);
 
+            bool foundEdit = false;
             int editsCount = m_ManualEdits.size();
             for (int i=0; i<editsCount;i++)
             {
-                EditInfo cmp = m_ManualEdits[i];
-                if (cmp.Index == ei.Index)
+                EditInfo& cmp = m_ManualEdits[i];
+                if (cmp.Index == index)
                 {
-                    m_ManualEdits.erase(m_ManualEdits.begin() + i);
+                    for (size_t n=0; n<cmp.TraceContours.size(); n++)
+                    {
+                        Contour& contour = cmp.TraceContours[n];
 
-                    i--;
-                    editsCount--;
+                        if (pointPolygonTest(contour, pt, false) >= 0)
+                        {
+                            Contour fc = cmp.TraceContours[n];
+                            cmp.TraceContours.erase(cmp.TraceContours.begin() + n);
+                            cmp.NoiseContours.push_back(fc);
+                            break;
+                        }
+                    }
+
+                    foundEdit = true;
+                    break;
                 }
             }
 
-            m_ManualEdits.push_back(ei);
+            if (!foundEdit)
+            {
+                EditInfo ei;
+                ei.Index = index;
+                ei.EditContour = m_InitialContuors[index];
+                ei.NoiseContours.push_back(oc);
+
+                for (int qwe=0; qwe<m_InitialContourIndex.size(); qwe++)
+                {
+                    if (m_InitialContourIndex[qwe] == index)
+                    {
+                        Contour zxc = m_Contuors[qwe];
+
+                        for (Point2i& pt : zxc)
+                        {
+                            pt.x -= roi2.x;
+                            pt.y -= roi2.y;
+                        }
+
+                        ei.TraceContours.push_back(zxc);
+                    }
+                }
+
+                for (int qwe=0; qwe<m_InitialNoiseContourIndex.size()-1; qwe++)
+                {
+                    if (m_InitialNoiseContourIndex[qwe] == index)
+                    {
+                        Contour zxc = m_Contuors[qwe];
+
+                        for (Point2i& pt : zxc)
+                        {
+                            pt.x -= roi2.x;
+                            pt.y -= roi2.y;
+                        }
+
+                        ei.NoiseContours.push_back(zxc);
+                    }
+                }
+
+                m_ManualEdits.push_back(ei);
+            }
         }
     }
 }

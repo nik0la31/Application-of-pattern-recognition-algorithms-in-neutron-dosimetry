@@ -257,11 +257,11 @@ void Workspace::SaveAllProjects()
     }
 }
 
-void Workspace::Update(ProcessingOptions& options, bool processImmediately)
+void Workspace::Update(ProcessingOptions& options, bool processImmediately, bool keepManualEdits)
 {
     if (processImmediately)
     {
-        m_CurrentDocument->Process(options);
+        m_CurrentDocument->Process(options, keepManualEdits);
     }
     else
     {
@@ -340,26 +340,14 @@ void Workspace::ExportTraces(std::string filePath)
     float countPerSurface = stats.TracesCount / surface;
 
     out << "Broj tragova po kvadratnom ";
+    out << ratioOptions.Unit << ",\n";
 
-    if (ratioOptions.BaseRatio == 6)
-    {
-        out << "µm";
-    }
-    else if (ratioOptions.BaseRatio == 9)
-    {
-        out << "nm";
-    }
-    else if (ratioOptions.BaseRatio == 12)
-    {
-        out << "pm";
-    }
-
-    out << ",\n" << countPerSurface << ",\n";
+    out << countPerSurface / (float) ratioOptions.PixelsPerUnit << ",\n";
 
     out << "Statistika,\n";
     out << "Diajmetar,\n";
     out << "Min,Max,Avg\n";
-    out << stats.MinDiameter << "," << stats.MaxDiameter << "," << stats.AverageDiameter << ",\n";
+    out << stats.MinDiameter / (float) ratioOptions.PixelsPerUnit<< "," << stats.MaxDiameter / (float) ratioOptions.PixelsPerUnit << "," << stats.AverageDiameter / (float) ratioOptions.PixelsPerUnit << ",\n";
     out << "Intenzitet,\n";
     out << "Min,Max,Avg\n";
     out << stats.MinIntensity << "," << stats.MaxIntensity << "," << stats.AverageIntensity << ",\n";

@@ -145,10 +145,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_scaleRatioMode = false;
     m_autoProcess = false;
+    m_keepManualEdits = true;
 
-    m_BaseRatio = 0;
+    m_Unit = "cm";
 
-    ui->cmbUnit->addItem("- Izbrati -");
+    ui->cmbUnit->addItem("cm (centimetar)");
+    ui->cmbUnit->addItem("mm (milimetar)");
     ui->cmbUnit->addItem("µm (mikrometar)");
     ui->cmbUnit->addItem("nm (nanometar)");
     ui->cmbUnit->addItem("pm (pikometar)");
@@ -200,9 +202,9 @@ void MainWindow::on_actionOpen_Project_triggered()
 
             if (Workspace::Instance.IsImageAvalilable())
             {
-                Workspace::Instance.Update(m_Options, m_autoProcess);
+                Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
                 m_Options = Workspace::Instance.GetCurrentDocument()->GetOptions();
-                m_BaseRatio = Workspace::Instance.GetCurrentDocument()->GetRatioOptions().BaseRatio;
+                m_Unit = Workspace::Instance.GetCurrentDocument()->GetRatioOptions().Unit;
             }
 
             RefreshImage();
@@ -236,7 +238,7 @@ void MainWindow::on_actionAdd_Image_triggered()
 
             ui->treeView->expand(index);
 
-            Workspace::Instance.Update(m_Options, m_autoProcess);
+            Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
 
             RefreshImage();
             DisplayImageProcesingOptions();
@@ -330,9 +332,9 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
     if (Workspace::Instance.IsImageAvalilable())
     {
         m_Options = Workspace::Instance.GetCurrentDocument()->GetOptions();
-        m_BaseRatio = Workspace::Instance.GetCurrentDocument()->GetRatioOptions().BaseRatio;
+        m_Unit = Workspace::Instance.GetCurrentDocument()->GetRatioOptions().Unit;
 
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
     }
 
     RefreshImage();
@@ -456,6 +458,8 @@ void MainWindow::on_actionInfo_triggered()
     Document* doc = Workspace::Instance.GetCurrentDocument();
     Trace trace = doc->GetTraces()[m_TraceInfo.Index];
 
+    RatioOptions ratioOptions = doc->GetRatioOptions();
+
     QString traceInfo;
     traceInfo.append("Info:\n");
 
@@ -466,9 +470,9 @@ void MainWindow::on_actionInfo_triggered()
     traceInfo.append("\n");
 
     traceInfo.append("Dijametar ");
-    traceInfo.append(QString::number(trace.diameter1));
+    traceInfo.append(QString::number(trace.diameter1 / (float) ratioOptions.PixelsPerUnit));
     traceInfo.append(", ");
-    traceInfo.append(QString::number(trace.diameter2));
+    traceInfo.append(QString::number(trace.diameter2 / (float) ratioOptions.PixelsPerUnit));
     traceInfo.append("\n");
 
     traceInfo.append("Ugao         ");
@@ -742,7 +746,7 @@ void MainWindow::RefreshImage()
         // Get options.
         RatioOptions ratioOptions = Workspace::Instance.GetCurrentDocument()->GetRatioOptions();
         m_Options = Workspace::Instance.GetCurrentDocument()->GetOptions();
-        m_BaseRatio = ratioOptions.BaseRatio;
+        m_Unit = ratioOptions.Unit;
         DisplayImageProcesingOptions();
 
         Stats stats = Workspace::Instance.GetStats();
@@ -754,41 +758,31 @@ void MainWindow::RefreshImage()
         sprintf(val, "%d", stats.TracesCount);
         statsStr.append(val);
 
-        if (m_BaseRatio > 0)
-        {
-            float surface = (img.cols * img.rows) / (ratioOptions.PixelsPerUnit * ratioOptions.PixelsPerUnit);
-            float countPerSurface = stats.TracesCount / surface;
+        float surface = (img.cols * img.rows) / (ratioOptions.PixelsPerUnit * ratioOptions.PixelsPerUnit);
+        float countPerSurface = stats.TracesCount / surface;
 
-            statsStr.append("<br/><br/>Broj tragova po ");
-
-            if (m_BaseRatio == 6)
-            {
-                statsStr.append("µm");
-            }
-            else if (m_BaseRatio == 9)
-            {
-                statsStr.append("nm");
-            }
-            else if (m_BaseRatio == 12)
-            {
-                statsStr.append("pm");
-            }
-
-            statsStr.append("<sup>2</sup>:<br/>");
-            sprintf(val, "%.2f", countPerSurface);
-            statsStr.append(val);
-        }
+        statsStr.append("<br/><br/>Broj tragova po ");
+        statsStr.append(m_Unit);
+        statsStr.append("<sup>2</sup>:<br/>");
+        sprintf(val, "%.2f", countPerSurface);
+        statsStr.append(val);
 
         if (stats.TracesCount > 0)
         {
-            statsStr.append("<br/><br/>Minimalni dijametar:<br/>");
-            sprintf(val, "%d", stats.MinDiameter);
+            statsStr.append("<br/><br/>Minimalni dijametar (");
+            statsStr.append(m_Unit);
+            statsStr.append("):<br/>");
+            sprintf(val, "%f", stats.MinDiameter / (float) ratioOptions.PixelsPerUnit);
             statsStr.append(val);
-            statsStr.append("<br/><br/>Maksimalni dijametar:<br/>");
-            sprintf(val, "%d", stats.MaxDiameter);
+            statsStr.append("<br/><br/>Maksimalni dijametar (");
+            statsStr.append(m_Unit);
+            statsStr.append("):<br/>");
+            sprintf(val, "%f", stats.MaxDiameter / (float) ratioOptions.PixelsPerUnit);
             statsStr.append(val);
-            statsStr.append("<br/><br/>Srednji dijametar:<br/>");
-            sprintf(val, "%d", stats.AverageDiameter);
+            statsStr.append("<br/><br/>Srednji dijametar");
+            statsStr.append(m_Unit);
+            statsStr.append("):<br/>");
+            sprintf(val, "%f", stats.AverageDiameter / (float) ratioOptions.PixelsPerUnit);
             statsStr.append(val);
             statsStr.append("<br/><br/>Minimalni intenzitet:<br/>");
             sprintf(val, "%d", stats.MinIntensity);
@@ -938,6 +932,13 @@ void MainWindow::on_actionCenterColor_clicked()
 
 void MainWindow::DisplayImageProcesingOptions()
 {
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+    RatioOptions ratioOptions;
+    if (doc)
+    {
+        ratioOptions = doc->GetRatioOptions();
+    }
+
     ui->checkBoxAutoThreshold->setChecked(m_Options.AutomaticOtsuThreshold);
     ui->sliderThreshold->setValue(m_Options.OtsuThreshold);
     ui->sliderThreshold->setToolTip(QString::number(ui->sliderThreshold->value()));
@@ -950,8 +951,8 @@ void MainWindow::DisplayImageProcesingOptions()
     ui->buttonWoB->setChecked(m_Options.WoB);
     //ui->buttonWoB->setEnabled(!m_Options.AutoDetectWob);
 
-    ui->spinMin->setValue((double) m_Options.MinTraceDiameter);
-    ui->spinMax->setValue((double) m_Options.MaxTraceDiameter);
+    ui->spinMin->setValue((double) m_Options.MinTraceDiameter / (float) ratioOptions.PixelsPerUnit);
+    ui->spinMax->setValue((double) m_Options.MaxTraceDiameter / (float) ratioOptions.PixelsPerUnit);
 
     if (m_Options.AutomaticOtsuThreshold)
     {
@@ -962,8 +963,15 @@ void MainWindow::DisplayImageProcesingOptions()
         ui->groupThreshold->setTitle("Prag binarizacije: " + QString::number(ui->sliderThreshold->value()));
     }
 
-    int index = m_BaseRatio / 3;
-    index = index > 0 ? index - 1 : 0;
+    int index = 0;
+    if (m_Unit == "nm")
+    {
+        index = 1;
+    }
+    else if (m_Unit == "pm")
+    {
+        index = 2;
+    }
     ui->cmbUnit->setCurrentIndex(index);
 
     // -----------------------------------
@@ -997,8 +1005,8 @@ void MainWindow::UpdateActionAvailability()
     {
         ui->actionClose_Project->setEnabled(true);
         ui->actionClose_All->setEnabled(true);
-        ui->actionSave_Project->setEnabled(Workspace::Instance.IsCurrentProjectPersistent());
-        ui->actionSave_All->setEnabled(Workspace::Instance.AreAllProjectsPersistent());
+        ui->actionSave_Project->setEnabled(true /*Workspace::Instance.IsCurrentProjectPersistent()*/);
+        ui->actionSave_All->setEnabled(true /*Workspace::Instance.AreAllProjectsPersistent()*/);
     }
     else
     {
@@ -1039,7 +1047,7 @@ void MainWindow::on_checkBoxAutoThreshold_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
     }
 
@@ -1052,7 +1060,7 @@ void MainWindow::on_sliderThreshold_sliderReleased()
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -1064,7 +1072,7 @@ void MainWindow::on_buttonBlur_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -1076,7 +1084,7 @@ void MainWindow::on_buttonWoB_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -1084,11 +1092,13 @@ void MainWindow::on_buttonWoB_clicked(bool checked)
 
 void MainWindow::on_spinMin_editingFinished()
 {
-    m_Options.MinTraceDiameter = (int) ui->spinMin->value();
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+    RatioOptions ratioOptions = doc->GetRatioOptions();
+    m_Options.MinTraceDiameter = (int) (ui->spinMin->value() * (float) ratioOptions.PixelsPerUnit);
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -1096,11 +1106,13 @@ void MainWindow::on_spinMin_editingFinished()
 
 void MainWindow::on_spinMax_editingFinished()
 {
-    m_Options.MaxTraceDiameter = (int) ui->spinMax->value();
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+    RatioOptions ratioOptions = doc->GetRatioOptions();
+    m_Options.MaxTraceDiameter = (int) (ui->spinMax->value() * (float) ratioOptions.PixelsPerUnit);
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -1112,7 +1124,7 @@ void MainWindow::on_btnAutoWob_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options, m_autoProcess);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
     }
 
     RefreshImage();
@@ -1442,7 +1454,7 @@ void MainWindow::on_btnProcessImage_clicked()
 {
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.GetCurrentDocument()->Process(m_Options);
+        Workspace::Instance.GetCurrentDocument()->Process(m_Options, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -1456,10 +1468,22 @@ void MainWindow::on_btnAutoProcess_clicked(bool checked)
     {
          if (Workspace::Instance.GetCurrentDocument()->GetTraces().size() == 0)
          {
-             Workspace::Instance.GetCurrentDocument()->Process(m_Options);
+             Workspace::Instance.GetCurrentDocument()->Process(m_Options, m_keepManualEdits);
              RefreshImage();
              DisplayImageProcesingOptions();
          }
+    }
+}
+
+void MainWindow::on_btnKeepManuals_clicked(bool checked)
+{
+    m_keepManualEdits = checked;
+
+    if (Workspace::Instance.IsImageAvalilable())
+    {
+        Workspace::Instance.GetCurrentDocument()->Process(m_Options, m_keepManualEdits);
+        RefreshImage();
+        DisplayImageProcesingOptions();
     }
 }
 
@@ -1485,15 +1509,29 @@ void MainWindow::on_cmbUnit_currentIndexChanged(int index)
 {
     if (Workspace::Instance.IsImageAvalilable())
     {
-        // 0 -          0
-        // 1 - um 6     3
-        // 2 - nm 9     6
-        // 3 - pm 12    9
+        if (index == 0)
+        {
+            m_Unit = "cm";
+        }
+        else if (index == 1)
+        {
+            m_Unit = "mm";
+        }
+        else if (index == 2)
+        {
+            m_Unit = "µm";
+        }
+        else if (index == 3)
+        {
+            m_Unit = "nm";
+        }
+        else
+        {
+            m_Unit = "pm";
+        }
 
-        int val = index * 3;
-        val = val >= 3 ? val + 3 : 0;
-        m_BaseRatio = val;
-        Workspace::Instance.GetCurrentDocument()->SetBaseUnitRatio(val);
+        Workspace::Instance.GetCurrentDocument()->SetUnit(m_Unit);
+
         RefreshImage();
     }
 }

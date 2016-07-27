@@ -59,7 +59,7 @@ public:
 
     void RemoveCurrentDocument();
 
-    void Update(ProcessingOptions& options, bool processImmediately);
+    void Update(ProcessingOptions& options, bool processImmediately, bool keepManualEdits);
 
     bool IsCurrentProjectPersistent();
 

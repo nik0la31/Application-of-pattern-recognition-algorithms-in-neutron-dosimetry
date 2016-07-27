@@ -1,6 +1,7 @@
 #ifndef RATIOOPTIONS_H
 #define RATIOOPTIONS_H
 
+#include <string>
 
 class RatioOptions
 {
@@ -13,12 +14,10 @@ public:
 
     float YCenterOffset;
 
-    /// Ratio
-    /// [/]  0   -
     /// [um] 6  - 1 : e-06
     /// [nm] 9  - 1 : e-09
     /// [pm] 12 - 1 : e-12
-    int BaseRatio;
+    std::string Unit;
 };
 
 #endif // RATIOOPTIONS_H
