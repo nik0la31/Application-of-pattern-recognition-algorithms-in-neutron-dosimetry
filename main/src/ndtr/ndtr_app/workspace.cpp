@@ -257,9 +257,18 @@ void Workspace::SaveAllProjects()
     }
 }
 
-void Workspace::Update(ProcessingOptions& options)
+void Workspace::Update(ProcessingOptions& options, bool processImmediately)
 {
-    m_CurrentDocument->Process(options);
+    if (processImmediately)
+    {
+        m_CurrentDocument->Process(options);
+    }
+    else
+    {
+        m_CurrentDocument->SetOptions(options);
+        m_CurrentDocument->Clear();
+    }
+
     m_ProjectsPersistentState[m_CurrentProject->GetName()] = true;
 }
 
@@ -320,10 +329,32 @@ void Workspace::ExportTraces(std::string filePath)
     ofstream out;
     out.open(filePath);
 
+    RatioOptions ratioOptions = m_CurrentDocument->GetRatioOptions();
     Stats stats = m_CurrentDocument->GetStats();
 
     out << "Broj tragova,\n";
     out << stats.TracesCount << ",\n";
+
+
+    float surface = (m_CurrentDocument->GetWidth() * m_CurrentDocument->GetHeigth()) / (ratioOptions.PixelsPerUnit * ratioOptions.PixelsPerUnit);
+    float countPerSurface = stats.TracesCount / surface;
+
+    out << "Broj tragova po kvadratnom ";
+
+    if (ratioOptions.BaseRatio == 6)
+    {
+        out << "µm";
+    }
+    else if (ratioOptions.BaseRatio == 9)
+    {
+        out << "nm";
+    }
+    else if (ratioOptions.BaseRatio == 12)
+    {
+        out << "pm";
+    }
+
+    out << ",\n" << countPerSurface << ",\n";
 
     out << "Statistika,\n";
     out << "Diajmetar,\n";

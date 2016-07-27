@@ -22,7 +22,8 @@ SOURCES += \
     viewoptions.cpp \
     stats.cpp \
     trace.cpp \
-    processingoptions.cpp
+    processingoptions.cpp \
+    ratiooptions.cpp
 
 HEADERS +=\
     project.h \
@@ -30,7 +31,8 @@ HEADERS +=\
     viewoptions.h \
     stats.h \
     trace.h \
-    processingoptions.h
+    processingoptions.h \
+    ratiooptions.h
 
 win32 {
     INCLUDEPATH += C:/opencv/build/include \

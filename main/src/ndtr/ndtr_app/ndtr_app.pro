@@ -23,6 +23,7 @@ SOURCES += \
     projectparser.cpp \
     projectitem.cpp \
     workspace.cpp \
+    arrangetracedialog.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -30,9 +31,11 @@ HEADERS += \
     projectparser.h \
     projectitem.h \
     workspace.h \
+    arrangetracedialog.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    arrangetracedialog.ui
 
 OTHER_FILES +=
 

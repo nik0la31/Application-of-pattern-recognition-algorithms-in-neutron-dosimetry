@@ -26,7 +26,11 @@ void Document::Init(Project* project, string name, string path)
     m_Width = m_Images[NDTR_ORIGINAL].cols;
     m_Height = m_Images[NDTR_ORIGINAL].rows;
 
-    ProcessImage();
+    if (m_RatioOptions.PixelsPerUnit == 0.0f)
+    {
+        int min = m_Width < m_Height ? m_Width : m_Height;
+        m_RatioOptions.PixelsPerUnit = min / 2.0f;
+    }
 }
 
 void Document::Process(ProcessingOptions& options)
@@ -123,6 +127,11 @@ const Stats Document::GetStats()
 ProcessingOptions Document::GetOptions()
 {
     return m_Options;
+}
+
+void Document::SetOptions(ProcessingOptions& options)
+{
+    m_Options = options;
 }
 
 std::vector<Trace>& Document::GetTraces()
@@ -287,15 +296,11 @@ int MarkLocalMaximums(Mat& dist_8u, Mat& localMaxumums)
 
 bool IsTouchingEdge(Mat& bw, Contour& contour)
 {
-
-    imwrite("be_test.png", bw);
-
     Mat m = bw.clone();
     m.setTo(0);
     vector<Contour> vec;
     vec.push_back(contour);
     drawContours(m, vec, 0, Scalar(255));
-    imwrite("jbg.png", m);
 
     Rect bb = boundingRect(contour);
     if (bb.x == 1)
@@ -305,7 +310,7 @@ bool IsTouchingEdge(Mat& bw, Contour& contour)
             if (bw.at<char>(i, 0) != 0)
             {
                 Point2i pt(0, i);
-                int dist = pointPolygonTest(contour, pt, true);
+                double dist = pointPolygonTest(contour, pt, true);
 
                 if (dist >= -1)
                 {
@@ -322,7 +327,7 @@ bool IsTouchingEdge(Mat& bw, Contour& contour)
             if (bw.at<char>(i, bw.cols - 1) != 0)
             {
                 Point2i pt(bw.cols - 1, i);
-                int dist = pointPolygonTest(contour, pt, true);
+                double dist = pointPolygonTest(contour, pt, true);
 
                 if (dist >= -1)
                 {
@@ -339,7 +344,7 @@ bool IsTouchingEdge(Mat& bw, Contour& contour)
             if (bw.at<char>(0, i) != 0)
             {
                 Point2i pt(i, 0);
-                int dist = pointPolygonTest(contour, pt, true);
+                double dist = pointPolygonTest(contour, pt, true);
 
                 if (dist >= -1)
                 {
@@ -357,7 +362,7 @@ bool IsTouchingEdge(Mat& bw, Contour& contour)
             if (bw.at<char>(bw.rows - 1, i) != 0)
             {
                 Point2i pt(i, bw.rows - 1);
-                int dist = pointPolygonTest(contour, pt, true);
+                double dist = pointPolygonTest(contour, pt, true);
 
                 if (dist >= -1)
                 {
@@ -384,7 +389,7 @@ void Document::ProcessImage()
     }
 
     int thresholdType;
-    if (m_Options.WoB)
+    if (m_Options.WoB || m_Options.AutoDetectWob)
     {
         thresholdType = CV_THRESH_BINARY;
     }
@@ -408,40 +413,108 @@ void Document::ProcessImage()
 
     // Get contuors.
     Mat origBW = m_Images[NDTR_BLACK_WHITE].clone();
-    std::vector<Contour> initialContours;
+
+    if (m_Options.AutoDetectWob)
+    {
+        int TotalNumberOfPixels = origBW.rows * origBW.cols;
+        int countWhite = TotalNumberOfPixels - countNonZero(origBW);
+        int countBlack = TotalNumberOfPixels - countWhite;
+
+          if (countBlack > countWhite)
+          {
+            m_Options.WoB = !m_Options.WoB;
+
+            origBW = 255 - origBW;
+
+            m_Images[NDTR_BLACK_WHITE] = origBW;
+          }
+    }
+
+    m_InitialContuors.clear();
     findContours(m_Images[NDTR_BLACK_WHITE],
-                 initialContours,
+                 m_InitialContuors,
                  CV_RETR_EXTERNAL,
                  CV_CHAIN_APPROX_NONE);
 
-    cv::Mat asd = Mat::zeros(m_Height, m_Width, CV_8UC1);
-    drawContours(asd, initialContours, -1, Scalar(255));
+    //cv::Mat asd = Mat::zeros(m_Height, m_Width, CV_8UC1);
+    //drawContours(asd, initialContours, -1, Scalar(255));
 
     // Reseve memory.
-    size_t reserveCount = static_cast<size_t>(initialContours.size() * 1.2);
+    size_t reserveCount = static_cast<size_t>(m_InitialContuors.size() * 1.2);
     m_Contuors.clear();
     m_Contuors.reserve(reserveCount);
+    m_InitialContourIndex.clear();
+    m_InitialContourIndex.reserve(reserveCount);
+    m_NoiseContuors.clear();
+    m_NoiseContuors.reserve(reserveCount);
+    m_InitialNoiseContourIndex.clear();
+    m_InitialNoiseContourIndex.reserve(reserveCount);
     m_Ellipses.clear();
     m_Ellipses.reserve(reserveCount);
     m_Traces.clear();
     m_Traces.reserve(reserveCount);
 
+    if (!m_Options.KeepManualEdits)
+    {
+        m_ManualEdits.clear();
+    }
+
     // Detect traces.
     cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
-    for (size_t i = 0; i < initialContours.size(); i++)
+    for (size_t i = 0; i < m_InitialContuors.size(); i++)
     {
-        Contour& contour = initialContours[i];
+        Contour& contour = m_InitialContuors[i];
+
+        if (m_Options.KeepManualEdits)
+        {
+            Rect bb = boundingRect(contour);
+
+            bool manual = false;
+            for (int eIndex=0; eIndex<m_ManualEdits.size(); eIndex++)
+            {
+                EditInfo& ei = m_ManualEdits[eIndex];
+
+                Rect eBB = boundingRect(ei.EditContour);
+
+                Rect iBB = bb & eBB;
+
+                float area = iBB.area();
+                if (area / bb.area() < 0.9 || area / eBB.area() < 0.9)
+                {
+                    continue;
+                }
+
+                if (true)
+                {
+                    ei.Index = i;
+                    ApplyEdit(ei, false);
+                    manual = true;
+                    break;
+                }
+            }
+
+            if (manual)
+            {
+                continue;
+            }
+        }
 
         // Check if there are enough point to analyze contour.
         const size_t minPointCount = 5;
         if (contour.size() < minPointCount)
         {
+            m_NoiseContuors.push_back(contour);
+            m_InitialNoiseContourIndex.push_back(i);
+
             continue;
         }
 
         // Skip contour if it is touching image edge.
         if (IsTouchingEdge(origBW, contour))
         {
+            m_NoiseContuors.push_back(contour);
+            m_InitialNoiseContourIndex.push_back(i);
+
             continue;
         }
 
@@ -455,12 +528,12 @@ void Document::ProcessImage()
         Contour hull;
         convexHull(contour, hull);
 
-        int cArea = contourArea(contour);
-        int hArea = contourArea(hull);
+        double cArea = contourArea(contour);
+        double hArea = contourArea(hull);
         double perc = cArea / (double) hArea;
 
         // Draw current contour.
-        drawContours(temp, initialContours, i, Scalar(1), -1);
+        drawContours(temp, m_InitialContuors, i, Scalar(1), -1);
 
         // Get ROI - Region Of Interest.
         Rect roi = boundingRect(contour);
@@ -507,10 +580,14 @@ void Document::ProcessImage()
                 ellipse.size.height < m_Options.MinTraceDiameter ||
                 ellipse.size.height > m_Options.MaxTraceDiameter)
             {
+                m_NoiseContuors.push_back(contour);
+                m_InitialNoiseContourIndex.push_back(i);
+
                 continue;
             }
 
             m_Contuors.push_back(contour);
+            m_InitialContourIndex.push_back(i);
 
             // Create trace from original contour.
             m_Ellipses.emplace_back(ellipse);
@@ -589,7 +666,7 @@ void Document::ProcessImage()
                              CV_RETR_LIST,
                              CV_CHAIN_APPROX_SIMPLE);
 
-                // There should only one contour in this vector.
+                // There should be only one contour in this vector.
                 for (size_t k = 0; k < newContours.size(); ++k)
                 {
                     Contour& newContour = newContours[k];
@@ -597,6 +674,9 @@ void Document::ProcessImage()
                     // Check if there are enough point to analyze contour.
                     if (newContour.size() < minPointCount)
                     {
+                        m_NoiseContuors.push_back(newContour);
+                        m_InitialNoiseContourIndex.push_back(i);
+
                         continue;
                     }
 
@@ -607,6 +687,9 @@ void Document::ProcessImage()
                         newEllipse.size.height < m_Options.MinTraceDiameter ||
                         newEllipse.size.height > m_Options.MaxTraceDiameter)
                     {
+                        m_NoiseContuors.push_back(newContour);
+                        m_InitialNoiseContourIndex.push_back(i);
+
                         continue;
                     }
 
@@ -617,6 +700,7 @@ void Document::ProcessImage()
                     }
 
                     m_Contuors.push_back(newContour);
+                    m_InitialContourIndex.push_back(i);
 
                     // Offset ellipse data.
                     newEllipse.center.x += roi.x;
@@ -765,4 +849,355 @@ Mat Document::CalcTransform(Document* prev, Document* curr)
     }
 
     return transform;
+}
+
+void Document::Clear()
+{
+    m_Contuors.clear();
+    m_Ellipses.clear();
+    m_Traces.clear();
+}
+
+TraceInfo Document::PosTest(int x, int y)
+{
+    TraceInfo ti;
+
+    for (size_t i=0; i<m_Contuors.size(); i++)
+    {
+        Contour& contour = m_Contuors[i];
+
+        if (pointPolygonTest(contour, Point2f(x,y), false) > 0)
+        {
+            ti.Type = 1;
+            ti.Index = i;
+            ti.InitIndex = m_InitialContourIndex[i];
+
+            return ti;
+        }
+    }
+
+    for (size_t i=0; i<m_NoiseContuors.size(); i++)
+    {
+        Contour& contour = m_NoiseContuors[i];
+
+        if (pointPolygonTest(contour, Point2f(x,y), false) > 0)
+        {
+            ti.Type = 2;
+            ti.Index = i;
+            ti.InitIndex = m_InitialNoiseContourIndex[i];
+
+            return ti;
+        }
+    }
+
+    return ti;
+}
+
+void Document::MarkTrace(int noiseContourIndex, bool addNew)
+{
+    if (noiseContourIndex < m_NoiseContuors.size())
+    {
+        int index = m_InitialNoiseContourIndex[noiseContourIndex];
+        Contour c = m_NoiseContuors[noiseContourIndex];
+
+        m_InitialNoiseContourIndex.erase(
+                    m_InitialNoiseContourIndex.begin() + noiseContourIndex);
+        m_NoiseContuors.erase(
+                    m_NoiseContuors.begin() + noiseContourIndex);
+
+        m_InitialContourIndex.push_back(index);
+        m_Contuors.push_back(c);
+
+        // Calculate ellipse.
+        Ellipse ellipse = fitEllipse(Mat(c));
+        m_Ellipses.push_back(ellipse);
+
+        // Get ROI - Region Of Interest.
+        Rect roi = boundingRect(c);
+
+        // Get mask image.
+        cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
+        drawContours(temp, m_InitialContuors, index, Scalar(1), -1);
+        Mat mask = temp(roi);
+
+        cv::Scalar mean = cv::mean(m_Images[NDTR_GRAYSCALE](roi), mask == 1);
+
+        m_Traces.emplace_back(
+            static_cast<int>(ellipse.center.x),
+            static_cast<int>(ellipse.center.y),
+            ellipse.angle,
+            static_cast<int>(ellipse.size.width),
+            static_cast<int>(ellipse.size.height),
+            static_cast<int>(mean[0]));
+
+        if (addNew)
+        {
+            EditInfo ei;
+            ei.Index = index;
+            ei.EditContour = c;
+
+            // Get ROI - Region Of Interest.
+            Rect roi = boundingRect(c);
+            Contour oc = c;
+            for (Point2i& pt : oc)
+            {
+                pt.x -= roi.x;
+                pt.y -= roi.y;
+            }
+
+            ei.TraceContours.push_back(oc);
+
+            int editsCount = m_ManualEdits.size();
+            for (int i=0; i<editsCount;i++)
+            {
+                EditInfo cmp = m_ManualEdits[i];
+                if (cmp.Index == ei.Index)
+                {
+                    m_ManualEdits.erase(m_ManualEdits.begin() + i);
+
+                    i--;
+                    editsCount--;
+                }
+            }
+
+            m_ManualEdits.push_back(ei);
+        }
+    }
+}
+
+void Document::MarkNoise(int traceContourIndex, bool addNew)
+{
+    if (traceContourIndex < m_Contuors.size())
+    {
+        int index = m_InitialContourIndex[traceContourIndex];
+        Contour c = m_Contuors[traceContourIndex];
+
+        m_InitialContourIndex.erase(m_InitialContourIndex.begin() + traceContourIndex);
+        m_Contuors.erase(m_Contuors.begin() + traceContourIndex);
+        m_Ellipses.erase(m_Ellipses.begin() + traceContourIndex);
+        m_Traces.erase(m_Traces.begin() + traceContourIndex);
+
+        m_InitialNoiseContourIndex.push_back(index);
+        m_NoiseContuors.push_back(c);
+
+        if (addNew)
+        {
+            EditInfo ei;
+            ei.Index = index;
+            ei.EditContour = c;
+
+            // Get ROI - Region Of Interest.
+            Rect roi = boundingRect(c);
+            Contour oc = c;
+            for (Point2i& pt : oc)
+            {
+                pt.x -= roi.x;
+                pt.y -= roi.y;
+            }
+
+            ei.NoiseContours.push_back(oc);
+
+            int editsCount = m_ManualEdits.size();
+            for (int i=0; i<editsCount;i++)
+            {
+                EditInfo cmp = m_ManualEdits[i];
+                if (cmp.Index == ei.Index)
+                {
+                    m_ManualEdits.erase(m_ManualEdits.begin() + i);
+
+                    i--;
+                    editsCount--;
+                }
+            }
+
+            m_ManualEdits.push_back(ei);
+        }
+    }
+}
+
+EditInfo Document::GetEditInfo(int contourIndex)
+{
+    EditInfo ei;
+
+    ei.Index = contourIndex;
+    ei.EditContour = m_InitialContuors[contourIndex];
+
+    // Get ROI - Region Of Interest.
+    Rect roi = boundingRect(ei.EditContour);
+
+    // Get mask image.
+    cv::Mat mask = Mat::zeros(m_Height, m_Width, CV_8UC1);
+    drawContours(mask, m_InitialContuors, contourIndex, Scalar(1), -1);
+    Mat temp;
+    m_Images[NDTR_GRAYSCALE].copyTo(temp, mask);
+
+    Mat imgOut = temp(roi).clone();
+
+    ei.Grayscale = imgOut;
+
+    return ei;
+}
+
+void Document::ApplyEdit(EditInfo& ei, bool addNew)
+{
+    int numberOfMarkers = ei.TraceContours.size() + ei.NoiseContours.size();
+
+    if (numberOfMarkers == 0)
+    {
+        return;
+    }
+
+    if (addNew)
+    {
+        int editsCount = m_ManualEdits.size();
+        for (int i=0; i<editsCount;i++)
+        {
+            EditInfo cmp = m_ManualEdits[i];
+            if (cmp.Index == ei.Index)
+            {
+                m_ManualEdits.erase(m_ManualEdits.begin() + i);
+
+                i--;
+                editsCount--;
+            }
+        }
+
+        m_ManualEdits.push_back(ei);
+
+        int contourCount = m_InitialContourIndex.size();
+        for (size_t i=0; i<contourCount; i++)
+        {
+            if (m_InitialContourIndex[i] == ei.Index)
+            {
+                m_Contuors.erase(m_Contuors.begin() + i);
+                m_InitialContourIndex.erase(m_InitialContourIndex.begin() + i);
+                m_Traces.erase(m_Traces.begin() + i);
+                m_Ellipses.erase(m_Ellipses.begin() + i);
+
+                contourCount--;
+                i--;
+            }
+        }
+
+        contourCount = m_InitialNoiseContourIndex.size();
+        for (size_t i=0; i<contourCount; i++)
+        {
+            if (m_InitialNoiseContourIndex[i] == ei.Index)
+            {
+                m_NoiseContuors.erase(m_NoiseContuors.begin() + i);
+                m_InitialNoiseContourIndex.erase(m_InitialNoiseContourIndex.begin() + i);
+
+                contourCount--;
+                i--;
+            }
+        }
+    }
+
+    cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
+    drawContours(temp, m_InitialContuors, ei.Index, Scalar(1), -1);
+
+    // Get ROI - Region Of Interest.
+    Rect roi = boundingRect(m_InitialContuors[ei.Index]);
+
+    // Get mask image.
+    Mat mask = temp(roi);
+
+    cv::Mat markers = cv::Mat::zeros(mask.size(), CV_32SC1);
+
+    // Mark traces
+    for (size_t i=0; i<ei.NoiseContours.size(); i++)
+    {
+        drawContours(markers, ei.NoiseContours, i, Scalar(i+1), -1);
+    }
+
+    for (size_t i=0; i<ei.TraceContours.size(); i++)
+    {
+        drawContours(markers, ei.TraceContours, i, Scalar(ei.NoiseContours.size() + i + 1), -1);
+    }
+
+    // Mark background.
+    for (int r = 0; r < mask.rows; r++)
+    {
+        for (int c = 0; c < mask.cols; c++)
+        {
+            int index = (int) mask.at<char>(r,c);
+            if (index == 0)
+            {
+                markers.at<int>(r,c) = 255;
+            }
+        }
+    }
+
+    Mat result;
+    cvtColor(mask, result, CV_GRAY2BGR);
+    cv::watershed(result, markers);
+
+    for (size_t nc = 1; nc <= numberOfMarkers; nc++)
+    {
+        cv::Mat newMask = markers == nc;
+
+        std::vector<Contour> newContours;
+        findContours(newMask,
+                     newContours,
+                     CV_RETR_LIST,
+                     CV_CHAIN_APPROX_SIMPLE);
+
+        // There should be only one contour in this vector.
+        for (size_t k = 0; k < newContours.size(); ++k)
+        {
+            Contour& newContour = newContours[k];
+
+            // test if it is noise or trace
+
+            Ellipse newEllipse = fitEllipse(Mat(newContour));
+
+            for (Point2i& pt : newContour)
+            {
+                pt.x += roi.x;
+                pt.y += roi.y;
+            }
+
+            bool noise = false;
+            Point2f centerPt(newEllipse.center.x, newEllipse.center.y);
+            for (int i=0; i<ei.NoiseContours.size(); i++)
+            {
+                Contour& c = ei.NoiseContours[i];
+
+                if (pointPolygonTest(c, centerPt, false) > 0)
+                {
+                    m_NoiseContuors.push_back(newContour);
+                    m_InitialNoiseContourIndex.push_back(ei.Index);
+                    noise = true;
+                    break;
+                }
+            }
+
+            if (noise)
+            {
+                continue;
+            }
+
+            // Offset ellipse data.
+            newEllipse.center.x += roi.x;
+            newEllipse.center.y += roi.y;
+
+            m_Contuors.push_back(newContour);
+            m_InitialContourIndex.push_back(ei.Index);
+
+
+            m_Ellipses.emplace_back(newEllipse);
+
+            cv::Scalar mean = cv::mean(m_Images[NDTR_GRAYSCALE](roi), newMask == 1);
+
+            m_Traces.emplace_back(
+                static_cast<int>(newEllipse.center.x),
+                static_cast<int>(newEllipse.center.y),
+                newEllipse.angle,
+                static_cast<int>(newEllipse.size.width),
+                static_cast<int>(newEllipse.size.height),
+                static_cast<int>(mean[0]));
+
+            m_Traces[m_Traces.size() - 1].DebugColor = Scalar(0, 0, 255);
+        }
+    }
 }

@@ -24,6 +24,12 @@
 #include <QMimeData>
 #include <QClipboard>
 
+#include <QPainter>
+
+#include <QToolTip>
+
+#include <arrangetracedialog.h>
+
 #include <stdio.h>  /* defines FILENAME_MAX */
 
 #ifdef WINDOWS
@@ -40,9 +46,13 @@ using namespace Qt;
 
 QSize MainWindow::s_ZoomOffset = QSize(2, 2);
 
+float x_offset = 0.0;
+float y_offset = 0.0;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_RatioColor(0,0,0)
 {
     ui->setupUi(this);
 
@@ -79,16 +89,33 @@ MainWindow::MainWindow(QWidget *parent) :
     //switchToAct = new QAction(tr("Switch to ..."), this);
     //connect(switchToAct, SIGNAL(triggered()), this, SLOT(on_actionSwitch_To_triggered()));
 
+    markTraceAct = new QAction(tr("Označi trag"), this);
+    connect(markTraceAct, SIGNAL(triggered()), this, SLOT(on_actionMarkTrace_triggered()));
+
+    markNoiseAct = new QAction(tr("Označi šum"), this);
+    connect(markNoiseAct, SIGNAL(triggered()), this, SLOT(on_actionMarkNoise_triggered()));
+
+    arrangeAct = new QAction(tr("Uredi"), this);
+    connect(arrangeAct, SIGNAL(triggered()), this, SLOT(on_actionArrange_triggered()));
+
+    infoAct = new QAction(tr("Info"), this);
+    connect(infoAct, SIGNAL(triggered()), this, SLOT(on_actionInfo_triggered()));
+
     // Image viewer
     imageLabel = new QLabel();
     imageLabel->setBackgroundRole(QPalette::Dark);
     imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     imageLabel->setScaledContents(true);
 
-    scrollArea = new QScrollArea();
+    scrollArea = new MyQScrollArea();
     scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidget(imageLabel);
     setCentralWidget(scrollArea);
+
+    connect(scrollArea, SIGNAL(ZoomedIn()), this, SLOT(on_imageScroll_In_triggered()));
+    connect(scrollArea, SIGNAL(ZoomedOut()), this, SLOT(on_imageScroll_Out_triggered()));
+    connect(scrollArea, SIGNAL(Pan(int, int)), this, SLOT(on_imagePan_triggered(int, int)));
+    connect(scrollArea, SIGNAL(MouseDown(int,int)), this, SLOT(on_imageMouseDown_triggered(int, int)));
 
     m_ImageTypeGroup = new QActionGroup(this);
     m_View.Image = NDTR_ORIGINAL;
@@ -112,7 +139,19 @@ MainWindow::MainWindow(QWidget *parent) :
     // Display default image processing options.
     DisplayImageProcesingOptions();
 
+    UpdateActionAvailability();
+
     ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    m_scaleRatioMode = false;
+    m_autoProcess = false;
+
+    m_BaseRatio = 0;
+
+    ui->cmbUnit->addItem("- Izbrati -");
+    ui->cmbUnit->addItem("µm (mikrometar)");
+    ui->cmbUnit->addItem("nm (nanometar)");
+    ui->cmbUnit->addItem("pm (pikometar)");
 }
 
 MainWindow::~MainWindow()
@@ -136,6 +175,8 @@ void MainWindow::on_actionNew_Project_triggered()
             Workspace::Instance.AddProject(fullFilePath);
 
             RefreshImage();
+            DisplayImageProcesingOptions();
+            UpdateActionAvailability();
         }
         catch (const std::exception& ex)
         {
@@ -157,7 +198,16 @@ void MainWindow::on_actionOpen_Project_triggered()
         {
             Workspace::Instance.AddProject(fullFilePath, true);
 
+            if (Workspace::Instance.IsImageAvalilable())
+            {
+                Workspace::Instance.Update(m_Options, m_autoProcess);
+                m_Options = Workspace::Instance.GetCurrentDocument()->GetOptions();
+                m_BaseRatio = Workspace::Instance.GetCurrentDocument()->GetRatioOptions().BaseRatio;
+            }
+
             RefreshImage();
+            DisplayImageProcesingOptions();
+            UpdateActionAvailability();
 
             on_actionFit_to_Window_triggered();
         }
@@ -186,7 +236,12 @@ void MainWindow::on_actionAdd_Image_triggered()
 
             ui->treeView->expand(index);
 
+            Workspace::Instance.Update(m_Options, m_autoProcess);
+
             RefreshImage();
+            DisplayImageProcesingOptions();
+            UpdateActionAvailability();
+
             on_actionFit_to_Window_triggered();
         }
         catch (const std::exception& ex)
@@ -219,6 +274,7 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pt)
         {
             menu.addAction(addImageAct);
             menu.addSeparator();
+            saveProjctAct->setEnabled(!Workspace::Instance.IsCurrentProjectPersistent());
             menu.addAction(saveProjctAct);
             menu.addAction(closeProjectAct);
             menu.addSeparator();
@@ -233,7 +289,9 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pt)
     menu.addAction(newProjectAct);
     menu.addAction(openProjectAct);
     menu.addSeparator();
+    saveAllAct->setEnabled(!Workspace::Instance.AreAllProjectsPersistent());
     menu.addAction(saveAllAct);
+    closeAllAct->setEnabled(Workspace::Instance.GetCurrentProject());
     menu.addAction(closeAllAct);
 
     menu.exec(globalPt);
@@ -269,8 +327,190 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
         Workspace::Instance.SetCurrent(item->GetName());
     }
 
+    if (Workspace::Instance.IsImageAvalilable())
+    {
+        m_Options = Workspace::Instance.GetCurrentDocument()->GetOptions();
+        m_BaseRatio = Workspace::Instance.GetCurrentDocument()->GetRatioOptions().BaseRatio;
+
+        Workspace::Instance.Update(m_Options, m_autoProcess);
+    }
+
     RefreshImage();
+    DisplayImageProcesingOptions();
+    UpdateActionAvailability();
+
     on_actionFit_to_Window_triggered();
+}
+
+void MainWindow::on_imageScroll_In_triggered()
+{
+    if (!Workspace::Instance.IsImageAvalilable())
+    {
+        return;
+    }
+
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier)
+    {
+        Document* doc = Workspace::Instance.GetCurrentDocument();
+        RatioOptions options = doc->GetRatioOptions();
+        doc->SetRatioOptions(options.PixelsPerUnit * 1.1, options.XCenterOffset, options.YCenterOffset);
+        RefreshImage();
+    }
+    else
+    {
+        // Zoom in 10%.
+       on_actionZoom_In_triggered();
+    }
+}
+
+void MainWindow::on_imageScroll_Out_triggered()
+{
+    if (!Workspace::Instance.IsImageAvalilable())
+    {
+        return;
+    }
+
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier)
+    {
+        Document* doc = Workspace::Instance.GetCurrentDocument();
+        RatioOptions options = doc->GetRatioOptions();
+        doc->SetRatioOptions(options.PixelsPerUnit * 0.91, options.XCenterOffset, options.YCenterOffset);
+        RefreshImage();
+    }
+    else
+    {
+        on_actionZoom_Out_triggered();
+    }
+}
+
+void MainWindow::on_imagePan_triggered(int x, int y)
+{
+    if (!Workspace::Instance.IsImageAvalilable())
+    {
+        return;
+    }
+
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier)
+    {
+        Document* doc = Workspace::Instance.GetCurrentDocument();
+        RatioOptions options = doc->GetRatioOptions();
+
+        doc->SetRatioOptions(options.PixelsPerUnit, options.XCenterOffset + x / scaleFactor, options.YCenterOffset + y / scaleFactor);
+        RefreshImage();
+    }
+    else
+    {
+        scrollArea->horizontalScrollBar()->setValue(scrollArea->horizontalScrollBar()->value() - x);
+        scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->value() - y);
+    }
+}
+
+void MainWindow::on_imageMouseDown_triggered(int x, int y)
+{
+    if (!Workspace::Instance.IsImageAvalilable())
+    {
+        return;
+    }
+
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+
+    int xAbs = scrollArea->horizontalScrollBar()->value() + x;
+    int yAbs = scrollArea->verticalScrollBar()->value() + y;
+
+    int xScaled = xAbs / scaleFactor;
+    int yScaled = yAbs / scaleFactor;
+
+    int xAreaScaled = scrollArea->width() / scaleFactor;
+    int yAreaScaled = scrollArea->height() / scaleFactor;
+
+    xScaled = xAreaScaled - doc->GetWidth() > 0 ? xScaled - (xAreaScaled - doc->GetWidth()) / 2 : xScaled;
+    yScaled = yAreaScaled - doc->GetHeigth() > 0 ? yScaled - (yAreaScaled - doc->GetHeigth()) / 2 : yScaled;
+
+    TraceInfo ti = doc->PosTest(xScaled, yScaled);
+    m_TraceInfo = ti;
+
+    if (ti.Type > 0)
+    {
+        QMenu menu;
+
+        if (ti.Type == 1)
+        {
+            menu.addAction(infoAct);
+            menu.addAction(markNoiseAct);
+        }
+        else
+        {
+            menu.addAction(markTraceAct);
+        }
+
+        menu.addAction(arrangeAct);
+
+        QPoint pt(x, y);
+        QPoint globalPt = scrollArea->mapToGlobal(pt);
+        menu.exec(globalPt);
+    }
+}
+
+void MainWindow::on_actionInfo_triggered()
+{
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+    Trace trace = doc->GetTraces()[m_TraceInfo.Index];
+
+    QString traceInfo;
+    traceInfo.append("Info:\n");
+
+    traceInfo.append("Pozicija     ");
+    traceInfo.append(QString::number(trace.x));
+    traceInfo.append(", ");
+    traceInfo.append(QString::number(trace.y));
+    traceInfo.append("\n");
+
+    traceInfo.append("Dijametar ");
+    traceInfo.append(QString::number(trace.diameter1));
+    traceInfo.append(", ");
+    traceInfo.append(QString::number(trace.diameter2));
+    traceInfo.append("\n");
+
+    traceInfo.append("Ugao         ");
+    traceInfo.append(QString::number(int(trace.angle)));
+    traceInfo.append("\n");
+
+    traceInfo.append("Intenzitet  ");
+    traceInfo.append(QString::number(trace.intensity));
+
+    QToolTip::showText(QCursor::pos(), traceInfo);
+}
+
+void MainWindow::on_actionMarkTrace_triggered()
+{
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+
+    doc->MarkTrace(m_TraceInfo.Index);
+
+    RefreshImage();
+}
+
+void MainWindow::on_actionMarkNoise_triggered()
+{
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+
+    doc->MarkNoise(m_TraceInfo.Index);
+
+    RefreshImage();
+}
+
+void MainWindow::on_actionArrange_triggered()
+{
+    Document* doc = Workspace::Instance.GetCurrentDocument();
+    EditInfo ei = doc->GetEditInfo(m_TraceInfo.InitIndex);
+
+    ArrangeTraceDialog dialog(ei, this);
+
+    if(dialog.exec())
+    {
+        doc->ApplyEdit(dialog.m_EditInfo);
+        RefreshImage();
+    }
 }
 
 void MainWindow::on_actionZoom_In_triggered()
@@ -371,14 +611,138 @@ void MainWindow::RefreshImage()
         cv::Mat img = Workspace::Instance.GetImage(m_View);
 
         // Prepare image.
-        QImage qim = QImage(img.data, img.cols, img.rows, QImage::Format_RGB888);
+        QImage qim = QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
         QPixmap pm(QPixmap::fromImage(qim));
+
+        if (m_scaleRatioMode)
+        {
+            Document* doc = Workspace::Instance.GetCurrentDocument();
+            RatioOptions options = doc->GetRatioOptions();
+
+            float one = options.PixelsPerUnit;
+            float x_center = img.cols / 2.0f + options.XCenterOffset;
+            float y_center = img.rows / 2.0f + options.YCenterOffset;
+
+            QPainter painter(&pm);
+            QBrush brush1(m_RatioColor);
+            QBrush brush2(m_RatioColor);
+
+            QPen pen1(brush1, 1, Qt::SolidLine);
+            QPen pen2(brush2, 1, Qt::DotLine);
+
+            // left
+            float i = 0.0f;
+            while (true)
+            {
+                float x = x_center - i * one;
+
+                if (x < 0.0f)
+                {
+                    break;
+                }
+
+                if ( int(10*i+5) % 10 != 0 )
+                {
+                    painter.setPen(pen2);
+                }
+                else
+                {
+                    painter.setPen(pen1);
+                }
+
+
+                QLineF line(x, 0, x, img.rows);
+                painter.drawLine(line);
+
+                i += 0.1f;
+            }
+
+            // right
+            i = -0.1f;
+            while (true)
+            {
+                i += 0.1f;
+
+                float x = x_center + i * one;
+
+                if (x > img.cols)
+                {
+                    break;
+                }
+
+                if ( int(10*i+5) % 10 != 0 )
+                {
+                    painter.setPen(pen2);
+                }
+                else
+                {
+                    painter.setPen(pen1);
+                }
+
+                QLine line(x, 0, x, img.rows);
+                painter.drawLine(line);
+            }
+
+            // up
+            i = 0.0f;
+            while (true)
+            {
+                float y = y_center - i * one;
+
+                if (y < 0.0f)
+                {
+                    break;
+                }
+
+                if ( int(10*i+5) % 10 != 0 )
+                {
+                    painter.setPen(pen2);
+                }
+                else
+                {
+                    painter.setPen(pen1);
+                }
+
+                QLine line(0, y, img.cols, y);
+                painter.drawLine(line);
+
+                i += 0.1f;
+            }
+
+            // down
+            i = 0.0f;
+            while (true)
+            {
+                float y = y_center + i * one;
+
+                if (y > img.rows)
+                {
+                    break;
+                }
+
+                if ( int(10*i+5) % 10 != 0 )
+                {
+                    painter.setPen(pen2);
+                }
+                else
+                {
+                    painter.setPen(pen1);
+                }
+
+                QLine line(0, y, img.cols, y);
+                painter.drawLine(line);
+
+                i += 0.1f;
+            }
+        }
 
         // Display image.
         imageLabel->setPixmap(pm);
 
         // Get options.
+        RatioOptions ratioOptions = Workspace::Instance.GetCurrentDocument()->GetRatioOptions();
         m_Options = Workspace::Instance.GetCurrentDocument()->GetOptions();
+        m_BaseRatio = ratioOptions.BaseRatio;
         DisplayImageProcesingOptions();
 
         Stats stats = Workspace::Instance.GetStats();
@@ -386,33 +750,58 @@ void MainWindow::RefreshImage()
         char val[100];
 
         string statsStr;
-        statsStr.append("Broj tragova:\n");
+        statsStr.append("Broj tragova:<br/>");
         sprintf(val, "%d", stats.TracesCount);
         statsStr.append(val);
 
+        if (m_BaseRatio > 0)
+        {
+            float surface = (img.cols * img.rows) / (ratioOptions.PixelsPerUnit * ratioOptions.PixelsPerUnit);
+            float countPerSurface = stats.TracesCount / surface;
+
+            statsStr.append("<br/><br/>Broj tragova po ");
+
+            if (m_BaseRatio == 6)
+            {
+                statsStr.append("µm");
+            }
+            else if (m_BaseRatio == 9)
+            {
+                statsStr.append("nm");
+            }
+            else if (m_BaseRatio == 12)
+            {
+                statsStr.append("pm");
+            }
+
+            statsStr.append("<sup>2</sup>:<br/>");
+            sprintf(val, "%.2f", countPerSurface);
+            statsStr.append(val);
+        }
+
         if (stats.TracesCount > 0)
         {
-            statsStr.append("\n\nMinimalni dijametar:\n");
+            statsStr.append("<br/><br/>Minimalni dijametar:<br/>");
             sprintf(val, "%d", stats.MinDiameter);
             statsStr.append(val);
-            statsStr.append("\n\nMaksimalni dijametar:\n");
+            statsStr.append("<br/><br/>Maksimalni dijametar:<br/>");
             sprintf(val, "%d", stats.MaxDiameter);
             statsStr.append(val);
-            statsStr.append("\n\nSrednji dijametar:\n");
+            statsStr.append("<br/><br/>Srednji dijametar:<br/>");
             sprintf(val, "%d", stats.AverageDiameter);
             statsStr.append(val);
-            statsStr.append("\n\nMinimalni intenzitet:\n");
+            statsStr.append("<br/><br/>Minimalni intenzitet:<br/>");
             sprintf(val, "%d", stats.MinIntensity);
             statsStr.append(val);
-            statsStr.append("\n\nMaksimalni intenzitet:\n");
+            statsStr.append("<br/><br/>Maksimalni intenzitet:<br/>");
             sprintf(val, "%d", stats.MaxIntensity);
             statsStr.append(val);
-            statsStr.append("\n\nSrednji intenzitet:\n");
+            statsStr.append("<br/><br/>Srednji intenzitet:<br/>");
             sprintf(val, "%d", stats.AverageIntensity);
             statsStr.append(val);
         }
 
-        ui->labelStats->setText(QString(statsStr.c_str()));
+        ui->labelStats->setText(statsStr.c_str());
     }
     else
     {
@@ -553,9 +942,14 @@ void MainWindow::DisplayImageProcesingOptions()
     ui->sliderThreshold->setValue(m_Options.OtsuThreshold);
     ui->sliderThreshold->setToolTip(QString::number(ui->sliderThreshold->value()));
     ui->sliderThreshold->setStatusTip(QString::number(ui->sliderThreshold->value()));
-    ui->sliderThreshold->setEnabled(!m_Options.AutomaticOtsuThreshold);
+    //ui->sliderThreshold->setEnabled(!m_Options.AutomaticOtsuThreshold);
+
     ui->buttonBlur->setChecked(m_Options.GaussianBlur);
+
+    ui->btnAutoWob->setChecked(m_Options.AutoDetectWob);
     ui->buttonWoB->setChecked(m_Options.WoB);
+    //ui->buttonWoB->setEnabled(!m_Options.AutoDetectWob);
+
     ui->spinMin->setValue((double) m_Options.MinTraceDiameter);
     ui->spinMax->setValue((double) m_Options.MaxTraceDiameter);
 
@@ -568,6 +962,75 @@ void MainWindow::DisplayImageProcesingOptions()
         ui->groupThreshold->setTitle("Prag binarizacije: " + QString::number(ui->sliderThreshold->value()));
     }
 
+    int index = m_BaseRatio / 3;
+    index = index > 0 ? index - 1 : 0;
+    ui->cmbUnit->setCurrentIndex(index);
+
+    // -----------------------------------
+    // Document
+
+    bool isDocumetAvailable = Workspace::Instance.IsImageAvalilable();
+
+    ui->checkBoxAutoThreshold->setEnabled(isDocumetAvailable);
+    ui->sliderThreshold->setEnabled(isDocumetAvailable && !m_Options.AutomaticOtsuThreshold);
+    ui->buttonBlur->setEnabled(isDocumetAvailable);;
+    ui->btnAutoWob->setEnabled(isDocumetAvailable);
+    ui->buttonWoB->setEnabled(isDocumetAvailable && !m_Options.AutoDetectWob);
+    ui->spinMin->setEnabled(isDocumetAvailable);
+    ui->spinMax->setEnabled(isDocumetAvailable);
+    ui->cmbUnit->setEnabled(isDocumetAvailable);
+
+    ui->btnProcessImage->setEnabled(isDocumetAvailable && !ui->btnAutoProcess->isChecked());
+}
+
+void MainWindow::UpdateActionAvailability()
+{
+    // -----------------------------------
+    // Project
+
+    //ui->actionNew_Project->setEnabled(true);
+    //ui->actionOpen_Project->setEnabled(true);
+    //ui->actionOpen_File->setEnabled(true);
+    //ui->actionExit->setEnabled(true);
+
+    if (Workspace::Instance.GetCurrentProject())
+    {
+        ui->actionClose_Project->setEnabled(true);
+        ui->actionClose_All->setEnabled(true);
+        ui->actionSave_Project->setEnabled(Workspace::Instance.IsCurrentProjectPersistent());
+        ui->actionSave_All->setEnabled(Workspace::Instance.AreAllProjectsPersistent());
+    }
+    else
+    {
+        ui->actionClose_Project->setEnabled(false);
+        ui->actionClose_All->setEnabled(false);
+        ui->actionSave_Project->setEnabled(false);
+        ui->actionSave_All->setEnabled(false);
+    }
+
+    // -----------------------------------
+    // Edit
+
+    ui->actionUndo->setEnabled(false);
+    ui->actionRedo->setEnabled(false);
+
+    ui->actionCopy_Image->setEnabled(Workspace::Instance.IsImageAvalilable());
+    ui->actionSave_Image->setEnabled(Workspace::Instance.IsImageAvalilable());
+    ui->actionExport->setEnabled(Workspace::Instance.IsImageAvalilable());
+
+    // -----------------------------------
+    // View
+
+    ui->actionZoom_In->setEnabled(Workspace::Instance.IsImageAvalilable());
+    ui->actionZoom_Out->setEnabled(Workspace::Instance.IsImageAvalilable());
+    ui->actionNormal_Size->setEnabled(Workspace::Instance.IsImageAvalilable());
+    ui->actionFit_to_Window->setEnabled(Workspace::Instance.IsImageAvalilable());
+
+    // -----------------------------------
+    // About
+
+    //ui->actionUser_Guide->setEnabled(true);
+    //ui->actionAbout->setEnabled(true);
 }
 
 void MainWindow::on_checkBoxAutoThreshold_clicked(bool checked)
@@ -576,7 +1039,7 @@ void MainWindow::on_checkBoxAutoThreshold_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options);
+        Workspace::Instance.Update(m_Options, m_autoProcess);
         RefreshImage();
     }
 
@@ -589,7 +1052,7 @@ void MainWindow::on_sliderThreshold_sliderReleased()
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options);
+        Workspace::Instance.Update(m_Options, m_autoProcess);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -601,7 +1064,7 @@ void MainWindow::on_buttonBlur_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options);
+        Workspace::Instance.Update(m_Options, m_autoProcess);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -613,7 +1076,7 @@ void MainWindow::on_buttonWoB_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options);
+        Workspace::Instance.Update(m_Options, m_autoProcess);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -625,7 +1088,7 @@ void MainWindow::on_spinMin_editingFinished()
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options);
+        Workspace::Instance.Update(m_Options, m_autoProcess);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
@@ -637,10 +1100,23 @@ void MainWindow::on_spinMax_editingFinished()
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.Update(m_Options);
+        Workspace::Instance.Update(m_Options, m_autoProcess);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
+}
+
+void MainWindow::on_btnAutoWob_clicked(bool checked)
+{
+    m_Options.AutoDetectWob = checked;
+
+    if (Workspace::Instance.IsImageAvalilable())
+    {
+        Workspace::Instance.Update(m_Options, m_autoProcess);
+    }
+
+    RefreshImage();
+    DisplayImageProcesingOptions();
 }
 
 void MainWindow::on_sliderThreshold_sliderMoved(int position)
@@ -793,6 +1269,7 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionSave_All_triggered()
 {
     Workspace::Instance.SaveAllProjects();
+    UpdateActionAvailability();
 }
 
 void MainWindow::on_actionSave_Project_triggered()
@@ -801,6 +1278,8 @@ void MainWindow::on_actionSave_Project_triggered()
         return;
 
     Workspace::Instance.SaveCurrentProject();
+
+    UpdateActionAvailability();
 }
 
 void MainWindow::closeEvent(QCloseEvent * /*event*/)
@@ -858,6 +1337,8 @@ void MainWindow::on_actionClose_Project_triggered()
         }
 
         RefreshImage();
+        DisplayImageProcesingOptions();
+        UpdateActionAvailability();
     }
 }
 
@@ -890,6 +1371,8 @@ void MainWindow::on_actionClose_All_triggered()
     {
         Workspace::Instance.CloseAllProjects();
         RefreshImage();
+        DisplayImageProcesingOptions();
+        UpdateActionAvailability();
     }
 }
 
@@ -928,6 +1411,8 @@ void MainWindow::on_actionRemove_Image_triggered()
     }
 
     RefreshImage();
+    DisplayImageProcesingOptions();
+    UpdateActionAvailability();
 }
 
 void MainWindow::on_actionExport_triggered()
@@ -950,5 +1435,75 @@ void MainWindow::on_actionExport_triggered()
                 msg.exec();
             }
         }
+    }
+}
+
+void MainWindow::on_btnProcessImage_clicked()
+{
+    if (Workspace::Instance.IsImageAvalilable())
+    {
+        Workspace::Instance.GetCurrentDocument()->Process(m_Options);
+        RefreshImage();
+        DisplayImageProcesingOptions();
+    }
+}
+
+void MainWindow::on_btnAutoProcess_clicked(bool checked)
+{
+    m_autoProcess = checked;
+
+    if (Workspace::Instance.IsImageAvalilable())
+    {
+         if (Workspace::Instance.GetCurrentDocument()->GetTraces().size() == 0)
+         {
+             Workspace::Instance.GetCurrentDocument()->Process(m_Options);
+             RefreshImage();
+             DisplayImageProcesingOptions();
+         }
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Control)
+    {
+        m_scaleRatioMode = true;
+        RefreshImage();
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Control)
+    {
+        m_scaleRatioMode = false;
+        RefreshImage();
+    }
+}
+
+void MainWindow::on_cmbUnit_currentIndexChanged(int index)
+{
+    if (Workspace::Instance.IsImageAvalilable())
+    {
+        // 0 -          0
+        // 1 - um 6     3
+        // 2 - nm 9     6
+        // 3 - pm 12    9
+
+        int val = index * 3;
+        val = val >= 3 ? val + 3 : 0;
+        m_BaseRatio = val;
+        Workspace::Instance.GetCurrentDocument()->SetBaseUnitRatio(val);
+        RefreshImage();
+    }
+}
+
+void MainWindow::on_actionRatioColor_clicked()
+{
+    QColor color = QColorDialog::getColor(m_RatioColor, this);
+
+    if (color != QColor::Invalid)
+    {
+        m_RatioColor = color;
     }
 }

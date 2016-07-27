@@ -13,9 +13,68 @@
 #include "viewoptions.h"
 #include "processingoptions.h"
 
+#include <QWheelEvent>
+
 namespace Ui {
 class MainWindow;
 }
+
+class MyQScrollArea : public QScrollArea
+{
+    Q_OBJECT
+
+private:
+    QPoint m_mousePos;
+
+protected:
+    void wheelEvent(QWheelEvent* event) override
+    {
+        if (event->delta() > 0)
+        {
+            emit ZoomedIn();
+        }
+        else
+        {
+            emit ZoomedOut();
+        }
+
+        event->accept();
+    }
+
+    void mousePressEvent(QMouseEvent *e) override
+    {
+        m_mousePos = e->pos();
+
+        if (e->buttons() == Qt::RightButton)
+        {
+            emit MouseDown(m_mousePos.x(), m_mousePos.y());
+        }
+    }
+
+    void mouseMoveEvent(QMouseEvent *e) override
+    {
+        if (e->buttons() == Qt::LeftButton)
+        {
+            QPoint diff = e->pos() - m_mousePos;
+            m_mousePos = e->pos();
+
+            emit Pan(diff.x(), diff.y());
+            //emit MouseMove(m_mousePos.x(), m_mousePos.y());
+
+            e->accept();
+        }
+    }
+
+signals:
+
+    void ZoomedIn();
+
+    void ZoomedOut();
+
+    void Pan(int x, int y);
+
+    void MouseDown(int x, int y);
+};
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +96,11 @@ private slots:
     void on_actionAdd_Image_triggered();
 
     void on_actionSwitch_To_triggered();
+
+    void on_imageScroll_In_triggered();
+    void on_imageScroll_Out_triggered();
+    void on_imagePan_triggered(int x, int y);
+    void on_imageMouseDown_triggered(int x, int y);
 
     void on_actionZoom_In_triggered();
 
@@ -122,11 +186,29 @@ private slots:
 
     void on_actionExport_triggered();
 
+    void on_btnProcessImage_clicked();
+
+    void on_btnAutoProcess_clicked(bool checked);
+
+    void on_btnAutoWob_clicked(bool checked);
+
+    void on_cmbUnit_currentIndexChanged(int index);
+
+    void on_actionRatioColor_clicked();
+
+    void on_actionMarkTrace_triggered();
+
+    void on_actionMarkNoise_triggered();
+
+    void on_actionArrange_triggered();
+
+    void on_actionInfo_triggered();
+
 private:
     Ui::MainWindow *ui;
 
     QLabel* imageLabel;
-    QScrollArea* scrollArea;
+    MyQScrollArea* scrollArea;
     double scaleFactor = 1.0;
 
     QAction* addImageAct;
@@ -138,6 +220,11 @@ private:
     QAction* saveAllAct;
     QAction* closeAllAct;
     QAction* switchToAct;
+
+    QAction* markTraceAct;
+    QAction* markNoiseAct;
+    QAction* arrangeAct;
+    QAction* infoAct;
 
     Workspace m_Workspace;
 
@@ -159,8 +246,26 @@ private:
 
     void DisplayImageProcesingOptions();
 
+    void UpdateActionAvailability();
+
+    // If true, re-process image on any image action (add, change params, etc).
+    // Othervize, clear results.
+    bool m_autoProcess;
+
+    bool m_scaleRatioMode;
+
+    int m_BaseRatio;
+
+    QColor m_RatioColor;
+
+    TraceInfo m_TraceInfo;
+
 protected:
     void closeEvent(QCloseEvent * /*event*/);
+
+    void keyPressEvent(QKeyEvent* event);
+
+    void keyReleaseEvent(QKeyEvent* event);
 };
 
 #endif // MAINWINDOW_H

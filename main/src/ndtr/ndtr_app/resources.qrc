@@ -33,5 +33,7 @@
         <file>ico/csv.ico</file>
         <file>ico/autoplay.ico</file>
         <file>ico/play.ico</file>
+        <file>ico/color_line.ico</file>
+        <file>ico/ruler.ico</file>
     </qresource>
 </RCC>

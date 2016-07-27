@@ -32,6 +32,7 @@ public:
 
             while(!stream.atEnd())
             {
+                QString xname = stream.name().toString();
                 if(stream.isStartElement())
                 {
                     if (stream.name() == "ndtr")
@@ -60,11 +61,14 @@ public:
                         tags.push("options");
 
                         ProcessingOptions options;
-                        LoadImageProcessingOptions(stream, options);
+                        RatioOptions ratioOptions;
+                        LoadOptions(stream, options, ratioOptions);
 
                         //doc->Update(options);
 // use ext,not path
-                        project->AddDocument(doc->GetName(), path, options);
+                        Document* doc2 = project->AddDocument(doc->GetName(), path, options);
+                        doc2->SetRatioOptions(ratioOptions.PixelsPerUnit, ratioOptions.XCenterOffset, ratioOptions.YCenterOffset); // todo
+                        doc2->SetBaseUnitRatio(ratioOptions.BaseRatio); // todo
                     }
                     else
                     {
@@ -98,7 +102,7 @@ public:
         return true;
     }
 
-    static void LoadImageProcessingOptions(QXmlStreamReader& stream, ProcessingOptions& options)
+    static void LoadOptions(QXmlStreamReader& stream, ProcessingOptions& options, RatioOptions& ratioOptions)
     {
         QXmlStreamAttributes attributes = stream.attributes();
 
@@ -136,6 +140,26 @@ public:
         {
             int max = attributes.value(QString("MaxTraceDiameter")).toInt();
             options.MaxTraceDiameter = max;
+        }
+
+        if (attributes.hasAttribute(QString("PixelsPerUnit")))
+        {
+            ratioOptions.PixelsPerUnit = attributes.value(QString("PixelsPerUnit")).toFloat();
+        }
+
+        if (attributes.hasAttribute(QString("XCenterOffset")))
+        {
+            ratioOptions.XCenterOffset = attributes.value(QString("XCenterOffset")).toFloat();
+        }
+
+        if (attributes.hasAttribute(QString("YCenterOffset")))
+        {
+            ratioOptions.YCenterOffset = attributes.value(QString("YCenterOffset")).toFloat();
+        }
+
+        if (attributes.hasAttribute(QString("BaseRatio")))
+        {
+            ratioOptions.BaseRatio = attributes.value(QString("BaseRatio")).toInt();
         }
     }
 
@@ -186,6 +210,17 @@ public:
                 stream.writeAttribute(min, QString::number(options.MinTraceDiameter));
                 QString max("MaxTraceDiameter");
                 stream.writeAttribute(max, QString::number(options.MaxTraceDiameter));
+
+                RatioOptions ratioOptions = doc->GetRatioOptions();
+
+                QString ppu("PixelsPerUnit");
+                stream.writeAttribute(ppu, QString::number(ratioOptions.PixelsPerUnit));
+                QString xco("XCenterOffset");
+                stream.writeAttribute(xco, QString::number(ratioOptions.XCenterOffset));
+                QString yco("YCenterOffset");
+                stream.writeAttribute(yco, QString::number(ratioOptions.YCenterOffset));
+                QString br("BaseRatio");
+                stream.writeAttribute(br, QString::number(ratioOptions.BaseRatio));
 
                 // OPTIONS  - END
                 stream.writeEndElement();

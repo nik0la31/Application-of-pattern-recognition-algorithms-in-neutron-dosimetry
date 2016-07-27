@@ -10,10 +10,14 @@ public:
     int OtsuThreshold;
 
     bool GaussianBlur;
+
+    bool AutoDetectWob;
     bool WoB;
 
     int MinTraceDiameter;
     int MaxTraceDiameter;
+
+    bool KeepManualEdits;
 
     bool Equal(ProcessingOptions& options);
 };
