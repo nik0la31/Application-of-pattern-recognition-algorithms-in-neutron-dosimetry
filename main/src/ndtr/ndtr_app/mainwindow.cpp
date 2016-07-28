@@ -779,7 +779,7 @@ void MainWindow::RefreshImage()
             statsStr.append("):<br/>");
             sprintf(val, "%f", stats.MaxDiameter / (float) ratioOptions.PixelsPerUnit);
             statsStr.append(val);
-            statsStr.append("<br/><br/>Srednji dijametar");
+            statsStr.append("<br/><br/>Srednji dijametar (");
             statsStr.append(m_Unit);
             statsStr.append("):<br/>");
             sprintf(val, "%f", stats.AverageDiameter / (float) ratioOptions.PixelsPerUnit);
@@ -1094,7 +1094,7 @@ void MainWindow::on_spinMin_editingFinished()
 {
     Document* doc = Workspace::Instance.GetCurrentDocument();
     RatioOptions ratioOptions = doc->GetRatioOptions();
-    m_Options.MinTraceDiameter = (int) (ui->spinMin->value() * (float) ratioOptions.PixelsPerUnit);
+    m_Options.MinTraceDiameter = (ui->spinMin->value() * (float) ratioOptions.PixelsPerUnit);
 
     if (Workspace::Instance.IsImageAvalilable())
     {
@@ -1108,7 +1108,7 @@ void MainWindow::on_spinMax_editingFinished()
 {
     Document* doc = Workspace::Instance.GetCurrentDocument();
     RatioOptions ratioOptions = doc->GetRatioOptions();
-    m_Options.MaxTraceDiameter = (int) (ui->spinMax->value() * (float) ratioOptions.PixelsPerUnit);
+    m_Options.MaxTraceDiameter = (ui->spinMax->value() * (float) ratioOptions.PixelsPerUnit);
 
     if (Workspace::Instance.IsImageAvalilable())
     {

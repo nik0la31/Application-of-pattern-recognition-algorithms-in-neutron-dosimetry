@@ -192,13 +192,13 @@ public:
 
         if (attributes.hasAttribute(QString("MinTraceDiameter")))
         {
-            int min = attributes.value(QString("MinTraceDiameter")).toInt();
+            float min = attributes.value(QString("MinTraceDiameter")).toFloat();
             options.MinTraceDiameter = min;
         }
 
         if (attributes.hasAttribute(QString("MaxTraceDiameter")))
         {
-            int max = attributes.value(QString("MaxTraceDiameter")).toInt();
+            float max = attributes.value(QString("MaxTraceDiameter")).toFloat();
             options.MaxTraceDiameter = max;
         }
 

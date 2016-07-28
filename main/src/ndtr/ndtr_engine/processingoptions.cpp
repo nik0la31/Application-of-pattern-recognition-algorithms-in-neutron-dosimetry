@@ -5,8 +5,8 @@ ProcessingOptions::ProcessingOptions()
       OtsuThreshold(125),
       GaussianBlur(false),
       WoB(true),
-      MinTraceDiameter(3),
-      MaxTraceDiameter(100),
+      MinTraceDiameter(3.0f),
+      MaxTraceDiameter(100.0f),
       AutoDetectWob(true)
 {
 

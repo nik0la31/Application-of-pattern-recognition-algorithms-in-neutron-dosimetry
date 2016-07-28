@@ -14,8 +14,8 @@ public:
     bool AutoDetectWob;
     bool WoB;
 
-    int MinTraceDiameter;
-    int MaxTraceDiameter;
+    float MinTraceDiameter;
+    float MaxTraceDiameter;
 
     bool Equal(ProcessingOptions& options);
 };
