@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  14 AUG 2016 22:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  15 AUG 2016 11:16
 entering extended mode
 **D:/Repo/NDTR/Application-of-pattern-recognition-algorithms-in-neutron-dosimet
 ry/main/docs/master/master-rad.tex
@@ -397,9 +397,6 @@ LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
 )
 (master-rad.aux
 
-LaTeX Warning: Label `fig:atom' multiply defined.
-
-
 LaTeX Warning: Label `fig:cv' multiply defined.
 
 
@@ -767,21 +764,28 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 728--728
 
 [23]
 \CYRG \cyrl \cyra \cyrv \cyra  4.
-<images/softver.PNG, id=127, 749.04843pt x 491.58656pt>
-File: images/softver.PNG Graphic file (type png)
+<images/softver.png, id=127, 749.04843pt x 491.58656pt>
+File: images/softver.png Graphic file (type png)
 
-<use images/softver.PNG>
-Package pdftex.def Info: images/softver.PNG used on input line 752.
+<use images/softver.png>
+Package pdftex.def Info: images/softver.png used on input line 752.
 (pdftex.def)             Requested size: 384.1122pt x 252.08601pt.
- [24
 
- <./images/softver.PNG>]
+Overfull \hbox (307.17412pt too wide) in paragraph at lines 759--760
+[][][]\T2A/cmr/m/n/10.95 Изворни код софтвера налази се на адреси \T2A/cmtt/m/n
+/10.95 https://github.com/nik0la31/Application-of-pattern-recognition-algorithm
+s-in-neutron-dosimetry\T2A/cmr/m/n/10.95 .
+ []
+
+[24
+
+ <./images/softver.png>]
 <images/struktura.png, id=133, 616.55344pt x 137.7647pt>
 File: images/struktura.png Graphic file (type png)
 
 <use images/struktura.png>
 Package pdftex.def Info: images/struktura.png used on input line 763.
-(pdftex.def)             Requested size: 284.52756pt x 63.57642pt.
+(pdftex.def)             Requested size: 170.71652pt x 38.145pt.
  [25 <./images/struktura.png>]
 <images/engine.png, id=138, 549.55313pt x 478.03593pt>
 File: images/engine.png Graphic file (type png)
@@ -789,11 +793,11 @@ File: images/engine.png Graphic file (type png)
 Package pdftex.def Info: images/engine.png used on input line 795.
 (pdftex.def)             Requested size: 426.79134pt x 371.2618pt.
 
-<images/softver2.PNG, id=139, 864.98157pt x 506.6428pt>
-File: images/softver2.PNG Graphic file (type png)
+<images/softver2.png, id=139, 864.98157pt x 506.6428pt>
+File: images/softver2.png Graphic file (type png)
 
-<use images/softver2.PNG>
-Package pdftex.def Info: images/softver2.PNG used on input line 814.
+<use images/softver2.png>
+Package pdftex.def Info: images/softver2.png used on input line 814.
 (pdftex.def)             Requested size: 426.79134pt x 249.9811pt.
  [26 <./images/engine.png>]
 Overfull \hbox (6.0pt too wide) in paragraph at lines 835--835
@@ -806,50 +810,55 @@ File: images/projects.png Graphic file (type png)
 <use images/projects.png>
 Package pdftex.def Info: images/projects.png used on input line 851.
 (pdftex.def)             Requested size: 426.79134pt x 136.74327pt.
- [27 <./images/softver2.PNG>]
+ [27 <./images/softver2.png>]
+Overfull \hbox (13.60919pt too wide) in paragraph at lines 859--860
+[][][]\T2A/cmr/m/n/10.95 У централном делу корисничког интерфеjса налази се при
+каз слике неутронске дозиметриjе
+ []
+
 <images/viewoptions.png, id=148, 353.06906pt x 27.10126pt>
 File: images/viewoptions.png Graphic file (type png)
 
 <use images/viewoptions.png>
-Package pdftex.def Info: images/viewoptions.png used on input line 864.
+Package pdftex.def Info: images/viewoptions.png used on input line 863.
 (pdftex.def)             Requested size: 426.79134pt x 32.76035pt.
 
 <images/imagetype.png, id=149, 947.03813pt x 294.34969pt>
 File: images/imagetype.png Graphic file (type png)
 
 <use images/imagetype.png>
-Package pdftex.def Info: images/imagetype.png used on input line 874.
+Package pdftex.def Info: images/imagetype.png used on input line 873.
 (pdftex.def)             Requested size: 426.79134pt x 132.64925pt.
 
 <images/shapetype.png, id=150, 287.57437pt x 182.18062pt>
 File: images/shapetype.png Graphic file (type png)
 
 <use images/shapetype.png>
-Package pdftex.def Info: images/shapetype.png used on input line 884.
+Package pdftex.def Info: images/shapetype.png used on input line 883.
 (pdftex.def)             Requested size: 227.62204pt x 144.20464pt.
  [28 <./images/projects.png> <./images/viewoptions.png> <./images/imagetype.png
 >]
 <images/trace.png, id=154, 178.41656pt x 176.91093pt>
 File: images/trace.png Graphic file (type png)
  <use images/trace.png>
-Package pdftex.def Info: images/trace.png used on input line 894.
+Package pdftex.def Info: images/trace.png used on input line 893.
 (pdftex.def)             Requested size: 113.81102pt x 112.85008pt.
 
 <images/colors.png, id=155, 415.5525pt x 465.99094pt>
 File: images/colors.png Graphic file (type png)
  <use images/colors.png>
-Package pdftex.def Info: images/colors.png used on input line 902.
+Package pdftex.def Info: images/colors.png used on input line 901.
 (pdftex.def)             Requested size: 369.88582pt x 414.79462pt.
 
 [29 <./images/shapetype.png> <./images/trace.png>]
 <images/stats.png, id=159, 158.84344pt x 246.9225pt>
 File: images/stats.png Graphic file (type png)
  <use images/stats.png>
-Package pdftex.def Info: images/stats.png used on input line 918.
+Package pdftex.def Info: images/stats.png used on input line 917.
 (pdftex.def)             Requested size: 170.71652pt x 265.40257pt.
 
 [30 <./images/colors.png>]
-Overfull \hbox (6.0pt too wide) in paragraph at lines 926--926
+Overfull \hbox (6.0pt too wide) in paragraph at lines 925--925
 [][][][][][][][][] 
  []
 
@@ -857,23 +866,23 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 926--926
 File: images/processing.png Graphic file (type png)
 
 <use images/processing.png>
-Package pdftex.def Info: images/processing.png used on input line 950.
+Package pdftex.def Info: images/processing.png used on input line 949.
 (pdftex.def)             Requested size: 426.79134pt x 67.43419pt.
  [31 <./images/stats.png>]
 <images/oznaci.png, id=169, 408.77719pt x 252.19218pt>
 File: images/oznaci.png Graphic file (type png)
  <use images/oznaci.png>
-Package pdftex.def Info: images/oznaci.png used on input line 966.
+Package pdftex.def Info: images/oznaci.png used on input line 965.
 (pdftex.def)             Requested size: 284.52756pt x 175.54819pt.
 
 <images/uredi.png, id=170, 214.55156pt x 175.40532pt>
 File: images/uredi.png Graphic file (type png)
  <use images/uredi.png>
-Package pdftex.def Info: images/uredi.png used on input line 976.
+Package pdftex.def Info: images/uredi.png used on input line 975.
 (pdftex.def)             Requested size: 213.39566pt x 174.46275pt.
 
 [32 <./images/processing.png> <./images/oznaci.png>]
-Overfull \hbox (0.12094pt too wide) in paragraph at lines 982--984
+Overfull \hbox (0.12094pt too wide) in paragraph at lines 981--983
 \T2A/cmr/m/n/10.95 делови се користе као полаз за претходно описани \T2A/cmr/m/
 it/10.95 Wa-ter-shed \T2A/cmr/m/n/10.95 алгоритам. У сличаjу погрешне
  []
@@ -883,16 +892,16 @@ it/10.95 Wa-ter-shed \T2A/cmr/m/n/10.95 алгоритам. У сличаjу погрешне
 <images/test.png, id=179, 975.645pt x 731.73375pt>
 File: images/test.png Graphic file (type png)
  <use images/test.png>
-Package pdftex.def Info: images/test.png used on input line 999.
+Package pdftex.def Info: images/test.png used on input line 998.
 (pdftex.def)             Requested size: 426.79134pt x 320.09923pt.
 
-Overfull \hbox (0.59964pt too wide) in paragraph at lines 1007--1008
+Overfull \hbox (0.59964pt too wide) in paragraph at lines 1006--1007
 \T2A/cmr/m/n/10.95 став-§а однос исправно детектованих трагова према стварном б
 роjу трагова, док \T2A/cmr/m/it/10.95 прецизност
  []
 
 
-Overfull \hbox (1.90639pt too wide) in paragraph at lines 1007--1008
+Overfull \hbox (1.90639pt too wide) in paragraph at lines 1006--1007
 \T2A/cmr/m/n/10.95 представ§а однос исправно детектованих трагова према укуном 
 броjу детектованих трагова. 
  []
@@ -904,14 +913,14 @@ Overfull \hbox (1.90639pt too wide) in paragraph at lines 1007--1008
 File: images/recall_prec.png Graphic file (type png)
 
 <use images/recall_prec.png>
-Package pdftex.def Info: images/recall_prec.png used on input line 1011.
+Package pdftex.def Info: images/recall_prec.png used on input line 1010.
 (pdftex.def)             Requested size: 341.43306pt x 460.1588pt.
 
 <images/analysis.png, id=184, 140.77594pt x 100.12407pt>
 File: images/analysis.png Graphic file (type png)
 
 <use images/analysis.png>
-Package pdftex.def Info: images/analysis.png used on input line 1021.
+Package pdftex.def Info: images/analysis.png used on input line 1020.
 (pdftex.def)             Requested size: 284.52756pt x 202.40024pt.
  [35 <./images/recall_prec.png>]
 <images/segmentation_results.png, id=189, 548.80031pt x 197.98969pt>
@@ -919,38 +928,38 @@ File: images/segmentation_results.png Graphic file (type png)
 
 <use images/segmentation_results.png>
 Package pdftex.def Info: images/segmentation_results.png used on input line 104
-8.
+7.
 (pdftex.def)             Requested size: 426.79134pt x 153.97514pt.
  [36 <./images/analysis.png> <./images/segmentation_results.png>]
 <images/binthresh.png, id=195, 206.27063pt x 48.93282pt>
 File: images/binthresh.png Graphic file (type png)
 
 <use images/binthresh.png>
-Package pdftex.def Info: images/binthresh.png used on input line 1063.
+Package pdftex.def Info: images/binthresh.png used on input line 1062.
 (pdftex.def)             Requested size: 426.79134pt x 101.2559pt.
  <images/multi.png, id=196, 97.86563pt x 24.84282pt>
 File: images/multi.png Graphic file (type png)
 
 <use images/multi.png>
-Package pdftex.def Info: images/multi.png used on input line 1071.
+Package pdftex.def Info: images/multi.png used on input line 1070.
 (pdftex.def)             Requested size: 426.79134pt x 108.36288pt.
  <images/small.png, id=197, 90.3375pt x 44.41594pt>
 File: images/small.png Graphic file (type png)
 
 <use images/small.png>
-Package pdftex.def Info: images/small.png used on input line 1079.
+Package pdftex.def Info: images/small.png used on input line 1078.
 (pdftex.def)             Requested size: 426.79134pt x 209.89618pt.
  [37 <./images/binthresh.png> <./images/multi.png>]
 <images/shadow.png, id=202, 96.36pt x 44.41594pt>
 File: images/shadow.png Graphic file (type png)
  <use images/shadow.png>
-Package pdftex.def Info: images/shadow.png used on input line 1087.
+Package pdftex.def Info: images/shadow.png used on input line 1086.
 (pdftex.def)             Requested size: 426.79134pt x 196.75632pt.
 
 <images/error01.png, id=203, 909.3975pt x 1397.22pt>
 File: images/error01.png Graphic file (type png)
  <use images/error01.png>
-Package pdftex.def Info: images/error01.png used on input line 1095.
+Package pdftex.def Info: images/error01.png used on input line 1094.
 (pdftex.def)             Requested size: 426.79134pt x 655.73412pt.
 
 [38 <./images/small.png> <./images/shadow.png>]
@@ -958,7 +967,7 @@ Overfull \vbox (2.15103pt too high) has occurred while \output is active []
 
 
 [39 <./images/error01.png>]
-Overfull \hbox (3.11859pt too wide) in paragraph at lines 1107--1108
+Overfull \hbox (3.11859pt too wide) in paragraph at lines 1109--1110
 [][][]\T2A/cmr/m/n/10.95 Такоўе, важно jе напоменути да ниjе увек погодно корис
 тити подразумевана подешава»а.
  []
@@ -967,13 +976,7 @@ Overfull \hbox (3.11859pt too wide) in paragraph at lines 1107--1108
 \CYRG \cyrl \cyra \cyrv \cyra  6.
 [41
 
-]
-Underfull \hbox (badness 2894) in paragraph at lines 1137--1138
-[][][]\T2A/cmr/m/n/10.95 Би§ана МиленковиЈ, \T2A/cmr/m/it/10.95 Примена детекто
-ра CR-39 у детекциjи и дозиметриjи
- []
-
-[42
+] [42
 
 ] (master-rad.aux)
 
@@ -981,8 +984,8 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 9058 strings out of 493673
- 125083 string characters out of 3141528
+ 9057 strings out of 493673
+ 125079 string characters out of 3141528
  309872 words of memory out of 3000000
  12203 multiletter control sequences out of 15000+200000
  31463 words of font info for 72 fonts, out of 3000000 for 9000
@@ -1016,9 +1019,9 @@ msfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/ams
 fonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
 ts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/c
 m/cmsy10.pfb>
-Output written on master-rad.pdf (43 pages, 6818287 bytes).
+Output written on master-rad.pdf (43 pages, 6819801 bytes).
 PDF statistics:
- 1029 PDF objects out of 1200 (max. 8388607)
+ 1036 PDF objects out of 1200 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  196 words of extra memory for PDF output out of 10000 (max. 10000000)
 
