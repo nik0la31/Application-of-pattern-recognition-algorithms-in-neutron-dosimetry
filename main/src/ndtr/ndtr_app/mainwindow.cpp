@@ -1270,7 +1270,7 @@ void MainWindow::on_actionExit_triggered()
 {
     bool cancel = false;
 
-    if (!Workspace::Instance.AreAllProjectsPersistent())
+    if (Workspace::Instance.GetCurrentProject())
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle(QString("Pitanje"));
@@ -1325,7 +1325,7 @@ void MainWindow::on_actionClose_Project_triggered()
 
     bool cancel = false;
 
-    if (!Workspace::Instance.IsCurrentProjectPersistent())
+    if (Workspace::Instance.GetCurrentProject())
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle(QString("Pitanje"));
@@ -1377,7 +1377,8 @@ void MainWindow::on_actionClose_All_triggered()
 {
     bool cancel = false;
 
-    if (!Workspace::Instance.AreAllProjectsPersistent())
+    //if (!Workspace::Instance.AreAllProjectsPersistent())
+    if (Workspace::Instance.GetCurrentProject())
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle(QString("Pitanje"));
@@ -1485,12 +1486,9 @@ void MainWindow::on_btnAutoProcess_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-         if (Workspace::Instance.GetCurrentDocument()->GetTraces().size() == 0)
-         {
-             Workspace::Instance.GetCurrentDocument()->Process(m_Options, m_keepManualEdits);
-             RefreshImage();
-             DisplayImageProcesingOptions();
-         }
+         Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
+         RefreshImage();
+         DisplayImageProcesingOptions();
     }
 }
 
@@ -1500,7 +1498,7 @@ void MainWindow::on_btnKeepManuals_clicked(bool checked)
 
     if (Workspace::Instance.IsImageAvalilable())
     {
-        Workspace::Instance.GetCurrentDocument()->Process(m_Options, m_keepManualEdits);
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
         RefreshImage();
         DisplayImageProcesingOptions();
     }
