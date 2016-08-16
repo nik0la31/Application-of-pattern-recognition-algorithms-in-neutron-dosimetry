@@ -225,34 +225,41 @@ void MainWindow::on_actionOpen_Project_triggered()
 
 void MainWindow::on_actionAdd_Image_triggered()
 {
-    QString fullFilePath = QFileDialog::getOpenFileName(this, tr("Add Image"), "", tr("Files (*.bmp *.png *.jpg *.jpeg)"));
+    QStringList filenames = QFileDialog::getOpenFileNames(this, tr("Add Image"), "", tr("Files (*.bmp *.png *.jpg *.jpeg)"));
 
-    if(fullFilePath.length() > 0)
+    if( !filenames.isEmpty() )
     {
-        try
+        auto index = ui->treeView->currentIndex();
+        auto item = (ProjectItem*) Workspace::Instance.GetProjectsModel()->itemFromIndex(index);
+        ui->treeView->expand(index);
+
+        for (int i =0;i<filenames.count();i++)
         {
-            auto index = ui->treeView->currentIndex();
-            auto item = (ProjectItem*) Workspace::Instance.GetProjectsModel()->itemFromIndex(index);
+            QString fullFilePath = filenames[i];
 
-            Workspace::Instance.AddDocument(item->GetName(), fullFilePath, m_Options);
+            if(fullFilePath.length() > 0)
+            {
+                try
+                {
+                    Workspace::Instance.AddDocument(item->GetName(), fullFilePath, m_Options);
 
-            ui->treeView->expand(index);
+                    RefreshImage();
+                    DisplayImageProcesingOptions();
+                    UpdateActionAvailability();
 
-            Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
-
-            RefreshImage();
-            DisplayImageProcesingOptions();
-            UpdateActionAvailability();
-
-            on_actionFit_to_Window_triggered();
+                    on_actionFit_to_Window_triggered();
+                }
+                catch (const std::exception& ex)
+                {
+                    QMessageBox msg;
+                    QString msgText(ex.what());
+                    msg.setText(msgText);
+                    msg.exec();
+                }
+            }
         }
-        catch (const std::exception& ex)
-        {
-            QMessageBox msg;
-            QString msgText(ex.what());
-            msg.setText(msgText);
-            msg.exec();
-        }
+
+        Workspace::Instance.Update(m_Options, m_autoProcess, m_keepManualEdits);
     }
 }
 
@@ -964,13 +971,25 @@ void MainWindow::DisplayImageProcesingOptions()
     }
 
     int index = 0;
-    if (m_Unit == "nm")
+    if (m_Unit == "cm")
+    {
+       index = 0;
+    }
+    else if (m_Unit == "mm")
     {
         index = 1;
     }
-    else if (m_Unit == "pm")
+    else if (m_Unit == "µm")
     {
         index = 2;
+    }
+    else if (m_Unit == "nm")
+    {
+        index = 3;
+    }
+    else if (m_Unit == "pm")
+    {
+        index = 4;
     }
     ui->cmbUnit->setCurrentIndex(index);
 
