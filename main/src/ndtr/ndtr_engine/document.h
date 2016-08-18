@@ -41,6 +41,11 @@ struct EditInfo
 
     std::vector<Contour> TraceContours;
     std::vector<Contour> NoiseContours;
+
+    std::vector<int> TraceIndex;
+    std::vector<int> NoiseIndex;
+
+    bool Processed = false;
 };
 
 class Document
@@ -107,11 +112,11 @@ public:
     int GetWidth() { return m_Width; }
     int GetHeigth() { return m_Height; }
 
-    TraceInfo PosTest(int x, int y);
+    TraceInfo PosTest(ViewOptions& view, int x, int y);
 
-    void MarkTrace(int noiseContourIndex, bool addNew = true);
+    void MarkTrace(int noiseContourIndex);
 
-    void MarkNoise(int traceContourIndex, bool addNew = true);
+    void MarkNoise(int traceContourIndex);
 
     EditInfo GetEditInfo(int contourIndex);
 

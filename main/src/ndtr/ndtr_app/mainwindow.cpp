@@ -283,7 +283,7 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pt)
         {
             menu.addAction(addImageAct);
             menu.addSeparator();
-            saveProjctAct->setEnabled(!Workspace::Instance.IsCurrentProjectPersistent());
+            //saveProjctAct->setEnabled(!Workspace::Instance.IsCurrentProjectPersistent());
             menu.addAction(saveProjctAct);
             menu.addAction(closeProjectAct);
             menu.addSeparator();
@@ -298,7 +298,8 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pt)
     menu.addAction(newProjectAct);
     menu.addAction(openProjectAct);
     menu.addSeparator();
-    saveAllAct->setEnabled(!Workspace::Instance.AreAllProjectsPersistent());
+    //saveAllAct->setEnabled(!Workspace::Instance.AreAllProjectsPersistent());
+    saveAllAct->setEnabled(Workspace::Instance.GetCurrentProject());
     menu.addAction(saveAllAct);
     closeAllAct->setEnabled(Workspace::Instance.GetCurrentProject());
     menu.addAction(closeAllAct);
@@ -435,7 +436,7 @@ void MainWindow::on_imageMouseDown_triggered(int x, int y)
     xScaled = xAreaScaled - doc->GetWidth() > 0 ? xScaled - (xAreaScaled - doc->GetWidth()) / 2 : xScaled;
     yScaled = yAreaScaled - doc->GetHeigth() > 0 ? yScaled - (yAreaScaled - doc->GetHeigth()) / 2 : yScaled;
 
-    TraceInfo ti = doc->PosTest(xScaled, yScaled);
+    TraceInfo ti = doc->PosTest(m_View, xScaled, yScaled);
     m_TraceInfo = ti;
 
     if (ti.Type > 0)

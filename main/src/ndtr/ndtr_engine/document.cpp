@@ -13,6 +13,37 @@
 using namespace cv;
 using namespace std;
 
+
+bool getEllipse(Contour& contour, Ellipse& ellipseOut)
+{
+    if (contour.size() > 4)
+    {
+        Ellipse result = fitEllipse(Mat(contour));
+        ellipseOut = result;
+    }
+    else if (contour.size() == 4)
+    {
+        cv::Point p0 = contour[0];
+        cv::Point p1 = contour[1];
+        cv::Point p2 = contour[2];
+        cv::Point p3 = contour[3];
+
+        Point center;
+        center.x = p0.x + p1.x + p2.x + p3.x;
+        center.y = p0.y + p1.y + p2.y + p3.y;
+
+        Size size;
+        size.height = norm(p0 - p2);
+        size.width = norm(p1-p3);
+
+        RotatedRect result(center, size, 0);
+
+        ellipseOut = result;
+    }
+
+    return contour.size() >= 4;
+}
+
 void Document::Init(Project* project, string name, string path)
 {
     m_Project = project;
@@ -500,14 +531,14 @@ void Document::ProcessImage()
         }
 
         // Check if there are enough point to analyze contour.
-        const size_t minPointCount = 5;
-        if (contour.size() < minPointCount)
-        {
-            m_NoiseContuors.push_back(contour);
-            m_InitialNoiseContourIndex.push_back(i);
+        //const size_t minPointCount = 5;
+        //if (contour.size() < minPointCount)
+        //{
+        //    m_NoiseContuors.push_back(contour);
+        //    m_InitialNoiseContourIndex.push_back(i);
 
-            continue;
-        }
+        //    continue;
+        //}
 
         // Skip contour if it is touching image edge.
         if (IsTouchingEdge(origBW, contour))
@@ -519,7 +550,16 @@ void Document::ProcessImage()
         }
 
         // Calculate ellipse.
-        Ellipse ellipse = fitEllipse(Mat(contour));
+        //Ellipse ellipse = fitEllipse(Mat(contour));
+        Ellipse ellipse;
+
+        if(!getEllipse(contour, ellipse))
+        {
+            m_NoiseContuors.push_back(contour);
+            m_InitialNoiseContourIndex.push_back(i);
+
+            continue;
+        }
 
         // ///////////////////////////////////////////////////////
         // Here goes the magic.
@@ -672,7 +712,18 @@ void Document::ProcessImage()
                     Contour& newContour = newContours[k];
 
                     // Check if there are enough point to analyze contour.
-                    if (newContour.size() < minPointCount)
+                    //if (newContour.size() < minPointCount)
+                    //{
+                    //    m_NoiseContuors.push_back(newContour);
+                    //    m_InitialNoiseContourIndex.push_back(i);
+
+                    //    continue;
+                    //}
+
+                    // Check if ellipse dimensions are in specified range.
+                    //Ellipse newEllipse = fitEllipse(Mat(newContour));
+                    Ellipse newEllipse;
+                    if(!getEllipse(newContour, newEllipse))
                     {
                         m_NoiseContuors.push_back(newContour);
                         m_InitialNoiseContourIndex.push_back(i);
@@ -680,8 +731,6 @@ void Document::ProcessImage()
                         continue;
                     }
 
-                    // Check if ellipse dimensions are in specified range.
-                    Ellipse newEllipse = fitEllipse(Mat(newContour));
                     if (newEllipse.size.width < m_Options.MinTraceDiameter ||
                         newEllipse.size.width > m_Options.MaxTraceDiameter ||
                         newEllipse.size.height < m_Options.MinTraceDiameter ||
@@ -858,13 +907,30 @@ void Document::Clear()
     m_Traces.clear();
 }
 
-TraceInfo Document::PosTest(int x, int y)
+TraceInfo Document::PosTest(ViewOptions& view, int x, int y)
 {
     TraceInfo ti;
 
     for (size_t i=0; i<m_Contuors.size(); i++)
     {
-        Contour& contour = m_Contuors[i];
+        Contour contour;
+        if (view.Shape == ShapeType::NDTR_ELLIPSE &&
+                (view.Fill || view.Edge))
+        {
+            Ellipse& ellipse = m_Ellipses[i];
+
+            cv::Point2f corners[4];
+            ellipse.points(corners);
+
+            contour.push_back((corners[0] + corners[1]) / 2);
+            contour.push_back((corners[1] + corners[2]) / 2);
+            contour.push_back((corners[2] + corners[3]) / 2);
+            contour.push_back((corners[3] + corners[0]) / 2);
+        }
+        else
+        {
+            contour = m_Contuors[i];
+        }
 
         if (pointPolygonTest(contour, Point2f(x,y), false) > 0)
         {
@@ -893,12 +959,12 @@ TraceInfo Document::PosTest(int x, int y)
     return ti;
 }
 
-void Document::MarkTrace(int noiseContourIndex, bool addNew)
+void Document::MarkTrace(int noiseContourIndex)
 {
     if (noiseContourIndex < m_NoiseContuors.size())
     {
         int index = m_InitialNoiseContourIndex[noiseContourIndex];
-        Contour c = m_NoiseContuors[noiseContourIndex];
+        Contour contour = m_NoiseContuors[noiseContourIndex];
 
         m_InitialNoiseContourIndex.erase(
                     m_InitialNoiseContourIndex.begin() + noiseContourIndex);
@@ -906,14 +972,16 @@ void Document::MarkTrace(int noiseContourIndex, bool addNew)
                     m_NoiseContuors.begin() + noiseContourIndex);
 
         m_InitialContourIndex.push_back(index);
-        m_Contuors.push_back(c);
+        m_Contuors.push_back(contour);
 
         // Calculate ellipse.
-        Ellipse ellipse = fitEllipse(Mat(c));
+        Ellipse ellipse;
+        getEllipse(contour, ellipse);
+
         m_Ellipses.push_back(ellipse);
 
         // Get ROI - Region Of Interest.
-        Rect roi = boundingRect(c);
+        Rect roi = boundingRect(contour);
 
         // Get mask image.
         cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
@@ -930,96 +998,62 @@ void Document::MarkTrace(int noiseContourIndex, bool addNew)
             static_cast<int>(ellipse.size.height),
             static_cast<int>(mean[0]));
 
-        if (addNew)
+        // Try to find if there is already edit for contour
+        int editIndex = -1;
+        for (int i=0; i<m_ManualEdits.size(); i++)
         {
-            Rect roi2 = boundingRect(m_InitialContuors[index]);
-
-            // Get ROI - Region Of Interest.
-            Contour oc = c;
-            for (Point2i& pt : oc)
+            if (m_ManualEdits[i].Index == index)
             {
-                pt.x -= roi2.x;
-                pt.y -= roi2.y;
+                editIndex = i;
+                break;
             }
+        }
 
-            Point2f pt(ellipse.center.x - roi2.x, ellipse.center.y - roi2.y);
+        // Prepare EditInfo
+        EditInfo ei;
+        if (editIndex >= 0)
+        {
+            ei = m_ManualEdits[editIndex];
+            m_ManualEdits.erase(m_ManualEdits.begin() + editIndex);
+        }
 
-            bool foundEdit = false;
-            int editsCount = m_ManualEdits.size();
-            for (int i=0; i<editsCount;i++)
+        if (ei.Processed)
+        {
+            int noiseIndex = -1;
+            for (int i=0; i<ei.NoiseIndex.size(); i++)
             {
-                EditInfo& cmp = m_ManualEdits[i];
-                if (cmp.Index == index)
+                if (ei.NoiseIndex[i] == noiseContourIndex)
                 {
-                    for (size_t n=0; n<cmp.NoiseContours.size(); n++)
-                    {
-                        Contour& contour = cmp.NoiseContours[n];
-
-                        if (pointPolygonTest(contour, pt, false) >= 0)
-                        {
-                            Contour fc = cmp.NoiseContours[n];
-                            cmp.NoiseContours.erase(cmp.NoiseContours.begin() + n);
-                            cmp.TraceContours.push_back(fc);
-                            break;
-                        }
-                    }
-
-                    foundEdit = true;
+                    noiseIndex = i;
                     break;
                 }
             }
 
-            if (!foundEdit)
-            {
-                EditInfo ei;
-                ei.Index = index;
-                ei.EditContour = m_InitialContuors[index];
-                ei.TraceContours.push_back(oc);
+            ei.TraceContours.push_back(ei.NoiseContours[noiseIndex]);
+            ei.TraceIndex.push_back(noiseContourIndex);
 
-                for (int qwe=0; qwe<m_InitialContourIndex.size()-1; qwe++)
-                {
-                    if (m_InitialContourIndex[qwe] == index)
-                    {
-                        Contour zxc = m_Contuors[qwe];
-
-                        for (Point2i& pt : zxc)
-                        {
-                            pt.x -= roi2.x;
-                            pt.y -= roi2.y;
-                        }
-
-                        ei.TraceContours.push_back(zxc);
-                    }
-                }
-
-                for (int qwe=0; qwe<m_InitialNoiseContourIndex.size(); qwe++)
-                {
-                    if (m_InitialNoiseContourIndex[qwe] == index)
-                    {
-                        Contour zxc = m_Contuors[qwe];
-
-                        for (Point2i& pt : zxc)
-                        {
-                            pt.x -= roi2.x;
-                            pt.y -= roi2.y;
-                        }
-
-                        ei.NoiseContours.push_back(zxc);
-                    }
-                }
-
-                m_ManualEdits.push_back(ei);
-            }
+            ei.NoiseContours.erase(ei.NoiseContours.begin() + noiseIndex);
+            ei.NoiseIndex.erase(ei.NoiseIndex.begin() + noiseIndex);
         }
+        else
+        {
+            ei.EditContour = m_InitialContuors[index];
+            ei.TraceContours.push_back(contour);
+            ei.TraceIndex.push_back(noiseContourIndex);
+
+            ei.Processed = true;
+        }
+
+        m_ManualEdits.push_back(ei);
     }
 }
 
-void Document::MarkNoise(int traceContourIndex, bool addNew)
+void Document::MarkNoise(int traceContourIndex)
 {
     if (traceContourIndex < m_Contuors.size())
     {
         int index = m_InitialContourIndex[traceContourIndex];
-        Contour c = m_Contuors[traceContourIndex];
+        Contour contour = m_Contuors[traceContourIndex];
 
         m_InitialContourIndex.erase(m_InitialContourIndex.begin() + traceContourIndex);
         m_Contuors.erase(m_Contuors.begin() + traceContourIndex);
@@ -1027,92 +1061,55 @@ void Document::MarkNoise(int traceContourIndex, bool addNew)
         m_Traces.erase(m_Traces.begin() + traceContourIndex);
 
         m_InitialNoiseContourIndex.push_back(index);
-        m_NoiseContuors.push_back(c);
+        m_NoiseContuors.push_back(contour);
 
-        if (addNew)
+        // Try to find if there is already edit for contour
+        int editIndex = -1;
+        for (int i=0; i<m_ManualEdits.size(); i++)
         {
-            // Calculate ellipse.
-            Ellipse ellipse = fitEllipse(Mat(c));
-
-            Rect roi2 = boundingRect(m_InitialContuors[index]);
-
-            // Get ROI - Region Of Interest.
-            Contour oc = c;
-            for (Point2i& pt : oc)
+            if (m_ManualEdits[i].Index == index)
             {
-                pt.x -= roi2.x;
-                pt.y -= roi2.y;
+                editIndex = i;
+                break;
             }
+        }
 
-            Point2f pt(ellipse.center.x - roi2.x, ellipse.center.y - roi2.y);
+        // Prepare EditInfo
+        EditInfo ei;
+        if (editIndex >= 0)
+        {
+            ei = m_ManualEdits[editIndex];
+            m_ManualEdits.erase(m_ManualEdits.begin() + editIndex);
+        }
 
-            bool foundEdit = false;
-            int editsCount = m_ManualEdits.size();
-            for (int i=0; i<editsCount;i++)
+        if (ei.Processed)
+        {
+            int traceIndex = -1;
+            for (int i=0; i<ei.TraceIndex.size(); i++)
             {
-                EditInfo& cmp = m_ManualEdits[i];
-                if (cmp.Index == index)
+                if (ei.TraceIndex[i] == traceContourIndex)
                 {
-                    for (size_t n=0; n<cmp.TraceContours.size(); n++)
-                    {
-                        Contour& contour = cmp.TraceContours[n];
-
-                        if (pointPolygonTest(contour, pt, false) >= 0)
-                        {
-                            Contour fc = cmp.TraceContours[n];
-                            cmp.TraceContours.erase(cmp.TraceContours.begin() + n);
-                            cmp.NoiseContours.push_back(fc);
-                            break;
-                        }
-                    }
-
-                    foundEdit = true;
+                    traceIndex = i;
                     break;
                 }
             }
 
-            if (!foundEdit)
-            {
-                EditInfo ei;
-                ei.Index = index;
-                ei.EditContour = m_InitialContuors[index];
-                ei.NoiseContours.push_back(oc);
+            ei.NoiseContours.push_back(ei.TraceContours[traceIndex]);
+            ei.NoiseIndex.push_back(traceContourIndex);
 
-                for (int qwe=0; qwe<m_InitialContourIndex.size(); qwe++)
-                {
-                    if (m_InitialContourIndex[qwe] == index)
-                    {
-                        Contour zxc = m_Contuors[qwe];
-
-                        for (Point2i& pt : zxc)
-                        {
-                            pt.x -= roi2.x;
-                            pt.y -= roi2.y;
-                        }
-
-                        ei.TraceContours.push_back(zxc);
-                    }
-                }
-
-                for (int qwe=0; qwe<m_InitialNoiseContourIndex.size()-1; qwe++)
-                {
-                    if (m_InitialNoiseContourIndex[qwe] == index)
-                    {
-                        Contour zxc = m_Contuors[qwe];
-
-                        for (Point2i& pt : zxc)
-                        {
-                            pt.x -= roi2.x;
-                            pt.y -= roi2.y;
-                        }
-
-                        ei.NoiseContours.push_back(zxc);
-                    }
-                }
-
-                m_ManualEdits.push_back(ei);
-            }
+            ei.TraceContours.erase(ei.TraceContours.begin() + traceIndex);
+            ei.TraceIndex.erase(ei.TraceIndex.begin() + traceIndex);
         }
+        else
+        {
+            ei.EditContour = m_InitialContuors[index];
+            ei.NoiseContours.push_back(contour);
+            ei.NoiseIndex.push_back(traceContourIndex);
+
+            ei.Processed = true;
+        }
+
+        m_ManualEdits.push_back(ei);
     }
 }
 
@@ -1194,111 +1191,145 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
         }
     }
 
-    cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
-    drawContours(temp, m_InitialContuors, ei.Index, Scalar(1), -1);
-
-    // Get ROI - Region Of Interest.
-    Rect roi = boundingRect(m_InitialContuors[ei.Index]);
-
-    // Get mask image.
-    Mat mask = temp(roi);
-
-    cv::Mat markers = cv::Mat::zeros(mask.size(), CV_32SC1);
-
-    // Mark traces
-    for (size_t i=0; i<ei.NoiseContours.size(); i++)
+    if (!ei.Processed)
     {
-        drawContours(markers, ei.NoiseContours, i, Scalar(i+1), -1);
-    }
+        cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
+        drawContours(temp, m_InitialContuors, ei.Index, Scalar(1), -1);
 
-    for (size_t i=0; i<ei.TraceContours.size(); i++)
-    {
-        drawContours(markers, ei.TraceContours, i, Scalar(ei.NoiseContours.size() + i + 1), -1);
-    }
+        // Get ROI - Region Of Interest.
+        Rect roi = boundingRect(m_InitialContuors[ei.Index]);
 
-    // Mark background.
-    for (int r = 0; r < mask.rows; r++)
-    {
-        for (int c = 0; c < mask.cols; c++)
+        // Get mask image.
+        Mat mask = temp(roi);
+
+        cv::Mat markers = cv::Mat::zeros(mask.size(), CV_32SC1);
+
+        // Mark traces
+        for (size_t i=0; i<ei.NoiseContours.size(); i++)
         {
-            int index = (int) mask.at<char>(r,c);
-            if (index == 0)
-            {
-                markers.at<int>(r,c) = 255;
-            }
+            drawContours(markers, ei.NoiseContours, i, Scalar(i+1), -1);
         }
-    }
 
-    Mat result;
-    cvtColor(mask, result, CV_GRAY2BGR);
-    cv::watershed(result, markers);
-
-    for (size_t nc = 1; nc <= numberOfMarkers; nc++)
-    {
-        cv::Mat newMask = markers == nc;
-
-        std::vector<Contour> newContours;
-        findContours(newMask,
-                     newContours,
-                     CV_RETR_LIST,
-                     CV_CHAIN_APPROX_SIMPLE);
-
-        // There should be only one contour in this vector.
-        for (size_t k = 0; k < newContours.size(); ++k)
+        for (size_t i=0; i<ei.TraceContours.size(); i++)
         {
-            Contour& newContour = newContours[k];
+            drawContours(markers, ei.TraceContours, i, Scalar(ei.NoiseContours.size() + i + 1), -1);
+        }
 
-            // test if it is noise or trace
-
-            Ellipse newEllipse = fitEllipse(Mat(newContour));
-
-            for (Point2i& pt : newContour)
+        // Mark background.
+        for (int r = 0; r < mask.rows; r++)
+        {
+            for (int c = 0; c < mask.cols; c++)
             {
-                pt.x += roi.x;
-                pt.y += roi.y;
-            }
-
-            bool noise = false;
-            Point2f centerPt(newEllipse.center.x, newEllipse.center.y);
-            for (int i=0; i<ei.NoiseContours.size(); i++)
-            {
-                Contour& c = ei.NoiseContours[i];
-
-                if (pointPolygonTest(c, centerPt, false) > 0)
+                int index = (int) mask.at<char>(r,c);
+                if (index == 0)
                 {
-                    m_NoiseContuors.push_back(newContour);
-                    m_InitialNoiseContourIndex.push_back(ei.Index);
-                    noise = true;
-                    break;
+                    markers.at<int>(r,c) = 255;
                 }
             }
-
-            if (noise)
-            {
-                continue;
-            }
-
-            // Offset ellipse data.
-            newEllipse.center.x += roi.x;
-            newEllipse.center.y += roi.y;
-
-            m_Contuors.push_back(newContour);
-            m_InitialContourIndex.push_back(ei.Index);
-
-
-            m_Ellipses.emplace_back(newEllipse);
-
-            cv::Scalar mean = cv::mean(m_Images[NDTR_GRAYSCALE](roi), newMask == 1);
-
-            m_Traces.emplace_back(
-                static_cast<int>(newEllipse.center.x),
-                static_cast<int>(newEllipse.center.y),
-                newEllipse.angle,
-                static_cast<int>(newEllipse.size.width),
-                static_cast<int>(newEllipse.size.height),
-                static_cast<int>(mean[0]));
-
-            m_Traces[m_Traces.size() - 1].DebugColor = Scalar(0, 0, 255);
         }
+
+        Mat result;
+        cvtColor(mask, result, CV_GRAY2BGR);
+        cv::watershed(result, markers);
+
+        for (size_t nc = 1; nc <= numberOfMarkers; nc++)
+        {
+            cv::Mat newMask = markers == nc;
+
+            std::vector<Contour> newContours;
+            findContours(newMask,
+                         newContours,
+                         CV_RETR_LIST,
+                         CV_CHAIN_APPROX_SIMPLE);
+
+            // There should be only one contour in this vector.
+            for (size_t k = 0; k < newContours.size(); ++k)
+            {
+                Contour& newContour = newContours[k];
+
+                // test if it is noise or trace
+
+                Ellipse newEllipse;
+                if(!getEllipse(newContour, newEllipse))
+                {
+                    continue;
+                }
+
+                bool noise = false;
+                Point2f centerPt(newEllipse.center.x, newEllipse.center.y);
+                for (int i=0; i<ei.NoiseContours.size(); i++)
+                {
+                    Contour& c = ei.NoiseContours[i];
+
+                    if (pointPolygonTest(c, centerPt, false) > 0)
+                    {
+                        noise = true;
+                        break;
+                    }
+                }
+
+                for (Point2i& pt : newContour)
+                {
+                    pt.x += roi.x;
+                    pt.y += roi.y;
+                }
+
+                if (noise)
+                {
+                    ei.NoiseContours.push_back(newContour);
+                }
+                else
+                {
+                    ei.TraceContours.push_back(newContour);
+                }
+            }
+        }
+
+        ei.Processed = true;
+    }
+
+    // Add noise contours.
+    for (int i=0; i<ei.NoiseContours.size(); i++)
+    {
+        ei.NoiseIndex.push_back(m_NoiseContuors.size());
+
+        m_InitialNoiseContourIndex.push_back(ei.Index);
+        m_NoiseContuors.push_back(ei.NoiseContours[i]);
+    }
+
+    // Add trace contours.
+    for (int i=0; i<ei.TraceContours.size(); i++)
+    {
+        ei.TraceIndex.push_back(m_Contuors.size());
+
+        m_InitialContourIndex.push_back(ei.Index);
+        m_Contuors.push_back(ei.TraceContours[i]);
+
+        Contour contour = ei.TraceContours[i];
+
+        // Calculate ellipse.
+        Ellipse ellipse;
+        getEllipse(contour, ellipse);
+
+        m_Ellipses.push_back(ellipse);
+
+        // Get ROI - Region Of Interest.
+        Rect roi = boundingRect(contour);
+
+        // Get mask image.
+        cv::Mat temp = Mat::zeros(m_Height, m_Width, CV_8UC1);
+        drawContours(temp, m_InitialContuors, ei.Index, Scalar(1), -1);
+        Mat mask = temp(roi);
+
+        cv::Scalar mean = cv::mean(m_Images[NDTR_GRAYSCALE](roi), mask == 1);
+
+        m_Traces.emplace_back(
+            static_cast<int>(ellipse.center.x),
+            static_cast<int>(ellipse.center.y),
+            ellipse.angle,
+            static_cast<int>(ellipse.size.width),
+            static_cast<int>(ellipse.size.height),
+            static_cast<int>(mean[0]));
+
     }
 }
