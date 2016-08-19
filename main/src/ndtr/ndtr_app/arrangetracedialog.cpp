@@ -21,8 +21,15 @@ ArrangeTraceDialog::ArrangeTraceDialog(EditInfo ei, QWidget *parent) :
     QImage qim = QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     QPixmap pm(QPixmap::fromImage(qim));
 
+    int smaller = std::min(img.rows, img.cols);
     int larger = std::max(img.rows, img.cols);
-    slaceFactor = 250.0f / larger;
+
+    slaceFactor = 250.0f / smaller;
+
+    if (larger * slaceFactor > 1000.0)
+    {
+        slaceFactor = 1000.0f / larger;
+    }
 
     imageLabel = new MyLabel();
 
@@ -111,13 +118,13 @@ void ArrangeTraceDialog::on_imageEndDraw_triggered(int x, int y)
     cv::Mat temp1 = cv::Mat::zeros(m_EditInfo.Grayscale.size(), CV_8UC1);
     std::vector<Contour> tmpContours;
     tmpContours.push_back(m_CurrentCountour);
-    cv::drawContours(temp1, tmpContours, 0, cv::Scalar(1));
+    cv::drawContours(temp1, tmpContours, 0, cv::Scalar(1), -1);
 
     std::vector<int> overlappingTraceIndices;
     for (int i=0; i<m_EditInfo.TraceContours.size(); i++)
     {
         cv::Mat temp2 = cv::Mat::zeros(m_EditInfo.Grayscale.size(), CV_8UC1);
-        cv::drawContours(temp2, m_EditInfo.TraceContours, i, cv::Scalar(1));
+        cv::drawContours(temp2, m_EditInfo.TraceContours, i, cv::Scalar(1), -1);
 
         cv::Mat result = temp1 & temp2;
         int count = cv::countNonZero(result);
@@ -132,7 +139,7 @@ void ArrangeTraceDialog::on_imageEndDraw_triggered(int x, int y)
     for (int i=0; i<m_EditInfo.NoiseContours.size(); i++)
     {
         cv::Mat temp2 = cv::Mat::zeros(m_EditInfo.Grayscale.size(), CV_8UC1);
-        cv::drawContours(temp2, m_EditInfo.NoiseContours, i, cv::Scalar(1));
+        cv::drawContours(temp2, m_EditInfo.NoiseContours, i, cv::Scalar(1), -1);
 
         cv::Mat result = temp1 & temp2;
         int count = cv::countNonZero(result);

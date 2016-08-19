@@ -112,6 +112,7 @@ public:
 
                         EditInfo ei;
                         LoadContour(stream, ei.EditContour);
+                        ei.Processed = true;
                         manualEdits.push_back(ei);
                     }
                     else if (stream.name() == "trace")

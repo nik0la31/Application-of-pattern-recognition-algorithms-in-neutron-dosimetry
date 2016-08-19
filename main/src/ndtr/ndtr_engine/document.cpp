@@ -731,6 +731,12 @@ void Document::ProcessImage()
                         continue;
                     }
 
+                    for (Point2i& pt : newContour)
+                    {
+                        pt.x += roi.x;
+                        pt.y += roi.y;
+                    }
+
                     if (newEllipse.size.width < m_Options.MinTraceDiameter ||
                         newEllipse.size.width > m_Options.MaxTraceDiameter ||
                         newEllipse.size.height < m_Options.MinTraceDiameter ||
@@ -740,12 +746,6 @@ void Document::ProcessImage()
                         m_InitialNoiseContourIndex.push_back(i);
 
                         continue;
-                    }
-
-                    for (Point2i& pt : newContour)
-                    {
-                        pt.x += roi.x;
-                        pt.y += roi.y;
                     }
 
                     m_Contuors.push_back(newContour);
@@ -963,6 +963,8 @@ void Document::MarkTrace(int noiseContourIndex)
 {
     if (noiseContourIndex < m_NoiseContuors.size())
     {
+        int newTraceIndex = m_Contuors.size();
+
         int index = m_InitialNoiseContourIndex[noiseContourIndex];
         Contour contour = m_NoiseContuors[noiseContourIndex];
 
@@ -1025,24 +1027,68 @@ void Document::MarkTrace(int noiseContourIndex)
                 if (ei.NoiseIndex[i] == noiseContourIndex)
                 {
                     noiseIndex = i;
-                    break;
+                }
+                else if (ei.NoiseIndex[i] > noiseContourIndex)
+                {
+                    ei.NoiseIndex[i]--;
                 }
             }
 
             ei.TraceContours.push_back(ei.NoiseContours[noiseIndex]);
-            ei.TraceIndex.push_back(noiseContourIndex);
+            ei.TraceIndex.push_back(newTraceIndex);
 
             ei.NoiseContours.erase(ei.NoiseContours.begin() + noiseIndex);
             ei.NoiseIndex.erase(ei.NoiseIndex.begin() + noiseIndex);
         }
         else
         {
+            ei.Index = index;
+
             ei.EditContour = m_InitialContuors[index];
-            ei.TraceContours.push_back(contour);
-            ei.TraceIndex.push_back(noiseContourIndex);
+            //ei.TraceContours.push_back(contour);
+            //ei.TraceIndex.push_back(newTraceIndex);
+
+            for (int i=0; i<m_InitialContourIndex.size(); i++)
+            {
+                if (m_InitialContourIndex[i] == index)
+                {
+                    ei.TraceContours.push_back(m_Contuors[i]);
+                    ei.TraceIndex.push_back(i);
+                }
+            }
+
+            for (int i=0; i<m_InitialNoiseContourIndex.size(); i++)
+            {
+                if (m_InitialNoiseContourIndex[i] == index)
+                {
+                    ei.NoiseContours.push_back(m_NoiseContuors[i]);
+                    ei.NoiseIndex.push_back(i);
+                }
+            }
 
             ei.Processed = true;
         }
+
+        for (int i=0; i<m_ManualEdits.size(); i++)
+        {
+            EditInfo& ei = m_ManualEdits[i];
+
+            for (int j=0; j<ei.NoiseIndex.size(); j++)
+            {
+                if (ei.NoiseIndex[j] > noiseContourIndex)
+                {
+                    ei.NoiseIndex[j]--;
+                }
+            }
+        }
+
+        //for (int i=0; i<m_InitialNoiseContourIndex.size(); i++)
+        //{
+        //    if (m_InitialNoiseContourIndex[i] > noiseContourIndex)
+        //    {
+        //        m_InitialNoiseContourIndex[i]--;
+        //    }
+        //}
 
         m_ManualEdits.push_back(ei);
     }
@@ -1052,6 +1098,8 @@ void Document::MarkNoise(int traceContourIndex)
 {
     if (traceContourIndex < m_Contuors.size())
     {
+        int newNoiseIndex = m_NoiseContuors.size();
+
         int index = m_InitialContourIndex[traceContourIndex];
         Contour contour = m_Contuors[traceContourIndex];
 
@@ -1090,24 +1138,67 @@ void Document::MarkNoise(int traceContourIndex)
                 if (ei.TraceIndex[i] == traceContourIndex)
                 {
                     traceIndex = i;
-                    break;
+                }
+                else if (ei.TraceIndex[i] > traceContourIndex)
+                {
+                    ei.TraceIndex[i]--;
                 }
             }
 
             ei.NoiseContours.push_back(ei.TraceContours[traceIndex]);
-            ei.NoiseIndex.push_back(traceContourIndex);
+            ei.NoiseIndex.push_back(newNoiseIndex);
 
             ei.TraceContours.erase(ei.TraceContours.begin() + traceIndex);
             ei.TraceIndex.erase(ei.TraceIndex.begin() + traceIndex);
         }
         else
         {
+            ei.Index = index;
             ei.EditContour = m_InitialContuors[index];
-            ei.NoiseContours.push_back(contour);
-            ei.NoiseIndex.push_back(traceContourIndex);
+            //ei.NoiseContours.push_back(contour);
+            //ei.NoiseIndex.push_back(newNoiseIndex);
+
+            for (int i=0; i<m_InitialContourIndex.size(); i++)
+            {
+                if (m_InitialContourIndex[i] == index)
+                {
+                    ei.TraceContours.push_back(m_Contuors[i]);
+                    ei.TraceIndex.push_back(i);
+                }
+            }
+
+            for (int i=0; i<m_InitialNoiseContourIndex.size(); i++)
+            {
+                if (m_InitialNoiseContourIndex[i] == index)
+                {
+                    ei.NoiseContours.push_back(m_NoiseContuors[i]);
+                    ei.NoiseIndex.push_back(i);
+                }
+            }
 
             ei.Processed = true;
         }
+
+        for (int i=0; i<m_ManualEdits.size(); i++)
+        {
+            EditInfo& ei = m_ManualEdits[i];
+
+            for (int j=0; j<ei.TraceIndex.size(); j++)
+            {
+                if (ei.TraceIndex[j] > traceContourIndex)
+                {
+                    ei.TraceIndex[j]--;
+                }
+            }
+        }
+
+        //for (int i=0; i<m_InitialContourIndex.size(); i++)
+        //{
+        //    if (m_InitialContourIndex[i] > traceContourIndex)
+        //    {
+        //        m_InitialContourIndex[i]--;
+        //    }
+        //}
 
         m_ManualEdits.push_back(ei);
     }
@@ -1125,6 +1216,12 @@ EditInfo Document::GetEditInfo(int contourIndex)
 
     // Get mask image.
     cv::Mat mask = Mat::zeros(m_Height, m_Width, CV_8UC1);
+
+    if (!m_Options.WoB)
+    {
+        mask = 255;
+    }
+
     drawContours(mask, m_InitialContuors, contourIndex, Scalar(1), -1);
     Mat temp;
     m_Images[NDTR_GRAYSCALE].copyTo(temp, mask);
@@ -1160,8 +1257,6 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
             }
         }
 
-        m_ManualEdits.push_back(ei);
-
         int contourCount = m_InitialContourIndex.size();
         for (size_t i=0; i<contourCount; i++)
         {
@@ -1171,6 +1266,27 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
                 m_InitialContourIndex.erase(m_InitialContourIndex.begin() + i);
                 m_Traces.erase(m_Traces.begin() + i);
                 m_Ellipses.erase(m_Ellipses.begin() + i);
+
+                for (int m=0; m<m_ManualEdits.size(); m++)
+                {
+                    EditInfo& ei = m_ManualEdits[m];
+
+                    for (int j=0; j<ei.TraceIndex.size(); j++)
+                    {
+                        if (ei.TraceIndex[j] > i)
+                        {
+                            ei.TraceIndex[j]--;
+                        }
+                    }
+                }
+
+                //for (int j=0; j<m_InitialContourIndex.size(); j++)
+                //{
+                //    if (m_InitialContourIndex[j] > i)
+                //    {
+                //        m_InitialContourIndex[j]--;
+                //    }
+                //}
 
                 contourCount--;
                 i--;
@@ -1184,6 +1300,27 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
             {
                 m_NoiseContuors.erase(m_NoiseContuors.begin() + i);
                 m_InitialNoiseContourIndex.erase(m_InitialNoiseContourIndex.begin() + i);
+
+                for (int m=0; m<m_ManualEdits.size(); m++)
+                {
+                    EditInfo& ei = m_ManualEdits[m];
+
+                    for (int j=0; j<ei.NoiseIndex.size(); j++)
+                    {
+                        if (ei.NoiseIndex[j] > i)
+                        {
+                            ei.NoiseIndex[j]--;
+                        }
+                    }
+                }
+
+                //for (int j=0; j<m_InitialNoiseContourIndex.size(); j++)
+                //{
+                //    if (m_InitialNoiseContourIndex[j] > i)
+                //    {
+                //        m_InitialNoiseContourIndex[j]--;
+                //    }
+                //}
 
                 contourCount--;
                 i--;
@@ -1214,6 +1351,11 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
         {
             drawContours(markers, ei.TraceContours, i, Scalar(ei.NoiseContours.size() + i + 1), -1);
         }
+
+        vector<Contour> noiseContours = ei.NoiseContours;
+
+        ei.NoiseContours.clear();
+        ei.TraceContours.clear();
 
         // Mark background.
         for (int r = 0; r < mask.rows; r++)
@@ -1257,9 +1399,9 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
 
                 bool noise = false;
                 Point2f centerPt(newEllipse.center.x, newEllipse.center.y);
-                for (int i=0; i<ei.NoiseContours.size(); i++)
+                for (int i=0; i<noiseContours.size(); i++)
                 {
-                    Contour& c = ei.NoiseContours[i];
+                    Contour& c = noiseContours[i];
 
                     if (pointPolygonTest(c, centerPt, false) > 0)
                     {
@@ -1287,6 +1429,9 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
 
         ei.Processed = true;
     }
+
+    ei.TraceIndex.clear();
+    ei.NoiseIndex.clear();
 
     // Add noise contours.
     for (int i=0; i<ei.NoiseContours.size(); i++)
@@ -1330,6 +1475,10 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
             static_cast<int>(ellipse.size.width),
             static_cast<int>(ellipse.size.height),
             static_cast<int>(mean[0]));
+    }
 
+    if (addNew)
+    {
+        m_ManualEdits.push_back(ei);
     }
 }

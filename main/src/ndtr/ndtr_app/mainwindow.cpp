@@ -490,6 +490,13 @@ void MainWindow::on_actionInfo_triggered()
     traceInfo.append("Intenzitet  ");
     traceInfo.append(QString::number(trace.intensity));
 
+    //traceInfo.append("\n");
+    //traceInfo.append("Index ");
+    //traceInfo.append(QString::number(m_TraceInfo.InitIndex));
+    //traceInfo.append(", ");
+    //traceInfo.append(QString::number(m_TraceInfo.Index));
+    //traceInfo.append("\n");
+
     QToolTip::showText(QCursor::pos(), traceInfo);
 }
 
