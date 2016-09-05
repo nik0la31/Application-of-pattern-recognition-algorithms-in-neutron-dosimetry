@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  17 AUG 2016 00:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.8)  4 SEP 2016 14:03
 entering extended mode
 **D:/Repo/NDTR/Application-of-pattern-recognition-algorithms-in-neutron-dosimet
 ry/main/docs/master/master-rad.tex
@@ -988,16 +988,16 @@ Overfull \hbox (3.11859pt too wide) in paragraph at lines 1119--1120
 \CYRG \cyrl \cyra \cyrv \cyra  6.
 [41
 
-] [42
+] (obrazac.tex [42
 
-] (master-rad.aux)
+]) [43] (master-rad.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 9063 strings out of 493673
- 125182 string characters out of 3141528
+ 9066 strings out of 493673
+ 125211 string characters out of 3141528
  309884 words of memory out of 3000000
  12208 multiletter control sequences out of 15000+200000
  31463 words of font info for 72 fonts, out of 3000000 for 9000
@@ -1031,9 +1031,9 @@ msfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/ams
 fonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
 ts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/c
 m/cmsy10.pfb>
-Output written on master-rad.pdf (43 pages, 7191189 bytes).
+Output written on master-rad.pdf (44 pages, 7193333 bytes).
 PDF statistics:
- 1041 PDF objects out of 1200 (max. 8388607)
+ 1046 PDF objects out of 1200 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  201 words of extra memory for PDF output out of 10000 (max. 10000000)
 
