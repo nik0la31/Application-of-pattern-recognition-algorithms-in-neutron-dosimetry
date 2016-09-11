@@ -29,19 +29,70 @@ bool getEllipse(Contour& contour, Ellipse& ellipseOut)
         cv::Point p3 = contour[3];
 
         Point center;
-        center.x = p0.x + p1.x + p2.x + p3.x;
-        center.y = p0.y + p1.y + p2.y + p3.y;
+        center.x = (p0.x + p1.x + p2.x + p3.x) / 4;
+        center.y = (p0.y + p1.y + p2.y + p3.y) / 4;
 
         Size size;
-        size.height = norm(p0 - p2);
-        size.width = norm(p1-p3);
+        size.height = std::max(1.0f, (float) norm(p0 - p2));
+        size.width = std::max(1.0f, (float) norm(p1-p3));
+
+        RotatedRect result(center, size, 0);
+
+        ellipseOut = result;
+    }
+    else if (contour.size() == 3)
+    {
+        cv::Point p0 = contour[0];
+        cv::Point p1 = contour[1];
+        cv::Point p2 = contour[2];
+
+        Point center;
+        center.x = (p0.x + p1.x + p2.x) / 3;
+        center.y = (p0.y + p1.y + p2.y) / 3;
+
+        Size size;
+        size.height = std::max(1.0f, (float) norm(p0 - p2));
+        size.width = std::max(1.0f, (float) norm(p0- p2));
+
+        RotatedRect result(center, size, 0);
+
+        ellipseOut = result;
+    }
+    else if (contour.size() == 2)
+    {
+        cv::Point p0 = contour[0];
+        cv::Point p1 = contour[1];
+
+        Point center;
+        center.x = (p0.x + p1.x) / 2;
+        center.y = (p0.y + p1.y) / 2;
+
+        Size size;
+        size.height = 1;
+        size.width = std::max(1.0f, (float) norm(p0-p1));
+
+        RotatedRect result(center, size, 0);
+
+        ellipseOut = result;
+    }
+    else if (contour.size() == 1)
+    {
+        cv::Point p0 = contour[0];
+
+        Point center;
+        center.x = p0.x;
+        center.y = p0.y;
+
+        Size size;
+        size.height = 1;
+        size.width = 1;
 
         RotatedRect result(center, size, 0);
 
         ellipseOut = result;
     }
 
-    return contour.size() >= 4;
+    return contour.size() >= 1;
 }
 
 void Document::Init(Project* project, string name, string path)
@@ -932,7 +983,7 @@ TraceInfo Document::PosTest(ViewOptions& view, int x, int y)
             contour = m_Contuors[i];
         }
 
-        if (pointPolygonTest(contour, Point2f(x,y), false) > 0)
+        if (pointPolygonTest(contour, Point2f(x,y), false) >= 0)
         {
             ti.Type = 1;
             ti.Index = i;
@@ -946,7 +997,7 @@ TraceInfo Document::PosTest(ViewOptions& view, int x, int y)
     {
         Contour& contour = m_NoiseContuors[i];
 
-        if (pointPolygonTest(contour, Point2f(x,y), false) > 0)
+        if (pointPolygonTest(contour, Point2f(x,y), false) >= 0)
         {
             ti.Type = 2;
             ti.Index = i;
@@ -1349,7 +1400,7 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
 
         for (size_t i=0; i<ei.TraceContours.size(); i++)
         {
-            drawContours(markers, ei.TraceContours, i, Scalar(ei.NoiseContours.size() + i + 1), -1);
+            drawContours(markers, ei.TraceContours, i, Scalar(int(ei.NoiseContours.size()) + i + 1), -1);
         }
 
         vector<Contour> noiseContours = ei.NoiseContours;
@@ -1436,7 +1487,7 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
     // Add noise contours.
     for (int i=0; i<ei.NoiseContours.size(); i++)
     {
-        ei.NoiseIndex.push_back(m_NoiseContuors.size());
+        ei.NoiseIndex.push_back((int)m_NoiseContuors.size());
 
         m_InitialNoiseContourIndex.push_back(ei.Index);
         m_NoiseContuors.push_back(ei.NoiseContours[i]);
@@ -1445,7 +1496,7 @@ void Document::ApplyEdit(EditInfo& ei, bool addNew)
     // Add trace contours.
     for (int i=0; i<ei.TraceContours.size(); i++)
     {
-        ei.TraceIndex.push_back(m_Contuors.size());
+        ei.TraceIndex.push_back((int)m_Contuors.size());
 
         m_InitialContourIndex.push_back(ei.Index);
         m_Contuors.push_back(ei.TraceContours[i]);
